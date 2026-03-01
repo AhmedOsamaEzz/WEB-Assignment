@@ -1,5 +1,6 @@
 current structure
 
+```
 ├── README.md
 ├── admin
 │   ├── bookAdd.html		add a new book
@@ -19,3 +20,4 @@ current structure
     ├── dashboard.html
     ├── results.html		list of books that match your search query 
     └── search.html		empty page with a search bar (we might omit this if we don't like it)
+```
