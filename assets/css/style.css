@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;700&display=swap');
+
+:root {
+  --bg: #0C1519;
+  --surface: #182125;
+  --surface-high: #222B30;
+  --surface-bright: #313B3F;
+
+  /* brand */
+  --primary: #F0BBA4;
+  --primary-dark: #724B39;
+  --secondary: #F1BB98;
+
+  /* text */
+  --text: #DAE4EA;
+  --text-muted: #CF9D7B;
+
+  /* headlines, display */
+  --serif: 'Noto Serif', serif;
+  /* body, labels, ui */
+  --sans: 'Manrope', sans-serif;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.75rem;
+
+  --shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+  /* gradient — for buttons */
+  --gradient: linear-gradient(135deg, #F0BBA4, #724B39);
+}
+
+* {
+  font-family: var(--serif);
+}
