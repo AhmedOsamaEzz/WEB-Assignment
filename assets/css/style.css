@@ -62,6 +62,8 @@
     letter-spacing: 0.15em;
     box-shadow: var(--shadow);
     transition: transform 0.1s;
+    outline: none;
+    border: none;
   }
   .btn-primary:active { transform: scale(0.98); }
 
@@ -251,7 +253,7 @@
 
 
   /* Link styling */
-    .link { margin-top: 2rem; 
+  .link { margin-top: 2rem; 
     text-align: center; 
     font-size: 0.875rem; 
     color: var(--text); 
