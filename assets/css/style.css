@@ -99,6 +99,11 @@
     box-shadow: var(--shadow);
     position: relative;
   }
+  .login-form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; 
+  }
   .brand-header { 
     text-align: center; 
     margin-bottom: 3rem; 
@@ -135,6 +140,27 @@
   }
   /* End Login */
 
+  /* Begin Signup */
+  .signup-container {
+    width: 100%;
+    max-width: 28rem;
+    /* z-index: 10; */
+  }
+  .signup-card {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+  .signup-form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; 
+  }
+  /* End Signup */
+
   /* Forms Elements */
   .input-wrapper { 
   position: relative; 
@@ -143,11 +169,6 @@
   }
   .input-wrapper:focus-within .input-icon { 
     color: var(--primary); 
-  }
-  .login-form { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 1.5rem; 
   }
   .input-field {
       width: 100%;
@@ -167,7 +188,7 @@
     color: var(--text-muted); 
   }
 
-  /* Begin checkbix */
+  /* Begin checkbox */
   /* taken from w3schools */
   .checkbox-container { 
   display: block;
@@ -227,6 +248,28 @@
     outline-offset: 2px;
   }
   /* End checkbox */
+
+
+  /* Link styling */
+    .link { margin-top: 2rem; 
+    text-align: center; 
+    font-size: 0.875rem; 
+    color: var(--text); 
+  }
+  .link a { color: var(--secondary); 
+    font-weight: 700; 
+    margin-left: 0.25rem; 
+    text-decoration: underline; 
+    text-decoration-color: transparent; 
+    text-underline-offset: 8px; 
+    transition: text-decoration-color 0.2s; 
+  }
+  .link a:hover { 
+    text-decoration-color: var(--secondary); 
+  }
+  /* End Link */
+  /* Notice : this "link" is the same as "registeration link" */
+  /* I am keeping both until we decide whether "link" will always be used or not */
 
 * {
   font-family: var(--serif);
