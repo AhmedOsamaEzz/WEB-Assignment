@@ -2,25 +2,49 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/css/style.css"/>
     <title>nice library</title>
   </head>
 
   <body>
-    <nav>
-      <a href="../index.html">home</a>
-    </nav>
+
+    <main class = "main-content">
+      <div class="bg-blur blur-primary"></div>
+      <div class="bg-blur blur-secondary"></div>
+
+      
+      <div class = "login-container">
+            <header class="brand-header">
+                <h1 class="brand-title">The Midnight Scholar</h1>
+                <p class="brand-subtitle">Private Archival Access</p>
+            </header>
+          <div class = "login-card">
+            <form class = "login-form">
+              <label for = "email" class = "form-label">username (email)</label>
+              <input type="text" placeholder="username@gmail.com" class = "input-field"/>
+
+              <label for = "password" class = "form-label">password</label>
+              <input type="text" placeholder="******" class = "input-field"/>
+              <!-- TODO  -->
+              <!-- add forgot password here later -->
+              <div class="checkbox-group">
+                <label class="checkbox-container">Stay Logged in
+                  <input type="checkbox" id="remember-login"/>
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+              
+              <button type = "button" class="btn-primary" onclick="window.location.href='../index.html'">Login</button>
+            </form>
+          </div>
+      <div class="link">
+       <p class="sans-text">Don't have an account? <a href="signup.html">Sign up!</a></p>
+      </div>
+      </div>
+
+    </main>
   </body>
-  <form>
-    <label>username</label><br />
-    <input type="text" /><br />
+  <footer>
 
-    <label>password</label><br />
-    <input type="text" /><br />
-
-    <input type="checkbox" />
-    <label>admin</label><br />
-
-    <button>login</button>
-  </form>
-  <footer></footer>
+  </footer>
 </html>
