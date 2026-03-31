@@ -302,6 +302,7 @@ body {
   box-shadow: var(--shadow);
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
   z-index: 100;
 }
 
@@ -335,6 +336,7 @@ body {
   font-size: 1rem;
   font-weight: 500;
   align-items: center;
+  flex-shrink: 1;
 }
 
 .nav-bar .tools {
@@ -342,6 +344,11 @@ body {
   gap: 1rem;
   align-items: center;
   color: var(--primary);
+}
+@media (max-width: 800px) {
+  .nav-bar .nav-links {
+    display: none;
+  }
 }
 * {
   font-family: var(--serif);
