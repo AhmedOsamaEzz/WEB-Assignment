@@ -350,6 +350,138 @@ body {
     display: none;
   }
 }
+/* end nav bar */
+
+/* start add-edit */
+
+.book-edit-container {
+  width: 100%;
+  min-height: 75%;
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  align-items: stretch;
+  /* max-width: 40rem; */
+  padding: 2rem;
+  flex-wrap: nowrap;
+}
+.book-edit-container .book-image-section {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: left;
+  margin-bottom: 2rem;
+  flex-direction: column;
+}
+.book-edit-container .book-image-section img {
+  width: 27rem;
+  height: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  opacity: 0.3;
+  display: block;
+}
+.book-edit-container .book-image-section label {
+  font-size: 0.75rem;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  margin-right: 1rem;
+  align-self: flex-start;
+  display: block;
+  padding-bottom: 1rem;
+}
+.book-edit-container .book-info-section {
+  flex: 3;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-left: 1rem;
+}
+.book-edit-container .book-info-section .label-input {
+  display: flex;
+  width: 100%;
+  gap: 0.4rem;
+  align-items: center;
+  flex-direction: column;
+}
+.book-edit-container .book-info-section .label-input label {
+  font-size: 0.75rem;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  width: 5rem;
+  align-self: flex-start;
+  text-wrap: nowrap;
+}
+.book-edit-container .book-info-section .label-input input {
+  width: 100%;
+  background-color: var(--surface-high);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  color: var(--text);
+  font-size: 1rem;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+.book-edit-container .book-info-section .label-input textarea {
+  width: 100%;
+  background-color: var(--surface-high);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  color: var(--text);
+  font-size: 1rem;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
+}
+
+.book-edit-container .book-info-section .label-input input:focus {
+  outline: none;
+  border-color: var(--primary);
+  /* box-shadow: 0 0 0 3px var(--primary); */
+}
+.book-edit-container .book-info-section .label-input input:focus-visible {
+  outline: 2px solid var(--primary);
+}
+.book-edit-container .book-info-section .label-input textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  /* box-shadow: 0 0 0 3px var(--primary); */
+}
+.book-edit-container .book-info-section .label-input textarea:focus-visible {
+  outline: 2px solid var(--primary);
+}
+.book-edit-container .book-info-section .same-row {
+  display: flex;
+  gap: 1rem;
+}
+.book-edit-container .book-info-section .form-button {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  margin-top: auto;
+  padding-top: 1rem;
+  width: 100%;
+}
+
+.book-edit-container .book-info-section .form-button .btn-primary {
+  width: auto;
+  min-width: 10rem;
+  cursor: pointer;
+}
 * {
   font-family: var(--serif);
 }
