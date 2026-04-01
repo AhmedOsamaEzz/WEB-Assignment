@@ -189,6 +189,18 @@
     letter-spacing: 0.1em;
     color: var(--text-muted); 
   }
+  /* Begin input field error*/
+  .error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px; 
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 6px;
+  animation: slideDown 0.2s ease-out forwards;
+}
+
 
   /* Begin checkbox */
   /* taken from w3schools */
