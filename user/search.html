@@ -3,20 +3,18 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/normalize.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://kit.fontawesome.com/80d75008f5.js"
+      crossorigin="anonymous"></script>
     <title>Search</title>
   </head>
-  <body>
+  <body id="search-page">
 
     <nav>
-      <a href="../index.html">Home</a>
-      <a href="search.html">Search</a>
-      <a href="borrowed.html">My borrowed books</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="../auth/login.html">Logout</a>
-    </nav>
 
-    <nav>
       <h3 class="logo">The Midnight Scholar</h3>
+
       <div class="links">
         <ul>
           <li><a href="#">Archive</a></li>
@@ -25,16 +23,51 @@
           <li><a href="#">Curators</a></li>
         </ul>
       </div>
+
       <div class="search-profile">
         <a href="#"><i class="fa-solid fa-bars"></i></a>
         <a href="#"><i class="fa-solid fa-user"></i></a>
       </div>
+
     </nav>
+
     <main>
+
       <div class="middle-text">
-        <p class="head">Explore the Infinite</p>
-        <p>Access the forgotten manuscripts, celestial maps, and</p>
-        <p>alchemical secrets preserved within our private vaults.</p>
+        <p class="head">Explore the <span>Infinite</span></p>
+        <p>Access the forgotten manuscripts, celestial maps, and <br>
+          alchemical secrets preserved within our private vaults.</p>
+      </div>
+
+      <form action class="searh-bar">
+        <i class="fa-solid fa-book-open"></i>
+        <input type="text" placeholder="Search the Vaults">
+        <button type="submit">SEARCH <i
+            class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </form>
+
+      <div class="opt-cnt">
+        <div class="icn-cnt active">
+          <button><i class="fa-solid fa-feather"></i></button>
+          <p>Rare Manuscripts</p>
+        </div>
+        <div class="icn-cnt">
+          <button><i class="fa-regular fa-map"></i></button>
+          <p>Ancient Cartography</p>
+        </div>
+        <div class="icn-cnt">
+          <button><i class="fa-solid fa-flask"></i></button>
+          <p>Lost Alchemy</p>
+        </div>
+        <div class="icn-cnt">
+          <button><i class="fa-regular fa-star"></i></button>
+          <p>Celestial Logbooks</p>
+        </div>
+        <div class="icn-cnt">
+          <button><i class="fa-solid fa-key"></i></button>
+          <p>Encrypted Ciphers</p>
+        </div>
       </div>
     </main>
   </body>
