@@ -149,6 +149,8 @@
   max-width: 56.25rem;
   border-radius: var(--radius-sm);
   margin: 1.25rem auto;
+  box-shadow:
+    0px 0px 20px var(--surface-bright);
 }
 
 #search-page main .searh-bar>i {
@@ -236,11 +238,14 @@
   background-color: var(--surface-bright);
   border-radius: var(--radius-lg);
   transition: ease-in-out 0.2s;
+  box-shadow:
+    -0.5px -0.5px 2px var(--text-light);
 }
 
 #search-page .opt-cnt .icn-cnt:not(.active) button:hover {
   background-color: var(--surface-high);
   cursor: pointer;
+  box-shadow: none;
 }
 
 #search-page .opt-cnt .icn-cnt:not(.active) button:hover i {
