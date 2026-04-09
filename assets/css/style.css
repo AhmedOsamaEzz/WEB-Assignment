@@ -50,7 +50,12 @@
   padding: 0 2rem;
   background-color: hsl(from var(--bg) h s l / 0.6);
   justify-content: space-between;
+  align-items: center;
   box-shadow: var(--shadow);
+}
+
+#search-page nav .logo {
+  user-select: none;
 }
 
 #search-page nav .logo a {
@@ -127,6 +132,7 @@
   color: var(--text);
   margin-bottom: .9375rem;
   margin-top: 3rem;
+  user-select: none;
 }
 
 #search-page .middle-text .head span {
@@ -156,7 +162,49 @@
   margin: 1.25rem auto;
   box-shadow:
     0px 0px 20px var(--surface-bright);
+  position: relative;
 }
+
+/* Search bar animation is AI implemented */
+#search-page main .search-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 150%, rgba(240, 187, 164, 0.25) 0%, transparent 65%);
+  opacity: 0;
+  pointer-events: none;
+  border-radius: var(--radius-sm);
+  transition: opacity 0.6s ease;
+}
+
+#search-page main .search-bar:focus-within::after {
+  opacity: 1;
+  animation: light-breathe 1.8s ease-in-out infinite;
+}
+
+@keyframes light-breathe {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  70% {
+    opacity: 0.7;
+  }
+
+  90% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+/**/
 
 #search-page main .search-bar>i {
   font-size: 1.5625rem;
