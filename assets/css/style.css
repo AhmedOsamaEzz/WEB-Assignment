@@ -184,6 +184,7 @@
   pointer-events: none;
   border-radius: var(--radius-sm);
   transform: translateX(-100%);
+  z-index: 5;
 }
 
 #search-page main .search-bar:focus-within::after {
