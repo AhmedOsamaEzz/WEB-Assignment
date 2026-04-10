@@ -66,7 +66,7 @@
   transition: color 0.2s;
 }
 
-#search-page nav .logo:hover a {
+#search-page nav .logo:hover a, #search-page .search-profile a:hover i {
   color: hsl(from var(--secondary) h s l /0.7);
 }
 
@@ -113,6 +113,7 @@
   font-size: 1.2rem;
   justify-content: flex-start;
   /* margin-right: 0.5rem; */
+  transition: color 0.2s;
 }
 
 /* End Nav */
@@ -163,6 +164,7 @@
   box-shadow:
     0px 0px 20px var(--surface-bright);
   position: relative;
+  overflow: hidden;
 }
 
 /* Search bar animation is AI implemented */
@@ -170,37 +172,36 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 50% 150%, rgba(240, 187, 164, 0.25) 0%, transparent 65%);
+  background: radial-gradient(ellipse at 50% 150%,
+      rgba(114, 75, 57, 0.6) 0%,
+      /* --primary-dark core */
+      rgba(240, 187, 164, 0.2) 40%,
+      /* --primary mid */
+      transparent 70%);
   opacity: 0;
   pointer-events: none;
   border-radius: var(--radius-sm);
-  transition: opacity 0.6s ease;
+  transform: translateX(50%);
 }
 
 #search-page main .search-bar:focus-within::after {
-  opacity: 1;
-  animation: light-breathe 1.8s ease-in-out infinite;
+  animation: light-breathe 1.8s ease-in-out forwards;
 }
 
 @keyframes light-breathe {
   0% {
     opacity: 0;
+    transform: translateX(50%);
   }
 
   50% {
     opacity: 1;
-  }
-
-  70% {
-    opacity: 0.7;
-  }
-
-  90% {
-    opacity: 0.4;
+    transform: translateX(0%);
   }
 
   100% {
-    opacity: 0;
+    opacity: 0.4;
+    transform: translateX(-50%);
   }
 }
 
