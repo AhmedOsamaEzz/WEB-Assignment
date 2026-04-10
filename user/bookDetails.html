@@ -3,25 +3,64 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>book details</title>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/normalize.css" />
+    <script
+      src="https://kit.fontawesome.com/80d75008f5.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
-  <body>
-    <header>
+
+  <body id="book-details-page">
+    <header id="header">
       <nav>
-        <a href="../index.html">Home</a>
-        <a href="../user/search.html">Search</a>
-        <a href="borrowed.html">Borrowed Books</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="../auth/login.html">Logout</a>
+        <h3 class="logo"><a href="../index.html">The Midnight Scholar</a></h3>
+
+        <div class="links">
+          <ul>
+            <li><a href="#">Archive</a></li>
+            <li><a href="#">Colections</a></li>
+            <li><a href="#">Curators</a></li>
+            <li><a href="search.html">Search</a></li>
+          </ul>
+        </div>
+
+        <div class="search-profile">
+          <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
+          <a href="#"><i class="fa-solid fa-bell"></i></a>
+        </div>
       </nav>
     </header>
-    <h1>Book details</h1>
-    <img src="../assets/images/download.webp" alt="Book Image" />
-    <p>ISBN :</p>
-    <p>Title :</p>
-    <p>Author :</p>
-    <p>Category :</p>
-    <p>Description :</p>
-    <p>status :</p>
-    <button>Borrow this book</button>
+
+    <h1 id="page-title">Book Details</h1>
+
+    <img
+      id="book-image"
+      src="../assets/images/download.webp"
+      alt="Book Image"
+    />
+
+    <div id="book-info">
+      <p id="isbn">ISBN :</p>
+      <p id="title">Title :</p>
+      <p id="author">Author :</p>
+      <p id="category">Category :</p>
+      <p id="description">Description :</p>
+      <p id="status">Status :</p>
+    </div>
+
+    <button id="borrow-btn">Borrow this book</button>
+    <hr />
+    <footer>
+      <p class="name">The Midnight Scholar</p>
+      <div class="cnt">
+        <p><a href="#">PRIVACY POLICY</a></p>
+        <p><a href="#">TERMS OF ACCESS</a></p>
+        <p><a href="#">CONTACT CURATOR</a></p>
+      </div>
+      <p class="copyrights">
+        &copy; 1924 The Midnight Scholar Private Archive. All rights reserved.
+      </p>
+    </footer>
   </body>
 </html>
