@@ -1,0 +1,118 @@
+{
+    const scriptUrl = document.currentScript.src;
+    const APP_ROOT = scriptUrl.split('assets/Javascript/add.js')[0];
+
+    // input handel
+    const imagePlaceHolder = document.querySelector('#image');
+    const imageInput = document.querySelector('#fileInput');
+    const addBtn = document.querySelector('#addbtn');
+    const bookTitle = document.querySelector('#title');
+    const bookAuthor = document.querySelector('#author');
+    const bookIsbn = document.querySelector('#isbn');
+    const bookYear = document.querySelector('#publicationYear');
+    const bookPublisher = document.querySelector('#publisher');
+    const bookCopies = document.querySelector('#totalCopies');
+    const bookDescription = document.querySelector('#description');
+
+    bookYear.addEventListener('input', () => {
+        bookYear.value = bookYear.value.replace(/[^0-9]/g, "");
+        if (bookYear.value.length > 4) {
+            bookIsbn.value = bookIsbn.value.slice(0, 4);
+        }
+    });
+
+    bookIsbn.addEventListener('input', () => {
+        bookIsbn.value = bookIsbn.value.replace(/[^0-9]/g, "");
+        if (bookIsbn.value.length > 13) {
+            bookIsbn.value = bookIsbn.value.slice(0, 13);
+        }
+    });
+
+    imagePlaceHolder.addEventListener('click', () => {
+        imageInput.click();
+    });
+
+    imageInput.addEventListener('change', () => {
+        const [file] = imageInput.files;
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                imagePlaceHolder.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+
+    addBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        const cover = imageInput.files[0];
+        if (!cover) {
+            console.log("no image!")
+            alert("please select an image")
+            return
+        }
+        if (bookTitle.value.trim() === "") {
+            console.log("missing title");
+            alert("please enter book title");
+            return;
+        }
+        if (bookAuthor.value.trim() === "") {
+            console.log("what book doesn't have an author??");
+            alert("please enter author name");
+            return;
+        }
+        if (bookIsbn.value.trim() === "") {
+            console.log("missing Isbn");
+            alert("please enter book Isbn");
+            return;
+        }
+        if (bookYear.value.trim() === "") {
+            console.log("i mean this book was written someday right?");
+            alert("please enter the book publication year");
+            return;
+        }
+        if (bookPublisher.value.trim() === "") {
+            console.log("who published this?");
+            alert("please enter book publisher");
+            return;
+        }
+        if (bookCopies.value.trim() === "") {
+            console.log("why add a book if it has no cpoies here?");
+            alert("please add how many book available");
+            return;
+        }
+        if (bookDescription.value.trim() === "") {
+            console.log("missing description");
+            alert("please enter book description");
+            return;
+        }
+        const reader = new FileReader;
+
+        reader.onload = function (c) {
+            const book = {
+                title: bookTitle.value,
+                author: bookAuthor.value,
+                isbn: bookIsbn.value,
+                year: bookYear.value,
+                publisher: bookPublisher.value,
+                copies: bookCopies.value,
+                description: bookDescription.value,
+                cover: c.target.result
+
+            }
+            const booklist = JSON.parse(localStorage.getItem('booklist')) || [];
+            booklist.push(book);
+            localStorage.setItem('booklist', JSON.stringify(booklist));
+
+            window.location.href = 'bookList.html';
+        }
+        reader.readAsDataURL(cover);
+
+
+    });
+
+}
