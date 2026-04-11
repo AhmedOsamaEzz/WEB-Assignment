@@ -32,69 +32,60 @@
     </nav>
 
     <main>
-      <div class="hero">
-        <div class="middle-text">
-          <p class="head">Explore the <span>Infinite</span></p>
-          <p>Access the forgotten manuscripts, celestial maps, and <br>
-            alchemical secrets preserved within our private vaults.</p>
+
+      <aside class="filters">
+        <div class="filters-section">
+          <p class="filters-title">Filter Archive</p>
+          <p class="filters-sub">Refine by category</p>
+        </div>
+        <div class="filters-section">
+          <h4>Category</h4>
+          <ul>
+            <li class="active">All</li>
+            <li>Self-Help</li>
+            <li>Programming</li>
+            <li>Math</li>
+            <li>History</li>
+          </ul>
+        </div>
+        <div class="filters-section">
+          <h4>Availability</h4>
+          <ul>
+            <li><input type="checkbox" checked> Available Now</li>
+            <li><input type="checkbox"> Digital Access</li>
+          </ul>
+        </div>
+        <button class="apply-filters-btn">Apply Filters</button>
+      </aside>
+
+      <div class="main-content">
+
+        <div class="hero">
+          <div class="middle-text">
+            <p class="head">Explore the <span>Infinite</span></p>
+            <p>Discover, organize, and explore our comprehensive archive of rare
+              editions.</p>
+          </div>
+          <form class="search-bar">
+            <i class="fa-solid fa-book-open"></i>
+            <input type="text" placeholder="Search the Vaults">
+            <button type="submit">SEARCH
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
         </div>
 
-        <form action class="search-bar">
-          <i class="fa-solid fa-book-open"></i>
-          <input type="text" placeholder="Search the Vaults">
-          <button type="submit">SEARCH <i
-              class="fa-solid fa-magnifying-glass"></i>
-          </button>
-        </form>
-
-        <div class="opt-cnt">
-
-          <div class="icn-cnt active">
-            <button><i class="fa-solid fa-feather"></i></button>
-            <p>Rare Manuscripts</p>
+        <div class="results-cnt" id="results-cnt">
+          <div class="results-header">
+            <div>
+              <p class="results-query">Results for: <span
+                  id="query-label"></span></p>
+              <p class="results-count"><span id="results-count">0</span> books
+                found</p>
+            </div>
           </div>
-
-          <div class="icn-cnt">
-            <button><i class="fa-regular fa-map"></i></button>
-            <p>Ancient Cartography</p>
-          </div>
-
-          <div class="icn-cnt">
-            <button><i class="fa-solid fa-flask"></i></button>
-            <p>Lost Alchemy</p>
-          </div>
-
-          <div class="icn-cnt">
-            <button><i class="fa-regular fa-star"></i></button>
-            <p>Celestial Logbooks</p>
-          </div>
-
-          <div class="icn-cnt">
-            <button><i class="fa-solid fa-key"></i></button>
-            <p>Encrypted Ciphers</p>
-          </div>
-
-        </div>
-      </div>
-
-      <section class="suggestions-cnt">
-        <p class="section-header">Curator's Suggestions</p>
-        <div class="cards">
-          <div class="card">
-            <figure>
-              <img src="../assets/images/power.jpg" alt="Can't load image!"
-                draggable="false">
-              <figcaption>
-                <p class="name">The 48 Laws of Power</p>
-                <p class="author">Robert Greene (1998)</p>
-                <p class="desc">The book breaks down historical examples,
-                  stories, and lessons into clear “laws” that show how power
-                  has
-                  been gained, maintained, and lost throughout history</p>
-              </figcaption>
-            </figure>
-          </div>
-          <div class="card">
+          <div class="cards" id="cards-container">
+            <!-- <div class="card">
             <figure>
               <img src="../assets/images/atomic.jpg" alt="Can't load image!"
                 draggable="false">
@@ -109,24 +100,12 @@
                   change.</p>
               </figcaption>
             </figure>
-          </div>
-          <div class="card">
-            <figure>
-              <img src="../assets/images/mountain.jpg" alt="Can't load image!"
-                draggable="false">
-              <figcaption>
-                <p class="name">The Mountain Is You</p>
-                <p class="author">Brianna Wiest</p>
-                <p class="desc">The book is about self-sabotage. Why we do
-                  it, when we do it, and how to stop doing it—for
-                  good.Coexisting but conflicting needs create self-sabotaging
-                  behaviors. </p>
-              </figcaption>
-            </figure>
+          </div> -->
           </div>
         </div>
 
-      </section>
+      </div>
+
     </main>
     <hr>
     <footer>
