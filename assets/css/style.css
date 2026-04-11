@@ -7,13 +7,16 @@
   --surface-bright: #313b3f;
 
   /* brand */
-  --primary: #f0c2ab;
+  --primary: #f0bba4;
   --primary-dark: #724b39;
-  --secondary: #ce9c7b;
+  --secondary: #f1bb98;
+  --active: #633e23;
 
   /* text */
   --text: #dae4ea;
+  --text-light: #d5c3bc;
   --text-muted: #cf9d7b;
+  --text-dark: #492818;
 
   /* headlines, display */
   --serif: "Noto Serif", serif;
@@ -28,9 +31,10 @@
 
   /* gradient — for buttons */
   --gradient: linear-gradient(135deg, #f0bba4, #724b39);
+  --gradient-reverse: linear-gradient(-135deg, #f0bba4, #724b39);
 }
 
-/* Decorative blur*/
+/* Decorative blur */
 * {
   box-sizing: border-box;
 }
@@ -95,7 +99,7 @@ body {
   overflow: hidden;
 }
 
-/* Begin Login*/
+/* Begin Login */
 .login-container {
   width: 100%;
   max-width: 28rem;
@@ -175,34 +179,44 @@ body {
 }
 /* End Signup */
 
-/* Forms Elements */
-.input-wrapper {
-  position: relative;
+  /* Forms Elements */
+  .input-wrapper { 
+  position: relative; 
+  display: flex; 
+  align-items: center; 
+  }
+  .input-wrapper:focus-within .input-icon { 
+    color: var(--primary); 
+  }
+  .input-field {
+      width: 100%;
+      background-color: var(--surface-high);
+      border: 1px solid transparent; 
+      border-radius: var(--radius-md);
+      padding: 1rem 1rem 1rem 1rem;
+      color: var(--text);
+      font-size: 1rem;
+      transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .form-label { 
+    font-size: 0.75rem;
+    font-weight: 1000; 
+    text-transform: uppercase; 
+    letter-spacing: 0.1em;
+    color: var(--text-muted); 
+  }
+  /* Begin input field error*/
+  .error-msg {
   display: flex;
   align-items: center;
+  gap: 6px; 
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 6px;
+  animation: slideDown 0.2s ease-out forwards;
 }
-.input-wrapper:focus-within .input-icon {
-  color: var(--primary);
-}
-.input-field {
-  width: 100%;
-  background-color: var(--surface-high);
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  padding: 1rem 1rem 1rem 1rem;
-  color: var(--text);
-  font-size: 1rem;
-  transition:
-    box-shadow 0.2s,
-    border-color 0.2s;
-}
-.form-label {
-  font-size: 0.75rem;
-  font-weight: 1000;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-}
+
 
 /* Begin checkbox */
 /* taken from w3schools */
@@ -347,7 +361,7 @@ body {
 }
 @media (max-width: 800px) {
   .nav-bar .nav-links {
-    display: none;
+    display: flex;
   }
 }
 /* end nav bar */
@@ -868,3 +882,163 @@ body {
 
 /* End footer */
 /*End borrowed page  */
+/* Start bookList body */
+/* Start main */
+
+#bookList-page .main-bookList {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Start book table */
+
+#bookList-page .main-bookList .table-section {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: small;
+  text-align: left;
+  border: none;
+}
+
+#bookList-page .main-bookList .table-section thead tr th {
+  color: var(--text-light);
+  background-color: var(--surface);
+  padding: 10px 20px;
+}
+
+#bookList-page .main-bookList .table-section tbody tr td {
+  text-decoration: none;
+  color: var(--text-light);
+  background-color: var(--surface-high);
+  padding: 15px 20px;
+  vertical-align: middle;
+}
+
+/* Title column */
+/* Image + title on same line */
+
+#bookList-page .main-bookList .table-section .book-title-column {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#bookList-page .main-bookList .table-section .mini-book-image {
+  width: 45px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+#bookList-page .main-bookList .table-section .book-title-text {
+  color: var(--text);
+  font-weight: 500;
+  cursor: text;
+}
+
+#bookList-page .main-bookList .table-section .book-isbn-label {
+  font-size: x-small;
+  color: var(--text-light);
+  cursor: text;
+}
+
+/* Category column */
+
+#bookList-page .main-bookList .table-section .book-category-column {
+  background-color: var(--text-dark);
+  border-radius: 30px;
+  padding: 4px 10px;
+  white-space: nowrap;
+  cursor: text;
+}
+
+/* Action column */
+
+#bookList-page .main-bookList .table-section .book-action-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 20px;
+  padding-left: 0;
+}
+
+#bookList-page .main-bookList .table-section tbody tr td a {
+  text-decoration: none;
+  color: var(--text-light);
+}
+
+#bookList-page .main-bookList .table-section tbody tr td button {
+  color: var(--text-light);
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+#bookList-page .main-bookList .table-section tbody tr td a:hover,
+#bookList-page .main-bookList .table-section tbody tr td button:hover {
+  color: var(--text-muted);
+}
+
+/* End book table */
+
+/* Start table options */
+
+#bookList-page .main-bookList .table-options-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#bookList-page .main-bookList .table-options-section .btn-primary {
+  margin-bottom: 20px;
+  padding: 0.8rem;
+  width: auto;
+  cursor: pointer;
+}
+
+#bookList-page .main-bookList .table-options-section .table-pagination {
+  display: flex;
+  gap: 5px;
+}
+
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .page-numbers
+  .current-button {
+  color: var(--text-light);
+  background-color: transparent;
+  outline: none;
+  border-color: var(--primary);
+  cursor: pointer;
+}
+
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .page-numbers
+  .not-current-button,
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .prev-btn,
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .next-btn {
+  color: var(--text-light);
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* End table options */
+/* End main */
+/* End bookList body */
