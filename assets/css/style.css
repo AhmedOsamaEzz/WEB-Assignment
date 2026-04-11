@@ -175,34 +175,44 @@ body {
 }
 /* End Signup */
 
-/* Forms Elements */
-.input-wrapper {
-  position: relative;
+  /* Forms Elements */
+  .input-wrapper { 
+  position: relative; 
+  display: flex; 
+  align-items: center; 
+  }
+  .input-wrapper:focus-within .input-icon { 
+    color: var(--primary); 
+  }
+  .input-field {
+      width: 100%;
+      background-color: var(--surface-high);
+      border: 1px solid transparent; 
+      border-radius: var(--radius-md);
+      padding: 1rem 1rem 1rem 1rem;
+      color: var(--text);
+      font-size: 1rem;
+      transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .form-label { 
+    font-size: 0.75rem;
+    font-weight: 1000; 
+    text-transform: uppercase; 
+    letter-spacing: 0.1em;
+    color: var(--text-muted); 
+  }
+  /* Begin input field error*/
+  .error-msg {
   display: flex;
   align-items: center;
+  gap: 6px; 
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 6px;
+  animation: slideDown 0.2s ease-out forwards;
 }
-.input-wrapper:focus-within .input-icon {
-  color: var(--primary);
-}
-.input-field {
-  width: 100%;
-  background-color: var(--surface-high);
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  padding: 1rem 1rem 1rem 1rem;
-  color: var(--text);
-  font-size: 1rem;
-  transition:
-    box-shadow 0.2s,
-    border-color 0.2s;
-}
-.form-label {
-  font-size: 0.75rem;
-  font-weight: 1000;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-muted);
-}
+
 
 /* Begin checkbox */
 /* taken from w3schools */

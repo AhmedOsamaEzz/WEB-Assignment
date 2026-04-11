@@ -3,7 +3,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../assets/css/style.css"/>
+    <script src="../assets/Javascript/auth.js"></script>
     <title>nice library</title>
+
   </head>
 
   <body>
@@ -22,9 +24,11 @@
             <form class = "login-form">
               <label for = "email" class = "form-label">username (email)</label>
               <input type="text" placeholder="username@gmail.com" class = "input-field"/>
-
+              <div class = "error-msg" id = "login-email-error"></div>
+              
               <label for = "password" class = "form-label">password</label>
-              <input type="text" placeholder="******" class = "input-field"/>
+              <input type="password" placeholder="******" class = "input-field"/>
+              <div class = "error-msg" id = "login-password-error"></div>
               <!-- TODO  -->
               <!-- add forgot password here later -->
               <div class="checkbox-group">
@@ -34,7 +38,7 @@
                 </label>
               </div>
               
-              <button type = "button" class="btn-primary" onclick="window.location.href='../index.html'">Login</button>
+              <button type = "submit" class="btn-primary">Login</button>
             </form>
           </div>
       <div class="link">
