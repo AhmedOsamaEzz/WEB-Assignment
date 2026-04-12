@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Search</title>
+    <title>Results</title>
   </head>
   <body>
     <nav>
@@ -14,14 +14,23 @@
       <a href="../auth/login.html">Logout</a>
     </nav>
     <main>
-      <h1>Search a book</h1>
+      <br />
       <form action="results.html" method="get">
-        <label>Search by Name, Author, Publisher : </label>
-        <input type="text" placeholder=" e.g. Atomic Habits" name="search" />
-        <button type="submit" class="search">search</button>
+        <input type="text" id="q" name="q" value="Atomic Habits" />
+        <button type="submit">Search</button>
       </form>
+      <h1>Results For :</h1>
+      <div class="book-card">
+        <a href="" class="book-a"></a>
+        <img src="" alt="" class="book-img" />
+        <div class="book-info">
+          <h3></h3>
+          <p></p>
+          <p></p>
+          <p></p>
+        </div>
+      </div>
     </main>
-
     <footer></footer>
   </body>
 </html>
