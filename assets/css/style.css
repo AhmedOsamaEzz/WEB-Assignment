@@ -1161,6 +1161,11 @@ body#sign-up-page {
   padding-left: 0;
 }
 
+/* Books count section (total, available, borrowed) */
+#bookList-page .main-bookList .table-section .books-count {
+  text-align: center;
+}
+
 #bookList-page .main-bookList .table-section tbody tr td a {
   text-decoration: none;
   color: var(--text-light);
