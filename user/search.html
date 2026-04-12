@@ -3,40 +3,121 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/css/normalize.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <script src="https://kit.fontawesome.com/80d75008f5.js"
+      crossorigin="anonymous"></script>
     <title>Search</title>
     <script src = "../assets/Javascript/auth.js"></script>
   </head>
-  <body>
+  <body id="search-page">
 
     <nav>
-      <a href="../index.html">Home</a>
-      <a href="search.html">Search</a>
-      <a href="borrowed.html">My borrowed books</a>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="../auth/login.html">Logout</a>
-    </nav>
 
-    <nav>
-      <h3 class="logo">The Midnight Scholar</h3>
+      <h3 class="logo"><a href="../index.html">The Midnight Scholar</a></h3>
+
       <div class="links">
         <ul>
           <li><a href="#">Archive</a></li>
           <li><a href="#">Colections</a></li>
-          <li><a href="#">Chronicles</a></li>
           <li><a href="#">Curators</a></li>
+          <li><a href="search.html">Search</a></li>
         </ul>
       </div>
+
       <div class="search-profile">
-        <a href="#"><i class="fa-solid fa-bars"></i></a>
-        <a href="#"><i class="fa-solid fa-user"></i></a>
+        <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
+        <a href="#"><i class="fa-solid fa-bell"></i></a>
       </div>
+
     </nav>
+
     <main>
-      <div class="middle-text">
-        <p class="head">Explore the Infinite</p>
-        <p>Access the forgotten manuscripts, celestial maps, and</p>
-        <p>alchemical secrets preserved within our private vaults.</p>
+
+      <aside class="filters">
+        <div class="filters-section">
+          <p class="filters-title">Filter Archive</p>
+          <p class="filters-sub">Refine by category</p>
+        </div>
+        <div class="filters-section">
+          <h4>Category</h4>
+          <ul>
+            <li class="active">All</li>
+            <li>Self-Help</li>
+            <li>Programming</li>
+            <li>Math</li>
+            <li>History</li>
+          </ul>
+        </div>
+        <div class="filters-section">
+          <h4>Availability</h4>
+          <ul>
+            <li><input type="checkbox" checked> Available Now</li>
+            <li><input type="checkbox"> Digital Access</li>
+          </ul>
+        </div>
+        <button class="apply-filters-btn">Apply Filters</button>
+      </aside>
+
+      <div class="main-content">
+
+        <div class="hero">
+          <div class="middle-text">
+            <p class="head">Explore the <span>Infinite</span></p>
+            <p>Discover, organize, and explore our comprehensive archive of rare
+              editions.</p>
+          </div>
+          <form class="search-bar">
+            <i class="fa-solid fa-book-open"></i>
+            <input type="text" placeholder="Search the Vaults">
+            <button type="submit">SEARCH
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </form>
+        </div>
+
+        <div class="results-cnt" id="results-cnt">
+          <div class="results-header">
+            <div>
+              <p class="results-query">Results for: <span
+                  id="query-label"></span></p>
+              <p class="results-count"><span id="results-count">0</span> books
+                found</p>
+            </div>
+          </div>
+          <div class="cards" id="cards-container">
+            <!-- <div class="card">
+            <figure>
+              <img src="../assets/images/atomic.jpg" alt="Can't load image!"
+                draggable="false">
+              <figcaption>
+                <p class="name">Atomic Habits</p>
+                <p class="author">James Clear</p>
+                <p class="desc">If you're having trouble changing your habits,
+                  the problem isn't you. The problem is your system. Bad
+                  habits
+                  repeat themselves again and again not because you don't want
+                  to change, but because you have the wrong system for
+                  change.</p>
+              </figcaption>
+            </figure>
+          </div> -->
+          </div>
+        </div>
+
       </div>
+
     </main>
+    <hr>
+    <footer>
+      <p class="name">The Midnight Scholar</p>
+      <div class="cnt">
+        <p><a href="#">PRIVACY POLICY</a></p>
+        <p><a href="#">TERMS OF ACCESS</a></p>
+        <p><a href="#">CONTACT CURATOR</a></p>
+      </div>
+      <p class="copyrights">&copy; 1924 The Midnight Scholar Private Archive.
+        All rights reserved.</p>
+    </footer>
   </body>
 </html>
