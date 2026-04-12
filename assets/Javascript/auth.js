@@ -1,5 +1,5 @@
-let giveAdmin = true;
-let devMode = true;
+let giveAdmin = false;
+let devMode = false;
 // giveAdmin is what decided what your role is Until we implement backend
 // devMode disables accessCheck
 
@@ -183,7 +183,7 @@ function initUI() {
           }
         }
 
-        window.location.href = "../index.html";
+        window.location.href = "../../user/search.html";
       }, 800); // 800ms fake delay for realism XD
     });
   }
