@@ -8,8 +8,10 @@
       <link rel="stylesheet" href="../assets/css/style.css" />
       <script
         src="https://kit.fontawesome.com/80d75008f5.js"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"
+      ></script>
       <!-- <script src="../assets/Javascript/auth.js"></script> -->
+      <script src="../assets/Javascript/bookList.js"></script>
       <title>List of All Books</title>
     </head>
 
@@ -23,14 +25,16 @@
               <li><a href="../index.html">Home</a></li>
               <li><a href="borrowed.html">My Books</a></li>
               <li><a href="dashboard.html">Dashboard</a></li>
-              <li><a href="../auth/login.html"
-                  onclick="logout()">Logout</a></li>
+              <li>
+                <a href="../auth/login.html" onclick="logout()">Logout</a>
+              </li>
             </ul>
           </div>
 
           <div class="search-profile">
-            <a href="search.html"><i
-                class="fa-solid fa-magnifying-glass"></i></a>
+            <a href="search.html"
+              ><i class="fa-solid fa-magnifying-glass"></i
+            ></a>
             <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
           </div>
         </nav>
@@ -44,7 +48,9 @@
               <th>Title</th>
               <th>Author</th>
               <th>Category</th>
-              <th>Status</th>
+              <th class="books-count">Total</th>
+              <th class="books-count">Available</th>
+              <th class="books-count">Borrowed</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -53,8 +59,9 @@
               <td>
                 <div class="book-title-column">
                   <img
-                    src="../assets/images/download.webp"
-                    class="mini-book-image" />
+                    src="../assets/images/unnamed.png"
+                    class="mini-book-image"
+                  />
                   <div>
                     <label class="book-title-text">Title 1</label>
                     <br />
@@ -64,57 +71,17 @@
               </td>
               <td>Author 1</td>
               <td><label class="book-category-column">Category 1</label></td>
-              <td>Stat 1</td>
+              <td class="books-count">0</td>
+              <td class="books-count">0</td>
+              <td class="books-count">0</td>
               <td class="book-action-column">
                 <div class="book-action-cell">
-                  <a href="bookEdit.html"><i class="fa-solid fa-pen"></i></a>
-                  <button><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="book-title-column">
-                  <img
-                    src="../assets/images/download.webp"
-                    class="mini-book-image" />
-                  <div>
-                    <label class="book-title-text">Title 2</label>
-                    <br />
-                    <label class="book-isbn-label">ISBN-0000</label>
-                  </div>
-                </div>
-              </td>
-              <td>Author 2</td>
-              <td><label class="book-category-column">Category 2</label></td>
-              <td>Stat 2</td>
-              <td class="book-action-column">
-                <div class="book-action-cell">
-                  <a href="bookEdit.html"><i class="fa-solid fa-pen"></i></a>
-                  <button><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td>
-                <div class="book-title-column">
-                  <img
-                    src="../assets/images/download.webp"
-                    class="mini-book-image" />
-                  <div>
-                    <label class="book-title-text">Title 3</label>
-                    <br />
-                    <label class="book-isbn-label">ISBN-0000</label>
-                  </div>
-                </div>
-              </td>
-              <td>Author 3</td>
-              <td><label class="book-category-column">Category 3</label></td>
-              <td>Stat 3</td>
-              <td class="book-action-column">
-                <div class="book-action-cell">
-                  <a href="bookEdit.html"><i class="fa-solid fa-pen"></i></a>
-                  <button><i class="fa-solid fa-trash-can"></i></button>
+                  <button onclick="editBook('${book.isbn}')">
+                    <i class="fa-solid fa-pen"></i>
+                  </button>
+                  <button onclick="deleteBook('${book.isbn}')">
+                    <i class="fa-solid fa-trash-can"></i>
+                  </button>
                 </div>
               </td>
             </tr>
@@ -126,7 +93,8 @@
           <button
             type="button"
             class="btn-primary"
-            onclick="window.location.href = 'bookEdit.html'">
+            onclick="window.location.href = 'bookEdit.html'"
+          >
             Add Book
           </button>
           <div class="table-pagination">
