@@ -391,6 +391,7 @@ body#sign-up-page {
 /* Notice : this "link" is the same as "registeration link" */
 /* I am keeping both until we decide whether "link" will always be used or not */
 
+
 /* start add-edit */
 
 .book-edit-container {
@@ -1228,6 +1229,987 @@ body#sign-up-page {
 /* End main */
 /* End bookList body */
 
+/* start ADMIN DASHBOARD*/
+#admin-dashboard-page .dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 3rem 0 3rem;
+}
+
+#admin-dashboard-page .dashboard-title {
+  font-family: var(--serif);
+  font-size: 2rem;
+  color: var(--text);
+  margin: 0 0 0.25rem 0;
+}
+
+#admin-dashboard-page .dashboard-subtitle {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+#admin-dashboard-page .btn-new-entry {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: auto;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+#admin-dashboard-page .dashboard-main {
+  padding: 1.5rem 3rem 4rem;
+}
+
+/* ── STAT CARDS ──────────────────────── */
+
+#admin-dashboard-page .stats-grid {
+  display: flex;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+#admin-dashboard-page .stat-card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+}
+
+#admin-dashboard-page .stat-card--large {
+  flex: 2;
+  position: relative;
+  overflow: hidden;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#admin-dashboard-page .stat-cards-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#admin-dashboard-page .stat-card--small {
+  background-color: var(--surface-high);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex: 1;
+}
+
+#admin-dashboard-page .stat-card__icon {
+  width: 3rem;
+  height: 3rem;
+  background-color: var(--surface-bright);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+#admin-dashboard-page .stat-card__label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--secondary);
+  margin-bottom: 0.4rem;
+}
+
+#admin-dashboard-page .stat-card__number {
+  font-family: var(--serif);
+  font-size: 2.75rem;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+#admin-dashboard-page .stat-card__number--sm {
+  font-size: 1.75rem;
+  margin-bottom: 0;
+}
+
+#admin-dashboard-page .stat-card__desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
+#admin-dashboard-page .stat-card__meta {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+#admin-dashboard-page .stat-card__meta-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  display: block;
+}
+
+#admin-dashboard-page .stat-card__meta-value {
+  font-family: var(--serif);
+  font-size: 1.2rem;
+  color: var(--primary);
+}
+
+#admin-dashboard-page .stat-card__deco {
+  position: absolute;
+  right: -5%;
+  top: -10%;
+  font-size: 16rem;
+  color: var(--primary);
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── BOTTOM SECTION ─────────────────── */
+
+#admin-dashboard-page .dashboard-bottom {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2.5rem;
+  align-items: flex-start;
+}
+
+#admin-dashboard-page .activity-section  { flex: 7; }
+#admin-dashboard-page .loan-status-section { flex: 5; }
+
+#admin-dashboard-page .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+#admin-dashboard-page .section-title {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  color: var(--text);
+  margin: 0 0 1.25rem 0;
+}
+
+#admin-dashboard-page .section-header .section-title {
+  margin-bottom: 0;
+}
+
+#admin-dashboard-page .section-link {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+#admin-dashboard-page .section-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ── ACTIVITY LIST ───────────────────── */
+
+#admin-dashboard-page .activity-list {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+#admin-dashboard-page .activity-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid hsl(from var(--text) h s l / 0.05);
+  transition: background-color 0.2s;
+}
+
+#admin-dashboard-page .activity-item:first-child { border-top: none; }
+#admin-dashboard-page .activity-item:hover { background-color: var(--surface-bright); }
+#admin-dashboard-page .activity-item--alt { background-color: var(--surface-high); }
+
+#admin-dashboard-page .activity-book-img {
+  width: 2.75rem;
+  height: 3.75rem;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+#admin-dashboard-page .activity-info { flex: 1; }
+
+#admin-dashboard-page .activity-book-title {
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+#admin-dashboard-page .activity-book-sub {
+  font-size: 0.8rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
+#admin-dashboard-page .activity-name { color: var(--secondary); }
+
+#admin-dashboard-page .activity-meta {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+#admin-dashboard-page .activity-time {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin: 0 0 0.35rem 0;
+}
+
+#admin-dashboard-page .activity-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+#admin-dashboard-page .activity-badge--loan {
+  background-color: hsl(from var(--primary-dark) h s l / 0.2);
+  color: var(--primary);
+}
+
+#admin-dashboard-page .activity-badge--returned {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+}
+
+#admin-dashboard-page .activity-badge--update {
+  background-color: hsl(from var(--secondary) h s l / 0.15);
+  color: var(--secondary);
+}
+
+/* ── LOAN STATUS CARD ────────────────── */
+
+#admin-dashboard-page .loan-card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+}
+
+#admin-dashboard-page .loan-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.75rem;
+}
+
+#admin-dashboard-page .loan-card__heading {
+  font-family: var(--serif);
+  color: var(--text);
+  margin: 0 0 0.2rem 0;
+}
+
+#admin-dashboard-page .loan-card__sub {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin: 0;
+}
+
+#admin-dashboard-page .loan-card__total {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  color: var(--primary);
+}
+
+#admin-dashboard-page .loan-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#admin-dashboard-page .loan-bar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+#admin-dashboard-page .loan-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+}
+
+#admin-dashboard-page .loan-bar-track {
+  width: 100%;
+  height: 3px;
+  background-color: var(--surface-high);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+#admin-dashboard-page .loan-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+#admin-dashboard-page .loan-bar-fill--available { background-color: var(--primary); }
+#admin-dashboard-page .loan-bar-fill--borrowed   { background-color: var(--secondary); }
+#admin-dashboard-page .loan-bar-fill--overdue    { background-color: var(--text-muted); }
+
+#admin-dashboard-page .loan-card__quote {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid hsl(from var(--text) h s l / 0.07);
+}
+
+#admin-dashboard-page .loan-card__quote-text {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: 0 0 0.4rem 0;
+}
+
+#admin-dashboard-page .loan-card__quote-author {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* end ADMIN DASHBOARD*/
+
+/* ============================================
+   USER DASHBOARD  (#user-dashboard-page)
+   ============================================ */
+
+#user-dashboard-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ── MAIN CANVAS ─────────────────────────── */
+
+.ud-main {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+/* ── HEADER / PROFILE BLOCK ──────────────── */
+
+.ud-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding-bottom: 2.5rem;
+  border-bottom: 1px solid rgba(240, 187, 164, 0.08);
+}
+
+.ud-profile-block {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.ud-avatar {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background: var(--surface-high);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(240, 187, 164, 0.15);
+  flex-shrink: 0;
+}
+
+.ud-avatar .material-symbols-outlined {
+  font-size: 3rem;
+  color: var(--primary);
+  font-variation-settings: 'FILL' 1;
+}
+
+.ud-label {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  margin: 0 0 0.35rem 0;
+}
+
+.ud-username {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.2rem 0;
+  line-height: 1.1;
+}
+
+.ud-email {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Quick stats */
+.ud-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem 2.5rem;
+}
+
+.ud-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.ud-stat-number {
+  font-family: var(--serif);
+  font-size: 2rem;
+  color: var(--primary);
+  line-height: 1;
+}
+
+.ud-stat-label {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.ud-stat-divider {
+  width: 1px;
+  height: 2.5rem;
+  background: rgba(240, 187, 164, 0.1);
+}
+
+/* ── SECTIONS ────────────────────────────── */
+
+.ud-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.ud-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ud-section-title {
+  font-family: var(--serif);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0;
+}
+
+.ud-section-link {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--secondary);
+  text-decoration: none;
+  transition: text-decoration-color 0.2s;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+}
+
+.ud-section-link:hover {
+  text-decoration-color: var(--secondary);
+}
+
+/* ── BOOK CARDS GRID ─────────────────────── */
+
+.ud-books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.ud-book-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  transition: background-color 0.2s;
+  border: 1px solid rgba(240, 187, 164, 0.05);
+}
+
+.ud-book-card:hover {
+  background: var(--surface-high);
+}
+
+.ud-book-cover-wrap {
+  width: 4.5rem;
+  height: 6.5rem;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.ud-book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ud-book-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Due date badge */
+.ud-due {
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--text-muted);
+}
+
+.ud-due--soon {
+  color: var(--primary);
+}
+
+.ud-book-title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.ud-book-author {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.ud-book-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.ud-btn-ghost {
+  background: var(--surface-high);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.75rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.ud-btn-ghost:hover {
+  background: var(--primary);
+  color: var(--bg);
+}
+
+.ud-btn-outline {
+  background: transparent;
+  border: 1px solid rgba(240, 187, 164, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.3rem 0.75rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--primary);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.ud-btn-outline:hover {
+  background: var(--primary);
+  color: var(--bg);
+}
+
+/* ── HISTORY TABLE ───────────────────────── */
+
+.ud-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 1rem;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.ud-filter-btn .material-symbols-outlined {
+  font-size: 1rem;
+}
+
+.ud-filter-btn:hover {
+  background: var(--surface-high);
+  color: var(--primary);
+}
+
+.ud-table-wrap {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  overflow-x: auto;
+}
+
+.ud-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.ud-table thead tr {
+  background: var(--surface-high);
+}
+
+.ud-table th {
+  padding: 1rem 1.5rem;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(213, 195, 188, 0.6);
+  white-space: nowrap;
+}
+
+.ud-table tbody tr {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background-color 0.2s;
+}
+
+.ud-table tbody tr:hover {
+  background: var(--surface-high);
+}
+
+.ud-tr-alt {
+  background: rgba(12, 21, 25, 0.5);
+}
+
+.ud-table td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.ud-td-title {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--text) !important;
+}
+
+/* Status badges */
+.ud-badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.ud-badge--returned {
+  background: rgba(241, 187, 152, 0.1);
+  color: var(--secondary);
+}
+
+.ud-badge--overdue {
+  background: rgba(255, 180, 171, 0.1);
+  color: #ffb4ab;
+}
+
+/* ── RESPONSIVE ──────────────────────────── */
+
+@media (max-width: 768px) {
+  .ud-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ud-stats-row {
+    width: 100%;
+    justify-content: space-around;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .ud-books-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ud-main {
+    padding: 2rem 1.25rem 3rem;
+  }
+}
+
+/* END USER DASHBOARD */
+
+/* ============================================
+   INDEX / LANDING PAGE  (#index-page)
+   Save as: assets/css/index.css
+   Link it in index.html only
+   ============================================ */
+
+#index-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ── HERO ────────────────────────────────── */
+
+.ix-hero {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 5rem;
+  overflow: hidden;
+  /* make sure hero fills space between nav and footer */
+  min-height: calc(100vh - 60px - 180px);
+}
+
+/* subtle bookshelf grid texture — pure CSS, no image needed */
+.ix-grid-texture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 62px,
+      rgba(0, 0, 0, 0.07) 62px,
+      rgba(0, 0, 0, 0.07) 64px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 90px,
+      rgba(0, 0, 0, 0.05) 90px,
+      rgba(0, 0, 0, 0.05) 92px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* warm radial glow from the center */
+.ix-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 55%,
+    rgba(114, 75, 57, 0.18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── CONTENT ─────────────────────────────── */
+
+.ix-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  max-width: 600px;
+  width: 100%;
+  /* staggered fade-in on load */
+  animation: ix-fade-up 0.9s ease both;
+}
+
+@keyframes ix-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* eyebrow label */
+.ix-eyebrow {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(207, 157, 123, 0.65);
+  margin: 0 0 1.5rem;
+  animation: ix-fade-up 0.9s 0.05s ease both;
+}
+
+/* headline */
+.ix-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
+  margin: 0 0 1.75rem;
+  line-height: 1.1;
+  animation: ix-fade-up 0.9s 0.1s ease both;
+}
+
+.ix-headline-light {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 3.5rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+
+.ix-headline-accent {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 3.5rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--primary);
+  letter-spacing: -0.03em;
+}
+
+/* subtitle */
+.ix-subtitle {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: rgba(213, 195, 188, 0.6);
+  margin: 0 0 2.5rem;
+  animation: ix-fade-up 0.9s 0.15s ease both;
+}
+
+/* CTA button */
+.ix-cta {
+  display: inline-block;
+  background: var(--gradient);
+  color: var(--bg);
+  text-decoration: none;
+  padding: 0.95rem 2.75rem;
+  border-radius: var(--radius-md);
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s, opacity 0.15s;
+  animation: ix-fade-up 0.9s 0.2s ease both;
+  margin-bottom: 1.5rem;
+}
+
+.ix-cta:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+
+.ix-cta:active {
+  transform: scale(0.97);
+  opacity: 1;
+}
+
+/* sign-in hint */
+.ix-signin {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: rgba(207, 157, 123, 0.35);
+  letter-spacing: 0.05em;
+  margin: 0;
+  animation: ix-fade-up 0.9s 0.25s ease both;
+}
+
+.ix-signin-link {
+  color: rgba(241, 187, 152, 0.6);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(241, 187, 152, 0.3);
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.ix-signin-link:hover {
+  color: var(--secondary);
+  text-decoration-color: var(--secondary);
+}
+
+/* ── RESPONSIVE ──────────────────────────── */
+
+@media (max-width: 600px) {
+  .ix-hero {
+    padding: 4rem 1.5rem 3rem;
+  }
+
+  .ix-subtitle br {
+    display: none;
+  }
+
+  .ix-cta {
+    padding: 0.9rem 2rem;
+  }
+}
+
+/* END INDEX PAGE */
+
 /* Start Global Nav */
 
 nav {
@@ -1379,3 +2361,4 @@ nav .logo:hover a,
 }
 
 /* End Global Footer */
+
