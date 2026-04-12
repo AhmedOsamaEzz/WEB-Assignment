@@ -1,83 +1,113 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../assets/css/normalize.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <script src = "../assets/Javascript/auth.js"></script>
+    <title>edit book</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../assets/css/style.css" />
-  <title>edit book</title>
-</head>
-
-<body>
-  <header>
-    <nav class="nav-bar">
-      <div class="title">
-        <h1 class="brand-title">The Midnight Scholar</h1>
-      </div>
-      <div class="nav-links">
-        <a href="../index.html">Home</a>
-        <a href="bookList.html">Book List</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="../auth/login.html">Logout</a>
-      </div>
-      <div class="tools">
-        <span class="material-symbols-outlined"> search </span>
-        <span class="material-symbols-outlined"> notifications </span>
-        <span class="material-symbols-outlined"> account_circle </span>
-      </div>
-    </nav>
-  </header>
-
-  <form class="book-edit-container">
-    <div class="book-image-section">
-      <label for="image">Book cover</label>
-      <img id="image" src="../assets/images/unnamed.png" alt="" />
-    </div>
-
-    <div class="book-info-section">
-      <div class="label-input">
-        <label for="title">Book Title</label>
-        <input id="title" placeholder="enter the book title" />
-      </div>
-
-      <div class="same-row">
-        <div class="label-input">
-          <label for="author">Book Author</label>
-          <input id="author" type="text" placeholder="enter the book Author" />
+  <body>
+    <header>
+      <nav class="nav-bar">
+        <div class="title">
+          <h1 class="brand-title">The Midnight Scholar</h1>
         </div>
+        <div class="nav-links">
+          <a href="../index.html">Home</a>
+          <a href="bookList.html">Book List</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="../auth/login.html">Logout</a>
+        </div>
+        <div class="tools">
+          <span class="material-symbols-outlined"> search </span>
+          <span class="material-symbols-outlined"> notifications </span>
+          <span class="material-symbols-outlined"> account_circle </span>
+        </div>
+      </nav>
+    </header>
+
+    <form class="book-edit-container">
+      <div class="book-image-section">
+        <label for="image">Book cover</label>
+        <img id="image" src="../assets/images/unnamed.png" alt="" />
+      </div>
+
+      <div class="book-info-section">
         <div class="label-input">
-          <label for="isbn">Book ISBN</label>
-          <input id="isbn" type="text" placeholder="enter the book ISBN" />
+          <label for="title">Book Title</label>
+          <input id="title" placeholder="enter the book title" />
+        </div>
+
+        <div class="same-row">
+          <div class="label-input">
+            <label for="author">Book Author</label>
+            <input
+              id="author"
+              type="text"
+              placeholder="enter the book Author"
+            />
+          </div>
+          <div class="label-input">
+            <label for="isbn">Book ISBN</label>
+            <input id="isbn" type="text" placeholder="enter the book ISBN" />
+          </div>
+        </div>
+
+        <div class="same-row">
+          <div class="label-input">
+            <label for="publicationYear">Publication Year</label>
+            <input
+              id="publicationYear"
+              type="text"
+              placeholder="enter the book Publication year"
+            />
+          </div>
+          <div class="label-input">
+            <label for="publisher">Publisher</label>
+            <input
+              id="publisher"
+              type="text"
+              placeholder="enter the book Publisher"
+            />
+          </div>
+        </div>
+
+        <div class="label-input">
+          <label for="totalCopies">Book Total Copies</label>
+          <input
+            id="totalCopies"
+            type="number"
+            placeholder="enter the book Total Copies"
+          />
+        </div>
+
+        <div class="label-input">
+          <label for="description">Book description</label>
+          <textarea
+            id="description"
+            placeholder="enter the book description"
+          ></textarea>
+        </div>
+        <div class="form-button">
+          <button class="btn-primary" type="submit">submit</button>
         </div>
       </div>
+    </form>
 
-      <div class="same-row">
-        <div class="label-input">
-          <label for="publicationYear">Publication Year</label>
-          <input id="publicationYear" type="text" placeholder="enter the book Publication year" />
-        </div>
-        <div class="label-input">
-          <label for="publisher">Publisher</label>
-          <input id="publisher" type="text" placeholder="enter the book Publisher" />
-        </div>
+    <hr class="global-hr" />
+    <footer class="global-footer">
+      <p class="name">The Midnight Scholar</p>
+      <div class="cnt">
+        <p><a href="#">PRIVACY POLICY</a></p>
+        <p><a href="#">TERMS OF ACCESS</a></p>
+        <p><a href="#">CONTACT CURATOR</a></p>
       </div>
-
-      <div class="label-input">
-        <label for="totalCopies">Book Total Copies</label>
-        <input id="totalCopies" type="number" placeholder="enter the book Total Copies" />
-      </div>
-
-      <div class="label-input">
-        <label for="description">Book description</label>
-        <textarea id="description" placeholder="enter the book description"></textarea>
-      </div>
-      <div class="form-button">
-        <button class="btn-primary" type="submit">submit</button>
-      </div>
-    </div>
-
-
-  </form>
-</body>
-
+      <p class="copyrights">
+        &copy; 2026 The Midnight Scholar Private Archive. All rights reserved.
+      </p>
+    </footer>
+  </body>
 </html>
