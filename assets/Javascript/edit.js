@@ -14,8 +14,24 @@
   const bookCopies = document.querySelector("#totalCopies");
   const bookDescription = document.querySelector("#description");
   const bookCategory = document.querySelector("#category");
-  const oldIsbn = document.querySelector("#isbn").value;
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const oldIsbn = urlParams.get("isbn");
+  const storedBooks = JSON.parse(localStorage.getItem("booklist"));
+  const existingBook = storedBooks.find((book) => book.isbn === oldIsbn);
+  if (existingBook) {
+    bookTitle.value = existingBook.title;
+    bookAuthor.value = existingBook.author;
+    bookIsbn.value = existingBook.isbn;
+    bookYear.value = existingBook.year;
+    bookPublisher.value = existingBook.publisher;
+    bookCopies.value = existingBook.copies;
+    bookDescription.value = existingBook.description;
+    bookCategory.value = existingBook.category;
+    imagePlaceHolder.src = existingBook.cover;
+  } else {
+    console.log("Could not find a book with ISBN:", oldIsbn);
+  }
   bookYear.addEventListener("input", () => {
     bookYear.value = bookYear.value.replace(/[^0-9]/g, "");
     if (bookYear.value.length > 4) {
