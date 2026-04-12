@@ -5,42 +5,146 @@
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="stylesheet" href="../assets/css/normalize.css" />
+      <link rel="stylesheet" href="../assets/css/style.css" />
+      <script
+        src="https://kit.fontawesome.com/80d75008f5.js"
+        crossorigin="anonymous"
+      ></script>
       <title>List of All Books</title>
+      <script src = "../assets/Javascript/auth.js"></script>
     </head>
 
-    <body>
+    <body id="bookList-page">
       <header>
-        <nav>
-          <a href="../index.html">Home</a>
-          <a href="../user/search.html">Search</a>
-          <a href="bookList.html">Book List</a>
-          <a href="dashboard.html">Dashboard</a>
-          <a href="../auth/login.html">Logout</a>
+        <nav class="nav-bar">
+          <div class="title">
+            <h1 class="brand-title">The Midnight Scholar</h1>
+          </div>
+          <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="bookList.html">Book List</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="../auth/login.html">Logout</a>
+          </div>
+          <div class="tools">
+            <span class="material-symbols-outlined"> search </span>
+            <span class="material-symbols-outlined"> notifications </span>
+            <span class="material-symbols-outlined"> account_circle </span>
+          </div>
         </nav>
       </header>
-      <h1>Book List</h1>
-      <a href="bookAdd.html">Add Book</a>
-      <ol>
-        <li>
-          book1
-          <a href="bookEdit.html">Edit Book</a>
-        </li>
+
+      <main class="main-bookList">
         <br />
-        <li>
-          book2
-          <a href="bookEdit.html">Edit Book</a>
-        </li>
+        <table class="table-section">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="book-title-column">
+                  <img
+                    src="../assets/images/download.webp"
+                    class="mini-book-image"
+                  />
+                  <div>
+                    <label class="book-title-text">Title 1</label>
+                    <br />
+                    <label class="book-isbn-label">ISBN-0000</label>
+                  </div>
+                </div>
+              </td>
+              <td>Author 1</td>
+              <td><label class="book-category-column">Category 1</label></td>
+              <td>Stat 1</td>
+              <td class="book-action-column">
+                <div class="book-action-cell">
+                  <a href="bookEdit.html"><i class="fa-solid fa-pen"></i></a>
+                  <button><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="book-title-column">
+                  <img
+                    src="../assets/images/download.webp"
+                    class="mini-book-image"
+                  />
+                  <div>
+                    <label class="book-title-text">Title 2</label>
+                    <br />
+                    <label class="book-isbn-label">ISBN-0000</label>
+                  </div>
+                </div>
+              </td>
+              <td>Author 2</td>
+              <td><label class="book-category-column">Category 2</label></td>
+              <td>Stat 2</td>
+              <td class="book-action-column">
+                <div class="book-action-cell">
+                  <a href="bookEdit.html"><i class="fa-solid fa-pen"></i></a>
+                  <button><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="book-title-column">
+                  <img
+                    src="../assets/images/download.webp"
+                    class="mini-book-image"
+                  />
+                  <div>
+                    <label class="book-title-text">Title 3</label>
+                    <br />
+                    <label class="book-isbn-label">ISBN-0000</label>
+                  </div>
+                </div>
+              </td>
+              <td>Author 3</td>
+              <td><label class="book-category-column">Category 3</label></td>
+              <td>Stat 3</td>
+              <td class="book-action-column">
+                <div class="book-action-cell">
+                  <a href="bookEdit.html"><i class="fa-solid fa-pen"></i></a>
+                  <button><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
         <br />
-        <li>
-          book3
-          <a href="bookEdit.html">Edit Book</a>
-        </li>
+        <div class="table-options-section">
+          <button
+            type="button"
+            class="btn-primary"
+            onclick="window.location.href = 'bookEdit.html'"
+          >
+            Add Book
+          </button>
+          <div class="table-pagination">
+            <button class="prev-btn">←</button>
+            <!-- page number buttons are generated by JavaScript -->
+            <div class="page-numbers">
+              <button class="current-button">1</button>
+              <button class="not-current-button">2</button>
+              <button class="not-current-button">3</button>
+            </div>
+            <button class="next-btn">→</button>
+          </div>
+        </div>
         <br />
-        <li>
-          book4
-          <a href="bookEdit.html">Edit Book</a>
-        </li>
-      </ol>
+      </main>
     </body>
   </html>
 </html>
