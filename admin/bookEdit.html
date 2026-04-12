@@ -7,8 +7,10 @@
     <link rel="stylesheet" href="../assets/css/style.css" />
     <script
       src="https://kit.fontawesome.com/80d75008f5.js"
-      crossorigin="anonymous"></script>
+      crossorigin="anonymous"
+    ></script>
     <!-- <script src="../assets/Javascript/auth.js"></script> -->
+	<script src="../assets/Javascript/bookList.js"></script>
     <title>edit book</title>
   </head>
 
@@ -37,8 +39,12 @@
       <div class="book-image-section">
         <label for="image">Book cover</label>
         <img id="image" src="../assets/images/unnamed.png" alt />
-        <input type="file" id="fileInput" accept="image/*"
-          style="display: none;">
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+          style="display: none"
+        />
       </div>
 
       <div class="book-info-section">
@@ -53,7 +59,8 @@
             <input
               id="author"
               type="text"
-              placeholder="enter the book Author" />
+              placeholder="enter the book Author"
+            />
           </div>
           <div class="label-input">
             <label for="isbn">Book ISBN</label>
@@ -82,14 +89,16 @@
             <input
               id="publicationYear"
               type="text"
-              placeholder="enter the book Publication year" />
+              placeholder="enter the book Publication year"
+            />
           </div>
           <div class="label-input">
             <label for="publisher">Publisher</label>
             <input
               id="publisher"
               type="text"
-              placeholder="enter the book Publisher" />
+              placeholder="enter the book Publisher"
+            />
           </div>
         </div>
 
@@ -98,14 +107,16 @@
           <input
             id="totalCopies"
             type="number"
-            placeholder="enter the book Total Copies" />
+            placeholder="enter the book Total Copies"
+          />
         </div>
 
         <div class="label-input">
           <label for="description">Book description</label>
           <textarea
             id="description"
-            placeholder="enter the book description"></textarea>
+            placeholder="enter the book description"
+          ></textarea>
         </div>
         <div class="form-button">
           <button class="btn-primary" type="submit">submit</button>

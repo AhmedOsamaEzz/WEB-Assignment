@@ -297,11 +297,11 @@ body#sign-up-page {
     border-color 0.2s;
 }
 
-.checkbox-container:hover input~.checkmark {
+.checkbox-container:hover input ~ .checkmark {
   border-color: var(--primary-dark);
 }
 
-.checkbox-container input:checked~.checkmark {
+.checkbox-container input:checked ~ .checkmark {
   background-color: var(--primary-dark);
   border-color: var(--primary-dark);
 }
@@ -312,7 +312,7 @@ body#sign-up-page {
   display: none;
 }
 
-.checkbox-container input:checked~.checkmark:after {
+.checkbox-container input:checked ~ .checkmark:after {
   display: block;
 }
 
@@ -326,7 +326,7 @@ body#sign-up-page {
   transform: rotate(45deg);
 }
 
-.checkbox-container input:focus-visible~.checkmark {
+.checkbox-container input:focus-visible ~ .checkmark {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
@@ -448,7 +448,9 @@ body#sign-up-page {
   color: var(--text);
   font-family: var(--sans);
   font-size: 1rem;
-  transition: box-shadow 0.2s, border-color 0.2s;
+  transition:
+    box-shadow 0.2s,
+    border-color 0.2s;
 }
 
 .book-edit-container .book-info-section .label-input textarea {
@@ -537,12 +539,16 @@ body#sign-up-page {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 20% 50%,
+    radial-gradient(
+      ellipse at 20% 50%,
       rgba(114, 75, 57, 0.3) 0%,
-      transparent 60%),
-    radial-gradient(ellipse at 80% 20%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse at 80% 20%,
       rgba(240, 187, 164, 0.1) 0%,
-      transparent 50%);
+      transparent 50%
+    );
   pointer-events: none;
   z-index: 0;
 }
@@ -603,12 +609,14 @@ body#sign-up-page {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg,
-      transparent 0%,
-      rgba(240, 187, 164, 0.08) 40%,
-      rgba(114, 75, 57, 0.25) 50%,
-      rgba(240, 187, 164, 0.08) 60%,
-      transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(240, 187, 164, 0.08) 40%,
+    rgba(114, 75, 57, 0.25) 50%,
+    rgba(240, 187, 164, 0.08) 60%,
+    transparent 100%
+  );
   opacity: 0;
   pointer-events: none;
   border-radius: var(--radius-sm);
@@ -637,14 +645,14 @@ body#sign-up-page {
   }
 }
 
-#search-page main .search-bar>i {
+#search-page main .search-bar > i {
   font-size: 1.5625rem;
   padding: 1.5rem;
   background-color: var(--surface-bright);
   border-top-left-radius: var(--radius-sm);
   border-bottom-left-radius: var(--radius-sm);
   color: var(--primary);
-  margin-right: .625rem;
+  margin-right: 0.625rem;
 }
 
 #search-page main .search-bar input {
@@ -1116,6 +1124,11 @@ body#sign-up-page {
   padding-left: 0;
 }
 
+/* Books count section (total, available, borrowed) */
+#bookList-page .main-bookList .table-section .books-count {
+  text-align: center;
+}
+
 #bookList-page .main-bookList .table-section tbody tr td a {
   text-decoration: none;
   color: var(--text-light);
@@ -1156,7 +1169,12 @@ body#sign-up-page {
   gap: 5px;
 }
 
-#bookList-page .main-bookList .table-options-section .table-pagination .page-numbers .current-button {
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .page-numbers
+  .current-button {
   color: var(--text-light);
   background-color: transparent;
   outline: none;
@@ -1164,9 +1182,22 @@ body#sign-up-page {
   cursor: pointer;
 }
 
-#bookList-page .main-bookList .table-options-section .table-pagination .page-numbers .not-current-button,
-#bookList-page .main-bookList .table-options-section .table-pagination .prev-btn,
-#bookList-page .main-bookList .table-options-section .table-pagination .next-btn {
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .page-numbers
+  .not-current-button,
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .prev-btn,
+#bookList-page
+  .main-bookList
+  .table-options-section
+  .table-pagination
+  .next-btn {
   color: var(--text-light);
   background-color: transparent;
   outline: none;
@@ -1265,7 +1296,8 @@ nav ul li a:hover::after {
   transition: color 0.2s;
 }
 
-nav .logo:hover a, .search-profile a:hover i {
+nav .logo:hover a,
+.search-profile a:hover i {
   color: hsl(from var(--secondary) h s l / 0.7);
 }
 
