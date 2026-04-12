@@ -1957,9 +1957,216 @@ body#sign-up-page {
   }
 }
 
+/* END USER DASHBOARD */
+
 /* ============================================
-   END USER DASHBOARD
+   INDEX / LANDING PAGE  (#index-page)
+   Save as: assets/css/index.css
+   Link it in index.html only
    ============================================ */
+
+#index-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+/* ── HERO ────────────────────────────────── */
+
+.ix-hero {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 6rem 2rem 5rem;
+  overflow: hidden;
+  /* make sure hero fills space between nav and footer */
+  min-height: calc(100vh - 60px - 180px);
+}
+
+/* subtle bookshelf grid texture — pure CSS, no image needed */
+.ix-grid-texture {
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px,
+      transparent 62px,
+      rgba(0, 0, 0, 0.07) 62px,
+      rgba(0, 0, 0, 0.07) 64px
+    ),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 90px,
+      rgba(0, 0, 0, 0.05) 90px,
+      rgba(0, 0, 0, 0.05) 92px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* warm radial glow from the center */
+.ix-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 55%,
+    rgba(114, 75, 57, 0.18) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── CONTENT ─────────────────────────────── */
+
+.ix-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  max-width: 600px;
+  width: 100%;
+  /* staggered fade-in on load */
+  animation: ix-fade-up 0.9s ease both;
+}
+
+@keyframes ix-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* eyebrow label */
+.ix-eyebrow {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(207, 157, 123, 0.65);
+  margin: 0 0 1.5rem;
+  animation: ix-fade-up 0.9s 0.05s ease both;
+}
+
+/* headline */
+.ix-headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
+  margin: 0 0 1.75rem;
+  line-height: 1.1;
+  animation: ix-fade-up 0.9s 0.1s ease both;
+}
+
+.ix-headline-light {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 3.5rem);
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.03em;
+}
+
+.ix-headline-accent {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 6vw, 3.5rem);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--primary);
+  letter-spacing: -0.03em;
+}
+
+/* subtitle */
+.ix-subtitle {
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: rgba(213, 195, 188, 0.6);
+  margin: 0 0 2.5rem;
+  animation: ix-fade-up 0.9s 0.15s ease both;
+}
+
+/* CTA button */
+.ix-cta {
+  display: inline-block;
+  background: var(--gradient);
+  color: var(--bg);
+  text-decoration: none;
+  padding: 0.95rem 2.75rem;
+  border-radius: var(--radius-md);
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s, opacity 0.15s;
+  animation: ix-fade-up 0.9s 0.2s ease both;
+  margin-bottom: 1.5rem;
+}
+
+.ix-cta:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+
+.ix-cta:active {
+  transform: scale(0.97);
+  opacity: 1;
+}
+
+/* sign-in hint */
+.ix-signin {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: rgba(207, 157, 123, 0.35);
+  letter-spacing: 0.05em;
+  margin: 0;
+  animation: ix-fade-up 0.9s 0.25s ease both;
+}
+
+.ix-signin-link {
+  color: rgba(241, 187, 152, 0.6);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(241, 187, 152, 0.3);
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.ix-signin-link:hover {
+  color: var(--secondary);
+  text-decoration-color: var(--secondary);
+}
+
+/* ── RESPONSIVE ──────────────────────────── */
+
+@media (max-width: 600px) {
+  .ix-hero {
+    padding: 4rem 1.5rem 3rem;
+  }
+
+  .ix-subtitle br {
+    display: none;
+  }
+
+  .ix-cta {
+    padding: 0.9rem 2rem;
+  }
+}
+
+/* END INDEX PAGE */
 
 /* Start Global Nav */
 
