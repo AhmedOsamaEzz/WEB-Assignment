@@ -7,9 +7,8 @@
     <link rel="stylesheet" href="../assets/css/style.css" />
     <script
       src="https://kit.fontawesome.com/80d75008f5.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="../assets/Javascript/auth.js"></script>
+      crossorigin="anonymous"></script>
+    <!-- <script src="../assets/Javascript/auth.js"></script> -->
   </head>
 
   <body id="book-details-page">
@@ -19,16 +18,16 @@
 
         <div class="links">
           <ul>
-            <li><a href="#">Archive</a></li>
-            <li><a href="#">Colections</a></li>
-            <li><a href="#">Curators</a></li>
-            <li><a href="search.html">Search</a></li>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="borrowed.html">My Books</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="../auth/login.html" onclick="logout()">Logout</a></li>
           </ul>
         </div>
 
         <div class="search-profile">
+          <a href="search.html"><i class="fa-solid fa-magnifying-glass"></i></a>
           <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
-          <a href="#"><i class="fa-solid fa-bell"></i></a>
         </div>
       </nav>
     </header>
@@ -38,8 +37,7 @@
     <img
       id="book-image"
       src="../assets/images/download.webp"
-      alt="Book Image"
-    />
+      alt="Book Image" />
 
     <div id="book-info">
       <p id="isbn">ISBN :</p>
