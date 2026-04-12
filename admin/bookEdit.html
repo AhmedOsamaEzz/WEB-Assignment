@@ -10,7 +10,8 @@
       crossorigin="anonymous"
     ></script>
     <!-- <script src="../assets/Javascript/auth.js"></script> -->
-	<script src="../assets/Javascript/bookList.js"></script>
+    <script src="../assets/Javascript/edit.js" defer></script>
+    <script src="../assets/Javascript/bookList.js"></script>
     <title>edit book</title>
   </head>
 
@@ -45,6 +46,7 @@
           accept="image/*"
           style="display: none"
         />
+        <div class="upload-icon"><i class="fas fa-camera"></i></div>
       </div>
 
       <div class="book-info-section">
@@ -119,7 +121,7 @@
           ></textarea>
         </div>
         <div class="form-button">
-          <button class="btn-primary" type="submit">submit</button>
+          <button class="btn-primary" id="editbtn" type="submit">submit</button>
         </div>
       </div>
     </form>
