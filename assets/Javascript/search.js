@@ -20,7 +20,8 @@ function renderBooks() {
     .toLowerCase();
   const activeCategory = document
     .querySelector(".filters ul li.active")
-    .textContent.trim();
+    .textContent.trim()
+    .toLowerCase();
   const onlyAvailable = document.querySelector(".filter-check").checked; // single checkbox
 
   const books = JSON.parse(localStorage.getItem("booklist")) || []; // parse converts JSON format array of book objects
@@ -30,7 +31,7 @@ function renderBooks() {
       book.title.toLowerCase().includes(query) ||
       book.author.toLowerCase().includes(query);
     const matchesCategory =
-      activeCategory === "All" || book.category === activeCategory;
+      activeCategory === "all" || book.category === activeCategory;
     const matchesAvail = !onlyAvailable || parseInt(book.copies) > 0;
 
     return matchesQuery && matchesCategory && matchesAvail;

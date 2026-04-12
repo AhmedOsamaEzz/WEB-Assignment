@@ -1299,6 +1299,7 @@ nav .logo:hover a, .search-profile a:hover i {
   font-style: italic;
   margin: 0;
   user-select: none;
+  font-family: var(--serif);
 }
 
 .global-footer .cnt {
