@@ -359,69 +359,6 @@ body#sign-up-page {
 /* Notice : this "link" is the same as "registeration link" */
 /* I am keeping both until we decide whether "link" will always be used or not */
 
-/* start nav bar*/
-.nav-bar {
-  max-width: 100%;
-  background-color: var(--surface);
-  padding: 0.75rem 2rem;
-  position: sticky;
-  top: 0;
-  display: flex;
-  gap: 2rem;
-  box-shadow: var(--shadow);
-  justify-content: space-between;
-  align-items: center;
-  overflow: hidden;
-  z-index: 100;
-}
-
-.nav-bar a {
-  color: var(--primary);
-  text-decoration: none;
-  font-weight: 500;
-  transition: color 0.2s;
-  white-space: nowrap;
-}
-
-.nav-bar a:hover {
-  color: var(--secondary);
-}
-
-.nav-bar .brand-title {
-  display: flex;
-  font-family: var(--serif);
-  font-size: 1.5rem;
-  font-weight: 700;
-  letter-spacing: -0.05em;
-  color: var(--primary);
-  white-space: nowrap;
-  margin-bottom: 20px;
-}
-
-.nav-bar .nav-links {
-  display: flex;
-  gap: 1.5rem;
-  font-family: var(--serif);
-  font-size: 1rem;
-  font-weight: 500;
-  align-items: center;
-  flex-shrink: 1;
-}
-
-.nav-bar .tools {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  color: var(--primary);
-}
-
-@media (max-width: 800px) {
-  .nav-bar .nav-links {
-    display: flex;
-  }
-}
-
-/* end nav bar */
 
 /* start add-edit */
 
@@ -2023,6 +1960,99 @@ body#sign-up-page {
 /* ============================================
    END USER DASHBOARD
    ============================================ */
+
+/* Start Global Nav */
+
+nav {
+  height: var(--nav-height);
+  display: flex;
+  padding: 0 2rem;
+  background-color: hsl(from var(--bg) h s l / 0.6);
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  font-family: var(--serif);
+}
+
+nav .logo {
+  user-select: none;
+}
+
+nav .logo a {
+  text-decoration: none;
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: 400;
+  transition: color 0.2s;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: hsl(from var(--text) h s l / 0.7);
+  padding: 10px;
+  margin: 15px;
+  display: block;
+  font-size: 1rem;
+  position: relative;
+}
+
+nav ul li a:hover {
+  color: var(--text-light);
+}
+
+nav ul li a::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background-color: var(--text-muted);
+  transform: scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
+nav ul li a:hover::after {
+  transform: scaleX(1);
+}
+
+.search-profile {
+  display: flex;
+  align-self: center;
+  gap: 1rem;
+}
+
+.search-profile a {
+  text-decoration: none;
+}
+
+.search-profile a i {
+  display: flex;
+  color: var(--primary);
+  font-size: 1.5rem;
+  justify-content: flex-start;
+  transition: color 0.2s;
+}
+
+nav .logo:hover a, .search-profile a:hover i {
+  color: hsl(from var(--secondary) h s l / 0.7);
+}
+
+/* End Global Nav */
 
 /* Start Global Footer */
 
