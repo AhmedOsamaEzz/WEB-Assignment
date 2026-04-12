@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap");
+
 :root {
   --bg: #0c1519;
   --surface: #182125;
@@ -38,6 +39,7 @@
 * {
   box-sizing: border-box;
 }
+
 .bg-blur {
   position: absolute;
   width: 40%;
@@ -47,15 +49,19 @@
   pointer-events: none;
   z-index: 0;
 }
+
 .blur-primary {
   top: -10%;
   right: -5%;
-  background-color: rgba(240, 187, 164, 0.05); /* --primary */
+  background-color: rgba(240, 187, 164, 0.05);
+  /* --primary */
 }
+
 .blur-secondary {
   bottom: -10%;
   left: -5%;
-  background-color: rgba(241, 187, 152, 0.03); /* --secondary */
+  background-color: rgba(241, 187, 152, 0.03);
+  /* --secondary */
 }
 
 /* Primary Button */
@@ -74,6 +80,7 @@
   outline: none;
   border: none;
 }
+
 .btn-primary:active {
   transform: scale(0.98);
 }
@@ -105,6 +112,7 @@ body {
   max-width: 28rem;
   /* z-index: 10; */
 }
+
 .login-card {
   background-color: var(--surface);
   border: 1px solid var(--border);
@@ -113,15 +121,18 @@ body {
   box-shadow: var(--shadow);
   position: relative;
 }
+
 .login-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
+
 .brand-header {
   text-align: center;
   margin-bottom: 3rem;
 }
+
 .brand-title {
   font-family: var(--serif);
   font-size: 2.25rem;
@@ -130,6 +141,7 @@ body {
   color: var(--primary);
   margin-bottom: 0.5rem;
 }
+
 .brand-subtitle {
   font-family: var(--sans);
   font-size: 0.75rem;
@@ -137,6 +149,7 @@ body {
   letter-spacing: 0.2em;
   color: var(--text-muted);
 }
+
 /* --- Registration Link --- */
 .registration-link {
   margin-top: 2rem;
@@ -144,6 +157,7 @@ body {
   font-size: 0.875rem;
   color: var(--text);
 }
+
 .registration-link a {
   color: var(--secondary);
   font-weight: 700;
@@ -153,9 +167,11 @@ body {
   text-underline-offset: 8px;
   transition: text-decoration-color 0.2s;
 }
+
 .registration-link a:hover {
   text-decoration-color: var(--secondary);
 }
+
 /* End Login */
 
 /* Begin Signup */
@@ -164,6 +180,7 @@ body {
   max-width: 28rem;
   /* z-index: 10; */
 }
+
 .signup-card {
   background-color: var(--surface);
   border: 1px solid var(--border);
@@ -172,44 +189,50 @@ body {
   box-shadow: var(--shadow);
   position: relative;
 }
+
 .signup-form {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
+
 /* End Signup */
 
-  /* Forms Elements */
-  .input-wrapper { 
-  position: relative; 
-  display: flex; 
-  align-items: center; 
-  }
-  .input-wrapper:focus-within .input-icon { 
-    color: var(--primary); 
-  }
-  .input-field {
-      width: 100%;
-      background-color: var(--surface-high);
-      border: 1px solid transparent; 
-      border-radius: var(--radius-md);
-      padding: 1rem 1rem 1rem 1rem;
-      color: var(--text);
-      font-size: 1rem;
-      transition: box-shadow 0.2s, border-color 0.2s;
-  }
-  .form-label { 
-    font-size: 0.75rem;
-    font-weight: 1000; 
-    text-transform: uppercase; 
-    letter-spacing: 0.1em;
-    color: var(--text-muted); 
-  }
-  /* Begin input field error*/
-  .error-msg {
+/* Forms Elements */
+.input-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 6px; 
+}
+
+.input-wrapper:focus-within .input-icon {
+  color: var(--primary);
+}
+
+.input-field {
+  width: 100%;
+  background-color: var(--surface-high);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 1rem 1rem 1rem 1rem;
+  color: var(--text);
+  font-size: 1rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 1000;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* Begin input field error*/
+.error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   color: #dc2626;
   font-size: 0.85rem;
   font-weight: 500;
@@ -231,6 +254,7 @@ body {
   user-select: none;
   line-height: 1.25rem;
 }
+
 .checkbox-container input {
   position: absolute;
   opacity: 0;
@@ -238,6 +262,7 @@ body {
   height: 0;
   width: 0;
 }
+
 .checkmark {
   position: absolute;
   top: 0;
@@ -251,21 +276,26 @@ body {
     background-color 0.2s,
     border-color 0.2s;
 }
-.checkbox-container:hover input ~ .checkmark {
+
+.checkbox-container:hover input~.checkmark {
   border-color: var(--primary-dark);
 }
-.checkbox-container input:checked ~ .checkmark {
+
+.checkbox-container input:checked~.checkmark {
   background-color: var(--primary-dark);
   border-color: var(--primary-dark);
 }
+
 .checkmark:after {
   content: "";
   position: absolute;
   display: none;
 }
-.checkbox-container input:checked ~ .checkmark:after {
+
+.checkbox-container input:checked~.checkmark:after {
   display: block;
 }
+
 .checkbox-container .checkmark:after {
   left: 0.35rem;
   top: 0.15rem;
@@ -275,10 +305,12 @@ body {
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
-.checkbox-container input:focus-visible ~ .checkmark {
+
+.checkbox-container input:focus-visible~.checkmark {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
+
 /* End checkbox */
 
 /* Link styling */
@@ -288,6 +320,7 @@ body {
   font-size: 0.875rem;
   color: var(--text);
 }
+
 .link a {
   color: var(--secondary);
   font-weight: 700;
@@ -297,9 +330,11 @@ body {
   text-underline-offset: 8px;
   transition: text-decoration-color 0.2s;
 }
+
 .link a:hover {
   text-decoration-color: var(--secondary);
 }
+
 /* End Link */
 /* Notice : this "link" is the same as "registeration link" */
 /* I am keeping both until we decide whether "link" will always be used or not */
@@ -359,11 +394,13 @@ body {
   align-items: center;
   color: var(--primary);
 }
+
 @media (max-width: 800px) {
   .nav-bar .nav-links {
     display: flex;
   }
 }
+
 /* end nav bar */
 
 /* start add-edit */
@@ -379,6 +416,7 @@ body {
   padding: 2rem;
   flex-wrap: nowrap;
 }
+
 .book-edit-container .book-image-section {
   flex: 1;
   width: 100%;
@@ -390,6 +428,7 @@ body {
   margin-bottom: 2rem;
   flex-direction: column;
 }
+
 .book-edit-container .book-image-section img {
   width: 27rem;
   height: 100%;
@@ -400,6 +439,7 @@ body {
   opacity: 0.3;
   display: block;
 }
+
 .book-edit-container .book-image-section label {
   font-size: 0.75rem;
   font-weight: 1000;
@@ -411,6 +451,7 @@ body {
   display: block;
   padding-bottom: 1rem;
 }
+
 .book-edit-container .book-info-section {
   flex: 3;
   width: 100%;
@@ -420,6 +461,7 @@ body {
   gap: 1.5rem;
   padding-left: 1rem;
 }
+
 .book-edit-container .book-info-section .label-input {
   display: flex;
   width: 100%;
@@ -427,6 +469,7 @@ body {
   align-items: center;
   flex-direction: column;
 }
+
 .book-edit-container .book-info-section .label-input label {
   font-size: 0.75rem;
   font-weight: 1000;
@@ -437,51 +480,50 @@ body {
   align-self: flex-start;
   text-wrap: nowrap;
 }
-.book-edit-container .book-info-section .label-input input {
+
+.book-edit-container .book-info-section .label-input input,
+.book-edit-container .book-info-section .label-input textarea,
+.book-edit-container .book-info-section .label-input select {
   width: 100%;
   background-color: var(--surface-high);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
   padding: 1rem;
   color: var(--text);
+  font-family: var(--sans);
   font-size: 1rem;
-  transition:
-    box-shadow 0.2s,
-    border-color 0.2s;
-}
-.book-edit-container .book-info-section .label-input textarea {
-  width: 100%;
-  background-color: var(--surface-high);
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
-  padding: 1rem;
-  color: var(--text);
-  font-size: 1rem;
-  transition:
-    box-shadow 0.2s,
-    border-color 0.2s;
+  transition: box-shadow 0.2s, border-color 0.2s;
 }
 
-.book-edit-container .book-info-section .label-input input:focus {
+.book-edit-container .book-info-section .label-input textarea {
+  resize: none;
+}
+
+.book-edit-container .book-info-section .label-input input:focus,
+.book-edit-container .book-info-section .label-input textarea:focus,
+.book-edit-container .book-info-section .label-input select:focus {
   outline: none;
   border-color: var(--primary);
-  /* box-shadow: 0 0 0 3px var(--primary); */
 }
-.book-edit-container .book-info-section .label-input input:focus-visible {
+
+.book-edit-container .book-info-section .label-input input:focus-visible,
+.book-edit-container .book-info-section .label-input textarea:focus-visible,
+.book-edit-container .book-info-section .label-input select:focus-visible {
   outline: 2px solid var(--primary);
 }
-.book-edit-container .book-info-section .label-input textarea:focus {
-  outline: none;
-  border-color: var(--primary);
-  /* box-shadow: 0 0 0 3px var(--primary); */
+
+.book-edit-container .book-info-section .label-input select {
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
 }
-.book-edit-container .book-info-section .label-input textarea:focus-visible {
-  outline: 2px solid var(--primary);
-}
+
 .book-edit-container .book-info-section .same-row {
   display: flex;
   gap: 1rem;
 }
+
 .book-edit-container .book-info-section .form-button {
   display: flex;
   justify-content: flex-end;
@@ -496,6 +538,7 @@ body {
   min-width: 10rem;
   cursor: pointer;
 }
+
 * {
   font-family: var(--serif);
 }
@@ -621,12 +664,7 @@ body {
   gap: 5px;
 }
 
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .page-numbers
-  .current-button {
+#bookList-page .main-bookList .table-options-section .table-pagination .page-numbers .current-button {
   color: var(--text-light);
   background-color: transparent;
   outline: none;
@@ -634,22 +672,9 @@ body {
   cursor: pointer;
 }
 
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .page-numbers
-  .not-current-button,
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .prev-btn,
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .next-btn {
+#bookList-page .main-bookList .table-options-section .table-pagination .page-numbers .not-current-button,
+#bookList-page .main-bookList .table-options-section .table-pagination .prev-btn,
+#bookList-page .main-bookList .table-options-section .table-pagination .next-btn {
   color: var(--text-light);
   background-color: transparent;
   outline: none;
