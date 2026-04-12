@@ -13,11 +13,12 @@
     const bookPublisher = document.querySelector('#publisher');
     const bookCopies = document.querySelector('#totalCopies');
     const bookDescription = document.querySelector('#description');
+    const bookCategory = document.querySelector('#category');
 
     bookYear.addEventListener('input', () => {
         bookYear.value = bookYear.value.replace(/[^0-9]/g, "");
         if (bookYear.value.length > 4) {
-            bookIsbn.value = bookIsbn.value.slice(0, 4);
+            bookYear.value = bookYear.value.slice(0, 4);
         }
     });
 
@@ -90,6 +91,10 @@
             alert("please enter book description");
             return;
         }
+        if (!bookCategory.value) {
+            alert("please select a category");
+            return;
+        }
         const reader = new FileReader;
 
         reader.onload = function (c) {
@@ -101,6 +106,7 @@
                 publisher: bookPublisher.value,
                 copies: bookCopies.value,
                 description: bookDescription.value,
+                category: bookCategory.value,
                 cover: c.target.result
 
             }
