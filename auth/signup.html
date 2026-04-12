@@ -2,56 +2,74 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../assets/css/style.css"/>
+    <link rel="stylesheet" href="../assets/css/style.css" />
     <script src="../assets/Javascript/auth.js"></script>
     <title>nice library</title>
   </head>
 
-  <body>
-
-    <main class = "main-content">
+  <body id="sign-up-page">
+    <main class="main-content">
       <div class="bg-blur blur-primary"></div>
       <div class="bg-blur blur-secondary"></div>
 
-      
-      <div class = "signup-container">
-            <header class="brand-header">
-                <h1 class="brand-title">Create An Account</h1>
-                <p class="brand-subtitle">Join the archives</p>
-            </header>
-          <div class = "signup-card">
-            <form class = "signup-form">
-              <label for = "signup-name" class = "form-label">Full Name</label>
-              <input type="text" placeholder="username@gmail.com" class = "input-field"/>
-              <dev class = "error-msg" id = "signup-username-error"></dev>
+      <div class="signup-container">
+        <header class="brand-header">
+          <h1 class="brand-title">Create An Account</h1>
+          <p class="brand-subtitle">Join the archives</p>
+        </header>
+        <div class="signup-card">
+          <form class="signup-form">
+            <label for="signup-name" class="form-label">Full Name</label>
+            <input
+              type="text"
+              placeholder="username@gmail.com"
+              class="input-field"
+            />
+            <dev class="error-msg" id="signup-username-error"></dev>
 
+            <label for="signup-email" class="form-label"
+              >username (email)</label
+            >
+            <input
+              type="text"
+              placeholder="username@gmail.com"
+              class="input-field"
+            />
+            <dev class="error-msg" id="signup-email-error"></dev>
 
-              <label for = "signup-email" class = "form-label">username (email)</label>
-              <input type="text" placeholder="username@gmail.com" class = "input-field"/>
-              <dev class = "error-msg" id = "signup-email-error"></dev>
-              
-              <label for = "signup-password" class = "form-label">password</label>
-              <input type="password" placeholder="******" class = "input-field"/>
-              <dev class = "error-msg" id = "signup-password-error"></dev>
+            <label for="signup-password" class="form-label">password</label>
+            <input type="password" placeholder="******" class="input-field" />
+            <dev class="error-msg" id="signup-password-error"></dev>
 
-              <div class="checkbox-group">
-                <label class="checkbox-container">Admin Account
-                  <input type="checkbox" id="create-admin-account"/>
-                  <span class="checkmark"></span>
-                </label>
-              </div>
-              
-              <button type = "submit" class="btn-primary">Sign Up</button>
-            </form>
-          </div>
-      <div class="link">
-       <p class="sans-text">Already have an account? <a href="login.html">Login!</a></p>
+            <div class="checkbox-group">
+              <label class="checkbox-container"
+                >Admin Account
+                <input type="checkbox" id="create-admin-account" />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <button type="submit" class="btn-primary">Sign Up</button>
+          </form>
+        </div>
+        <div class="link">
+          <p class="sans-text">
+            Already have an account? <a href="login.html">Login!</a>
+          </p>
+        </div>
       </div>
-      </div>
-
     </main>
   </body>
-  <footer>
-
+  <hr class="global-hr" />
+  <footer class="global-footer">
+    <p class="name">The Midnight Scholar</p>
+    <div class="cnt">
+      <p><a href="#">PRIVACY POLICY</a></p>
+      <p><a href="#">TERMS OF ACCESS</a></p>
+      <p><a href="#">CONTACT CURATOR</a></p>
+    </div>
+    <p class="copyrights">
+      &copy; 2026 The Midnight Scholar Private Archive. All rights reserved.
+    </p>
   </footer>
 </html>
