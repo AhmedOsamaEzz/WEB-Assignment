@@ -1,5 +1,5 @@
-let giveAdmin = false;
-let devMode = false;
+let giveAdmin = true;
+let devMode = true;
 // giveAdmin is what decided what your role is Until we implement backend
 // devMode disables accessCheck
 
