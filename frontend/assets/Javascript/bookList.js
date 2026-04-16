@@ -111,23 +111,28 @@ function renderBookList() {
 }
 
 // Delets a book from the localStorage
-function deleteBook(isbn) {
-  // Get the booklist from localStorage
-  const booklist = JSON.parse(localStorage.getItem("booklist"));
-
+async function deleteBook(isbn) {
   // Find the book by ISBN
-  const book = booklist.find((b) => b.isbn === isbn);
+  // try {
+  const response = await FakeAPI.getBook(isbn);
+  const book = response.data.title;
+  // } catch (error) {
+  // alert(error.message);
+  // }
 
   // Confirmation message
   const confirmed = confirm(
-    `Are you sure you want to delete "${book.title}" from the archive?`,
+    `Are you sure you want to delete "${book}" from the archive?`,
   );
 
   if (!confirmed) return;
 
   // Remove the book and save back to localStorage
-  const updatedList = booklist.filter((b) => b.isbn !== isbn);
-  localStorage.setItem("booklist", JSON.stringify(updatedList));
+  try {
+    const response2 = await FakeAPI.deleteBook(isbn);
+  } catch (error) {
+    alert(error.message);
+  }
 
   // Re-render the table after deleting the book
   renderBookList();
