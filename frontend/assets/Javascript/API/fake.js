@@ -1,8 +1,7 @@
-// ---------- storage helpers ----------
-
+// storage helpers
 const BOOKLIST_KEY = "booklist";
 
-const getBooklist = () => JSON.parse(localStorage.getItem(BOOKLIST_KEY)) || [];
+const getBookList = () => JSON.parse(localStorage.getItem(BOOKLIST_KEY)) || [];
 const saveBooklist = (list) => localStorage.setItem(BOOKLIST_KEY, JSON.stringify(list));
 
 const getBorrowedKey = (userToken) => `borrowedBooks_${userToken}`;
@@ -18,10 +17,9 @@ const getAvailableCopies = (book) =>
 
 
 
-// ---------- API functions ----------
-
-async function getBooks(query = "", categories = [], availableOnly = false) {
-  const books = getBooklist();
+const FakeAPI = {
+  async getBooks(query = "", categories = [], availableOnly = false) {
+  const books = getBookList();
   const q = query.trim().toLowerCase();
   const cats = categories.map((c) => c.toLowerCase());
   const filterByCategory = cats.length > 0 && !cats.includes("all");
@@ -40,16 +38,16 @@ async function getBooks(query = "", categories = [], availableOnly = false) {
 
     return matchesQuery && matchesCategory && matchesAvail;
   });
-}
+  },
 
-async function getBookById(ISBN) {
-  const book = getBooklist().find((b) => b.isbn === ISBN);
+  async getBookById(ISBN) {
+  const book = getBookList().find((b) => b.isbn === ISBN);
   if (!book) throw new Error("book not found");
   return book;
-}
+  },
 
-async function borrowBook(ISBN, userToken) {
-  const booklist = getBooklist();
+  async  borrowBook(ISBN, userToken) {
+  const booklist = getBookList();
   const index = booklist.findIndex((b) => b.isbn === ISBN);
 
   if (index === -1) throw new Error("book not found");
@@ -73,18 +71,87 @@ async function borrowBook(ISBN, userToken) {
     borrowedAt: new Date().toISOString(),
   });
   saveBorrowedList(userToken, borrowedBooks);
-
   return book;
-}
+  },
 
-async function getUserBorrowedBooks(userToken) {
+  async getUserBorrowedBooks(userToken) {
   return getBorrowedList(userToken);
-}
+  },
+  
+  addBook(bookData) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist")) || [];
+        const isDuplicate = booklist.some(
+          (book) => book.isbn === bookData.isbn,
+        );
+        if (isDuplicate) {
+          reject(new Error("A book with this ISBN already exists"));
+          return;
+        }
+        booklist.push(bookData);
+        localStorage.setItem("booklist", JSON.stringify(booklist));
+        resolve({ success: true, message: "Book added successfully!" });
+      } catch (error) {
+        reject(new Error("An error occurred in add book"));
+      }
+    });
+  },
 
-
+  getBook(oldisbn) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist"));
+        const index = booklist.findIndex((book) => book.isbn === oldisbn);
+        if (index !== -1) {
+          resolve({ success: true, data: booklist[index] });
+        } else {
+          reject(new Error("book not found"));
+          return;
+        }
+      } catch (error) {
+        reject(new Error("error in finding the book"));
+      }
+    });
+  },
+  editBook(oldisbn, newData) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist"));
+        const isDuplicate = booklist.some((book) => book.isbn === newData.isbn);
+        if (isDuplicate && newData.isbn !== oldisbn) {
+          reject(new Error("A book with this ISBN already exists"));
+          return;
+        }
+        const index = booklist.findIndex((book) => book.isbn === oldisbn);
+        if (index === -1) {
+          reject(new Error("book not found"));
+          return;
+        }
+        booklist[index] = newData;
+        localStorage.setItem("booklist", JSON.stringify(booklist));
+        resolve({ success: true, message: "Book updated successfully!" });
+      } catch (error) {
+        reject(new Error("an error in edit"));
+      }
+    });
+  },
+  deleteBook(isbn) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist"));
+        const updatedList = booklist.filter(
+          (b) => String(b.isbn) !== String(isbn),
+        );
+        localStorage.setItem("booklist", JSON.stringify(updatedList));
+        resolve({ success: true, message: "deleted" });
+      } catch (error) {
+         reject(new Error("error in delete"));
+      }
+    });
+  },
+};
 
 // ---------- export ----------
 
-const fake = { getBooks, getBookById, borrowBook, getUserBorrowedBooks };
-
-export default fake;
+export default FakeAPI;

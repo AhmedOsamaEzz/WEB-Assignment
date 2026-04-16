@@ -1,4 +1,3 @@
-
 // input handle
 const imagePlaceHolder = document.querySelector("#image");
 const imageInput = document.querySelector("#fileInput");
@@ -124,7 +123,7 @@ addBtn.addEventListener("click", (e) => {
   }
 
   const reader = new FileReader();
-  reader.onload = function (c) {
+  reader.onload = async function (c) {
     const book = {
       title: bookTitle.value,
       author: bookAuthor.value,
@@ -136,10 +135,12 @@ addBtn.addEventListener("click", (e) => {
       category: bookCategory.value,
       cover: c.target.result,
     };
-    booklist.push(book);
-    localStorage.setItem("booklist", JSON.stringify(booklist));
-
-    window.location.href = "bookList.html";
+    try {
+      const response = await FakeAPI.addBook(book);
+      window.location.href = "bookList.html";
+    } catch (error) {
+      alert(error.message);
+    }
   };
   reader.readAsDataURL(cover);
 });
