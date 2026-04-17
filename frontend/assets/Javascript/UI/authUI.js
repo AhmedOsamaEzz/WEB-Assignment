@@ -161,18 +161,23 @@ function initUI() {
         console.log("login input field error");
         return;
       }
-
+      const originalText = loginBtn.textContent;
       loginBtn.textContent = "Processing...";
       loginBtn.disabled = true;
 
       try{
+        loginBtn.textContent = "Processing...";
+        loginBtn.disabled = true;
         const response= await loginUser(email,password);
+        checkAccess();
       }
       catch(error){
+        loginBtn.textContent = originalText;
+        loginBtn.disabled = false;
         console.error(error.message); 
         document.getElementById("login-email-error").innerText = error.message;
       }
-      checkAccess();
+      
     });
   }
 
@@ -242,8 +247,6 @@ function initUI() {
       if (inputFieldError) return;
 
       const originalText = signupBtn.textContent;
-      signupBtn.textContent = "Processing...";
-      signupBtn.disabled = true;
       const adminCheckbox = document.getElementById("create-admin-account");
       let role;
       if(adminCheckbox && adminCheckbox.checked){
@@ -253,13 +256,17 @@ function initUI() {
         role="user";
       }
       try{
+        signupBtn.textContent = "Processing...";
+        signupBtn.disabled = true;
         const response = await registerUser(name,email,password,role);
+        window.location.href = "login.html";
       }
       catch(error){
+        signupBtn.textContent = originalText;
+        signupBtn.disabled = false;
         console.error(error.message);
         document.getElementById("signup-email-error").innerText = error.message;
       }
-      window.location.href = "login.html";
     });
   }
 }
@@ -272,7 +279,7 @@ function logout() {
 }
 
 // logout button
-const logoutBtn = document.getElementById("logout-btn");
+const logoutBtn = document.getElementById("logout-link");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", () => {
     logout();
