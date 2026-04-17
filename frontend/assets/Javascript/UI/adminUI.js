@@ -13,7 +13,7 @@ const BOOKS_PER_PAGE = 10;
 const deleteBook = async (ISBN) => {
     if(confirm('Are you Sure you want to delete this book?')) {
         try {
-            console.log("try delete" + ISBN);
+            // console.log("try delete" + ISBN);
             await API.deleteBook(ISBN);
             renderAdminInventory();
         } catch (error) {
@@ -29,7 +29,7 @@ const deleteBook = async (ISBN) => {
  * @returns {Promise<string>} A promise that resolves to the Base64 string of the image.
  */
 const readImageAsync = (file) => {
-    console.log("image read attempt");
+    // console.log("image read attempt");
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => resolve(e.target.result);
@@ -48,7 +48,7 @@ const renderAdminInventory = async () => {
     const pageNumbersContainer = document.querySelector(".page-numbers");
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
-    console.log("render");
+    // console.log("render");
     try {
 
         tbody.innerHTML = `
@@ -59,6 +59,7 @@ const renderAdminInventory = async () => {
 
         const bookList = await API.getBooks();
 
+        tbody.innerHTML = "";
         if (bookList.length === 0) {
             tbody.innerHTML = `
             <tr>
@@ -68,7 +69,7 @@ const renderAdminInventory = async () => {
             pageNumbersContainer.innerHTML = "";
             return;
         }
-        console.log(bookList.length);
+        // console.log(bookList.length);
         // Calculate total pages
         const totalPages = Math.ceil(bookList.length / BOOKS_PER_PAGE);
 
@@ -234,7 +235,7 @@ const handleBookFormSubmit = async(event, mode) => {
     const bookData = { title, author, isbn, year, publisher, copies, description, category };
     
     if(!isValidBook(bookData)) return;
-    console.log("lizard");
+    // console.log("lizard");
     bookData.year = parseInt(bookData.year);
     bookData.copies = parseInt(bookData.copies);
 
@@ -245,9 +246,10 @@ const handleBookFormSubmit = async(event, mode) => {
         bookData.cover = document.querySelector("#image").src;
     }
     if(mode === "add") {
-        
+        // console.log("will add");
         try {
             await API.addBook(bookData);
+            // console.log("added");
             window.location.href = "bookList.html";
         } catch(error) {
             // failed to add book
