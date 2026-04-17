@@ -1,4 +1,4 @@
-import API from '../api/api.js';
+import API from '../API/api.js';
 
 let currentPage = 1;
 const BOOKS_PER_PAGE = 10;

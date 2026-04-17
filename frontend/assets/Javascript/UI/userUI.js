@@ -1,4 +1,4 @@
-import API from "../API/API.js";
+import API from "../API/api.js";
 
 const scriptUrl1 = import.meta.url;
 const APP_ROOT1 = scriptUrl1.split("assets/Javascript/UI/userUI.js")[0];
@@ -45,13 +45,12 @@ function fetchBook(book) {
  * container, handling errors by displaying a message if the catalog fails to load.
  */
 async function renderCatalog(query = "", categories = [], availableOnly = false) {
-  const cardsContainer = document.getElementById("card-container");
+  const cardsContainer = document.getElementById("cards-container");
   const resultsCount = document.getElementById("results-count");
   if(!cardsContainer) return; 
 
   try {
     const books = await API.getBooks(query, categories, availableOnly);
-
     if (resultsCount) resultsCount.textContent = books.length;
 
     if (books.length === 0) {
@@ -155,7 +154,6 @@ async function renderUserLoans() {
     });
 
   } catch (error) {
-    console.error("Failed to load borrowed books:", error);
     bookListElement.innerHTML = `
       <div style="color: red; text-align: center; padding: 20px; border: 1px solid red; border-radius: 5px;">
         <strong>Error:</strong> ${error.message}
