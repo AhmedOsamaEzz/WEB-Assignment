@@ -161,6 +161,7 @@ function initUI() {
         console.log("login input field error");
         return;
       }
+      const Stay = document.getElementById("remember-login").checked;
       const originalText = loginBtn.textContent;
       loginBtn.textContent = "Processing...";
       loginBtn.disabled = true;
@@ -168,7 +169,7 @@ function initUI() {
       try{
         loginBtn.textContent = "Processing...";
         loginBtn.disabled = true;
-        const response= await loginUser(email,password);
+        const response= await loginUser(email,password,Stay);
         checkAccess();
       }
       catch(error){

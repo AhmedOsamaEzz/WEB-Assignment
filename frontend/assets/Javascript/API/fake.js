@@ -30,7 +30,7 @@ export async function registerUser(Username, UserEmail, UserPassword,UserRole){
 }
 
 
-export async function loginUser(UserEmail, UserPassword){
+export async function loginUser(UserEmail, UserPassword,StayloggedIn){
     return new Promise((resolve,reject)=>{
         setTimeout(() => {
             try{
@@ -43,7 +43,12 @@ export async function loginUser(UserEmail, UserPassword){
                     role: foundUser.role,
                     name: foundUser.username
                 };
-                localStorage.setItem("user_info", JSON.stringify(user_info));
+                if(StayloggedIn==true){
+                    localStorage.setItem("user_info", JSON.stringify(user_info));
+                }
+                else{
+                    sessionStorage.setItem("user_info", JSON.stringify(user_info));
+                }
                 resolve({ message: "User logged in successfully" });
             }
             catch(error){
