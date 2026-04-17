@@ -12,7 +12,10 @@ const API = {
   getBook: FakeAPI.getBook,
   editBook: FakeAPI.editBook,
   updateBook: FakeAPI.editBook, 
-  deleteBook: FakeAPI.deleteBook
+  deleteBook: FakeAPI.deleteBook,
+
+  loginUser : FakeAPI.loginUser,
+  loginUser : FakeAPI.registerUser
 };
 
 export default API;
