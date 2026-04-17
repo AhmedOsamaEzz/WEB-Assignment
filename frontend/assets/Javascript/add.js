@@ -1,5 +1,5 @@
-const scriptUrl = document.currentScript.src;
-const APP_ROOT = scriptUrl.split("assets/Javascript/add.js")[0];
+// const scriptUrl = document.currentScript.src;
+// const APP_ROOT = scriptUrl.split("assets/Javascript/add.js")[0];
 
 // input handle
 const imagePlaceHolder = document.querySelector("#image");
