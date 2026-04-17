@@ -11,8 +11,9 @@ const BOOKS_PER_PAGE = 10;
  * @returns {Promise<void>}
  */
 const deleteBook = async (ISBN) => {
-    if(!confirm('Are you Sure you want to delete this book?')) {
+    if(confirm('Are you Sure you want to delete this book?')) {
         try {
+            console.log("try delete" + ISBN);
             await API.deleteBook(ISBN);
             renderAdminInventory();
         } catch (error) {
@@ -28,6 +29,7 @@ const deleteBook = async (ISBN) => {
  * @returns {Promise<string>} A promise that resolves to the Base64 string of the image.
  */
 const readImageAsync = (file) => {
+    console.log("image read attempt");
   return new Promise((resolve) => {
     const reader = new FileReader();
     reader.onload = (e) => resolve(e.target.result);
@@ -46,7 +48,7 @@ const renderAdminInventory = async () => {
     const pageNumbersContainer = document.querySelector(".page-numbers");
     const prevBtn = document.querySelector(".prev-btn");
     const nextBtn = document.querySelector(".next-btn");
-
+    console.log("render");
     try {
 
         tbody.innerHTML = `
@@ -66,7 +68,7 @@ const renderAdminInventory = async () => {
             pageNumbersContainer.innerHTML = "";
             return;
         }
-
+        console.log(bookList.length);
         // Calculate total pages
         const totalPages = Math.ceil(bookList.length / BOOKS_PER_PAGE);
 
@@ -172,9 +174,9 @@ const isValidBook = (book) => {
   
   // ISBN Checks
   if (!book.isbn) {return false;}
-  if (!/^\d+$/.test(book.isbn)) {return false;}
+  if (!/^[\d-]+[Xx]?$/.test(String(book.isbn))) {return false;}
+  console.log("good isbn");
   if (book.isbn.length > 13) {return false;}
-  
   // Year Checks
   if (!book.year) {return false;}
   if (!/^\d+$/.test(book.year)) {return false;}
@@ -209,16 +211,15 @@ const isValidBook = (book) => {
  */
 const handleBookFormSubmit = async(event, mode) => {
     event.preventDefault();
-
     const imageInput = document.getElementById("fileInput");
-
+    
     if(mode == "add" && (!imageInput.files || imageInput.files.length === 0)) {
         // display error no img
         return;
     }
-
+    
     const oldIsbn = new URLSearchParams(window.location.search).get("isbn");
-
+    
     const title = document.querySelector("#title").value.trim();
     const author = document.querySelector("#author").value.trim();
     const isbn = document.querySelector("#isbn").value.trim();
@@ -227,12 +228,13 @@ const handleBookFormSubmit = async(event, mode) => {
     const copies = document.querySelector("#totalCopies").value.trim();
     const description = document.querySelector("#description").value.trim();
     const category = document.querySelector("#category")?.value || "Uncategorized";
-
+    
     // if(!title || !author || !isbn || !year || !publisher || !description) return;
-
+    
     const bookData = { title, author, isbn, year, publisher, copies, description, category };
-
+    
     if(!isValidBook(bookData)) return;
+    console.log("lizard");
     bookData.year = parseInt(bookData.year);
     bookData.copies = parseInt(bookData.copies);
 
@@ -267,6 +269,7 @@ const handleBookFormSubmit = async(event, mode) => {
  * @returns {void}
  */
 const populateEditForm = async () => {
+    console.log("edit");
     const isbn = new URLSearchParams(window.location.search).get("isbn");
     if(!isbn) return;
 
@@ -294,12 +297,13 @@ const populateEditForm = async () => {
 document.addEventListener("DOMContentLoaded", () => {
 
   //booklist stuff
+  console.log("here");
   if (document.getElementById("bookList-page")) {
     renderAdminInventory();
     const tbody = document.querySelector("tbody");
     if(tbody) {
         tbody.addEventListener("click", (event) => {
-            const editBtn = event.target.closest(".edit-btn"); // what does closes mean
+            const editBtn = event.target.closest(".edit-btn"); 
             const deleteBtn = event.target.closest(".delete-btn");
 
             if(editBtn) {
@@ -322,6 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // editbook stuff
   const editBtn = document.getElementById("editbtn");
   if (editBtn) {
+     
     populateEditForm();
     editBtn.addEventListener("click", (e) => handleBookFormSubmit(e, "edit"));
   }
@@ -330,6 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const imagePlaceHolder = document.querySelector("#image");
   const imageInput = document.getElementById("fileInput");
 
+  
   if (imagePlaceHolder && imageInput) {
     imagePlaceHolder.addEventListener("click", () => imageInput.click());
     

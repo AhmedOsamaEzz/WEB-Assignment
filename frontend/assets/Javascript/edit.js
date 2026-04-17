@@ -1,4 +1,5 @@
 {
+  import API from 'API/api.js';
   document.addEventListener("DOMContentLoaded", async () => {
     // input handel
     const imagePlaceHolder = document.querySelector("#image");
@@ -15,7 +16,7 @@
 
     const urlParams = new URLSearchParams(window.location.search);
     const oldIsbn = urlParams.get("isbn");
-    const response = await FakeAPI.getBook(oldIsbn);
+    const response = await API.getBook(oldIsbn);
     const existingBook = response.data;
     if (existingBook) {
       bookTitle.value = existingBook.title;
@@ -138,7 +139,7 @@
             cover: c.target.result,
           };
           try {
-            const response = await FakeAPI.editBook(oldIsbn, newData);
+            const response = await API.editBook(oldIsbn, newData);
             window.location.href = "bookList.html";
           } catch (error) {
             alert(error.message);
@@ -158,7 +159,7 @@
           cover: imagePlaceHolder.src,
         };
         try {
-          const response = await FakeAPI.editBook(oldIsbn, newData);
+          const response = await API.editBook(oldIsbn, newData);
           window.location.href = "bookList.html";
         } catch (error) {
           alert(error.message);

@@ -15,7 +15,7 @@ const API = {
   deleteBook: FakeAPI.deleteBook,
 
   loginUser : FakeAPI.loginUser,
-  loginUser : FakeAPI.registerUser
+  registerUser : FakeAPI.registerUser
 };
 
 export default API;
