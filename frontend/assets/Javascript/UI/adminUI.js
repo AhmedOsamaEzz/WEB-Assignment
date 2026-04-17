@@ -1,5 +1,8 @@
 import API from '../API/api.js';
 
+const scriptUrl2 = import.meta.url;
+const APP_ROOT2 = scriptUrl2.split("assets/Javascript/UI/adminUI.js")[0];
+
 let currentPage = 1;
 const BOOKS_PER_PAGE = 10;
 
@@ -298,6 +301,13 @@ const populateEditForm = async () => {
 
 // listeners 
 document.addEventListener("DOMContentLoaded", () => {
+  const logo = document.getElementById("logo-link");
+  console.log(APP_ROOT2);
+  if(logo) {
+    logo.addEventListener("click", () => {
+      window.location.href = APP_ROOT2 + "admin/dashboard.html";
+    });
+  }
 
   //booklist stuff
   console.log("here");
