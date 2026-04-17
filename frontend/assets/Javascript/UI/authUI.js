@@ -1,5 +1,42 @@
+import API from "../API/api.js";
+
 const scriptUrl = document.currentScript.src;
 const APP_ROOT = scriptUrl.split("assets/js/ui/authUI.js")[0];
+
+let devMode = false;
+
+// helper functions
+/**
+ * Validates email address format.
+ * @param {string} email
+ * @returns {boolean}
+ */
+function isValidEmail(email) {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+}
+
+/**
+ * Evaluates password strength.
+ * Requires: 8+ chars, uppercase, lowercase, digit, and a symbol (!@#$%^&*).
+ * @param {string} password
+ * @returns {boolean}
+ */
+function isStrongPassword(password) {
+  if (password.length < 8) return false;
+
+  const allowedChars = /^[a-zA-Z0-9!@#$%^&*]+$/;
+  if (!allowedChars.test(password)) return false;
+
+  if (!/[A-Z]/.test(password)) return false;
+  if (!/[a-z]/.test(password)) return false;
+  if (!/[0-9]/.test(password)) return false;
+  if (!/[!@#$%^&*]/.test(password)) return false;
+
+  return true;
+}
+
+
 
 /**
  * Ensures the user has access to the current page.
@@ -188,13 +225,10 @@ function initUI() {
 
   if (loginForm) {
     const loginBtn = document.querySelector(".login-card .btn-primary");
-    const inputs = document.querySelectorAll(".login-form .input-field");
 
-    const emailInput = inputs[0];
-    const passwordInput = inputs[1];
+    const emailInput = document.getElementById("login-email");
+    const passwordInput = document.getElementById("login-password");
     const rememberCheckbox = document.getElementById("remember-login");
-
-    loginBtn.onclick = null;
 
     emailInput.addEventListener("input", () => {
       document.getElementById("login-email-error").innerText = "";
@@ -204,7 +238,7 @@ function initUI() {
       document.getElementById("login-password-error").innerText = "";
     });
 
-    loginBtn.addEventListener("click", (e) => {
+    loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
       handleLoginSubmit(emailInput, passwordInput, rememberCheckbox, loginBtn);
     });
@@ -215,13 +249,10 @@ function initUI() {
 
   if (signupForm) {
     const signupBtn = document.querySelector(".signup-card .btn-primary");
-    const inputs = document.querySelectorAll(".signup-form .input-field");
 
-    const nameInput = inputs[0];
-    const emailInput = inputs[1];
-    const passwordInput = inputs[2];
-
-    signupBtn.onclick = null;
+    const nameInput = document.getElementById("signup-name");
+    const emailInput = document.getElementById("signup-email");
+    const passwordInput = document.getElementById("signup-password");
 
     nameInput.addEventListener("input", () => {
       document.getElementById("signup-username-error").innerText = "";
@@ -235,10 +266,11 @@ function initUI() {
       document.getElementById("signup-password-error").innerText = "";
     });
 
-    signupBtn.addEventListener("click", (e) => {
+    signupForm.addEventListener("submit", (e) => {
       e.preventDefault();
       handleSignupSubmit(nameInput, emailInput, passwordInput, signupBtn);
     });
+
   }
 }
 
