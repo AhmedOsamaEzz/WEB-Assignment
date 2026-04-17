@@ -95,7 +95,8 @@ async function handleBorrowAction(params) {
   try {
     // Captures the 'isbn' from the URL (e.g., details.html?isbn=123)
     const isbn = new URLSearchParams(window.location.search).get("isbn");
-    const token = localStorage.getItem("user_token") || sessionStorage.getItem("user_token");
+    const info = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const token = info.token;
     if (!isbn) {
       alert("Error: No book selected.");
       return;
@@ -118,8 +119,9 @@ async function renderUserLoans() {
   bookListElement.innerHTML = "<p style='text-align: center;'>Loading your borrowed books...</p>";
 
   try {
-    const token = localStorage.getItem("user_token") || sessionStorage.getItem("user_token");
-    
+    const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const info = storedInfo ? JSON.parse(storedInfo) : {};
+    const token = info.token;
     if (!token) {
       throw new Error("You must be logged in to view your borrowed books.");
     }
