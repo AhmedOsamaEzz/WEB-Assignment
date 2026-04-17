@@ -132,7 +132,7 @@ function initUI() {
       document.getElementById("login-password-error").innerText = "";
     });
 
-    loginBtn.addEventListener("click", async (e) => {
+    loginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const email = emailInput.value.trim();
@@ -163,9 +163,6 @@ function initUI() {
       }
       const Stay = document.getElementById("remember-login").checked;
       const originalText = loginBtn.textContent;
-      loginBtn.textContent = "Processing...";
-      loginBtn.disabled = true;
-
       try{
         loginBtn.textContent = "Processing...";
         loginBtn.disabled = true;
@@ -207,7 +204,7 @@ function initUI() {
       document.getElementById("signup-password-error").innerText = "";
     });
 
-    signupBtn.addEventListener("click", async (e) => {
+    signupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
       const name = nameInput.value.trim();
