@@ -43,13 +43,13 @@ function fetchBook(book) {
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(query = "", categories = []) {
+async function renderCatalog(query = "", categories = [], availableOnly = false) {
   const cardsContainer = document.getElementById("card-container");
   const resultsCount = document.getElementById("results-count");
   if(!cardsContainer) return; 
 
   try {
-    const books = await API.getBooks(query, categories);
+    const books = await API.getBooks(query, categories, availableOnly);
 
     if (resultsCount) resultsCount.textContent = books.length;
 
@@ -82,7 +82,7 @@ async function renderBookDetails(params) {
     const book = await API.getBookById(isbn);
     fetchBook(book);
   } catch (error) {
-    bookInfo.innerHTML = `<p style: "red"> Error loading the book </p>`;
+    bookInfo.innerHTML = `<p style="color: red;"> Error loading the book </p>`;
   }
 }
 
@@ -178,9 +178,9 @@ async function initSearchPage() {
   const triggerSearch = () => {
     if(queryLabel) {
       queryLabel.textContent = currentQuery;
+    }
       const catogriesArray = (currentCategory === "All" ? [] : [currentCategory]);
       renderCatalog(currentQuery, catogriesArray, currentAvailability);
-    }
   }
 
   if(searchInput) {
@@ -214,6 +214,8 @@ async function initSearchPage() {
       triggerSearch();
     });
   }
+
+  triggerSearch();
 }
 
 document.addEventListener("DOMContentLoaded", () => {
