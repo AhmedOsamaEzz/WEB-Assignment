@@ -1,6 +1,7 @@
-
 import API from "../API/API.js";
 
+const scriptUrl1 = import.meta.url;
+const APP_ROOT1 = scriptUrl1.split("assets/Javascript/UI/userUI.js")[0];
 
 /**
  * Generates an HTML template string for a book card.
@@ -219,6 +220,13 @@ async function initSearchPage() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const logo = document.getElementById("logo-link");
+  if(logo) {
+    logo.addEventListener("click", () => {
+      window.location.href = APP_ROOT1 + "user/dashboard.html";
+    });
+  }
+
   if (document.getElementById("cards-container")) {
     initSearchPage();
   }

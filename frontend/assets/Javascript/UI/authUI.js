@@ -61,7 +61,7 @@ async function handleLoginSubmit(emailInput, passwordInput, rememberCheckbox, lo
   const password = passwordInput.value.trim();
   let inputFieldError = false;
 
-  console.log("hi");
+  console.log()
   if (!email) {
     document.getElementById("login-email-error").innerText = "Email field cannot be empty";
     inputFieldError = true;
