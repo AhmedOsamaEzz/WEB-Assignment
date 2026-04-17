@@ -98,8 +98,8 @@ const renderAdminInventory = async () => {
             <td>${book.author}</td>
             <td><label class="book-category-column">${book.category}</label></td>
             <td class="books-count">${book.copies}</td>
-            <td class="books-count">${book.copies}</td>
-            <td class="books-count">0</td>
+            <td class="books-count">${book.availableCopies}</td>
+            <td class="books-count">${book.copies - book.availableCopies}</td>
             <td class="book-action-column">
                 <div class="book-action-cell">
                 <button class = "edit-btn" data-isbn = "${book.isbn}">

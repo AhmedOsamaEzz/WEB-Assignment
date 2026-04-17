@@ -15,8 +15,6 @@ const getAvailableCopies = (book) =>
     ? book.availableCopies
     : parseInt(book.copies);
 
-
-
 const FakeAPI = {
   async registerUser(Username, UserEmail, UserPassword,UserRole){
     return new Promise((resolve,reject)=>{
@@ -182,7 +180,9 @@ const FakeAPI = {
           reject(new Error("book not found"));
           return;
         }
+        let booked = booklist[index].copies - booklist[index].availableCopies
         booklist[index] = newData;
+        booklist[index].availableCopies = booklist[index].copies - booked;
         localStorage.setItem("booklist", JSON.stringify(booklist));
         resolve({ success: true, message: "Book updated successfully!" });
       } catch (error) {
