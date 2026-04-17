@@ -94,13 +94,15 @@ async function handleBorrowAction(params) {
   try {
     // Captures the 'isbn' from the URL (e.g., details.html?isbn=123)
     const isbn = new URLSearchParams(window.location.search).get("isbn");
-    const info = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const info = JSON.parse(storedInfo);
     const token = info.token;
     if (!isbn) {
       alert("Error: No book selected.");
       return;
     }
-
+    console.log(isbn);
+    console.log(token);
     await API.borrowBook(isbn, token);
     alert("Book borrowed successfully");
   } catch (error) {
