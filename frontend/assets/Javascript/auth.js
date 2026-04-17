@@ -1,3 +1,5 @@
+// leave this file as is until we erase it
+
 let giveAdmin = true;
 let devMode = true;
 // giveAdmin is what decided what your role is Until we implement backend
