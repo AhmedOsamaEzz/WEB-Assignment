@@ -53,7 +53,7 @@ const FakeAPI = {
                 if(!foundUser) return reject({ message: "Invalid email or password" });
                 const user_info={
                     // fake hashing base 64
-                    token:btoa(foundUser.email + ":" + Date.now()),
+                    token:btoa(foundUser.email + ":"),
                     role: foundUser.role,
                     name: foundUser.username
                 };

@@ -238,6 +238,7 @@ const handleBookFormSubmit = async(event, mode) => {
     // console.log("lizard");
     bookData.year = parseInt(bookData.year);
     bookData.copies = parseInt(bookData.copies);
+    bookData.availableCopies = bookData.copies;
 
     if(imageInput.files && imageInput.files.length > 0) {
         const img = await readImageAsync(imageInput.files[0]);
