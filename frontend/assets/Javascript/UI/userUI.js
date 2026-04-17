@@ -1,6 +1,6 @@
 
 import API from "../API/API.js";
-import card from "../search.js";
+
 
 /**
  * Generates an HTML template string for a book card.
@@ -43,13 +43,24 @@ function fetchBook(book) {
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(params) {
+async function renderCatalog(query = "", categories = [], availableOnly = false) {
   const cardsContainer = document.getElementById("card-container");
+  const resultsCount = document.getElementById("results-count");
+  if(!cardsContainer) return; 
+
   try {
-    const books = await API.getBooks();
+    const books = await API.getBooks(query, categories, availableOnly);
+
+    if (resultsCount) resultsCount.textContent = books.length;
+
+    if (books.length === 0) {
+      cardsContainer.innerHTML = `<p style="text-align: center; width: 100%;">No books found matching your search.</p>`;
+      return;
+    }
     cardsContainer.innerHTML = books.map(createCard).join("");
+
   } catch (error) {
-    cardsContainer.innerHTML = `<p style: "red"> Failed to load catalog </p>`;
+    cardsContainer.innerHTML = `<p style="color: red;"> Failed to load catalog </p>`;
   }
 }
 
@@ -71,7 +82,7 @@ async function renderBookDetails(params) {
     const book = await API.getBookById(isbn);
     fetchBook(book);
   } catch (error) {
-    bookInfo.innerHTML = `<p style: "red"> Error loading the book </p>`;
+    bookInfo.innerHTML = `<p style="color: red;"> Error loading the book </p>`;
   }
 }
 
@@ -83,14 +94,145 @@ async function handleBorrowAction(params) {
   try {
     // Captures the 'isbn' from the URL (e.g., details.html?isbn=123)
     const isbn = new URLSearchParams(window.location.search).get("isbn");
+    const token = localStorage.getItem("user_token") || sessionStorage.getItem("user_token");
     if (!isbn) {
       alert("Error: No book selected.");
       return;
     }
 
-    await API.borrowBook(isbn);
+    await API.borrowBook(isbn, token);
     alert("Book borrowed successfully");
   } catch (error) {
     alert("Sorry, book out of stock");
   }
 }
+
+/**
+ * Fetches the user's borrowed books from the API and renders them to the screen.
+ */
+async function renderUserLoans() {
+  const bookListElement = document.getElementById("book-list");
+  if (!bookListElement) return;
+
+  bookListElement.innerHTML = "<p style='text-align: center;'>Loading your borrowed books...</p>";
+
+  try {
+    const token = localStorage.getItem("user_token") || sessionStorage.getItem("user_token");
+    
+    if (!token) {
+      throw new Error("You must be logged in to view your borrowed books.");
+    }
+
+    const borrowedBooks = await API.getUserBorrowedBooks(token);
+
+    if (!borrowedBooks || borrowedBooks.length === 0) {
+      bookListElement.innerHTML = "<p style='text-align: center;'>You have not borrowed any books yet.</p>";
+      return;
+    }
+
+    bookListElement.innerHTML = "";
+
+    borrowedBooks.forEach((book) => {
+      const bookCard = document.createElement("div");
+      bookCard.className = "book-card"; 
+      
+      const dateBorrowed = new Date(book.borrowedAt).toLocaleDateString();
+
+      bookCard.innerHTML = `
+        <img src="${book.cover}" alt="${book.title}" class="book-image" style="width: 100px;" />
+        <div class="book-details">
+          <h3>${book.title}</h3>
+          <p><strong>Author:</strong> ${book.author}</p>
+          <p><strong>ISBN:</strong> ${book.isbn}</p>
+          <p><strong>Borrowed on:</strong> ${dateBorrowed}</p>
+        </div>
+      `;
+      
+      bookListElement.appendChild(bookCard);
+    });
+
+  } catch (error) {
+    console.error("Failed to load borrowed books:", error);
+    bookListElement.innerHTML = `
+      <div style="color: red; text-align: center; padding: 20px; border: 1px solid red; border-radius: 5px;">
+        <strong>Error:</strong> ${error.message}
+      </div>
+    `;
+  }
+}
+
+/**
+ * handles live search functionality and listeners
+ */
+async function initSearchPage() {
+  const searchInput = document.querySelector(".search-bar input");
+  const searchForm = document.querySelector(".search-bar");
+  const categoryItems = document.querySelectorAll(".filters-section ul li");
+  const availabilityCheckbox = document.querySelector(".filter-check");
+  const queryLabel = document.getElementById("query-label");
+
+  let currentQuery = "";
+  let currentCategory = "All";
+  let currentAvailability = true;
+
+  const triggerSearch = () => {
+    if(queryLabel) {
+      queryLabel.textContent = currentQuery;
+    }
+      const catogriesArray = (currentCategory === "All" ? [] : [currentCategory]);
+      renderCatalog(currentQuery, catogriesArray, currentAvailability);
+  }
+
+  if(searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      currentQuery = e.target.value.trim();
+      triggerSearch();
+    });
+  }
+
+  if(searchForm) {
+    searchForm.addEventListener("submit", (e) => {e.preventDefault()});
+  }
+
+  categoryItems.forEach(li => {
+    if (li.querySelector("input")) return; 
+
+    li.addEventListener("click", function() {
+      categoryItems.forEach(item => item.classList.remove("active"));
+      this.classList.add("active");
+      
+      currentCategory = this.textContent.trim();
+      triggerSearch(); 
+    });
+  });
+
+
+  if (availabilityCheckbox) {
+    currentAvailability = availabilityCheckbox.checked; 
+    availabilityCheckbox.addEventListener("change", (e) => {
+      currentAvailability = e.target.checked;
+      triggerSearch();
+    });
+  }
+
+  triggerSearch();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (document.getElementById("cards-container")) {
+    initSearchPage();
+  }
+
+  if (document.getElementById("book-info")) {
+    renderBookDetails();
+    
+    const borrowBtn = document.getElementById("borrow-btn");
+    if (borrowBtn) {
+      borrowBtn.addEventListener("click", handleBorrowAction);
+    }
+  }
+
+  if (document.getElementById("book-list")) {
+    renderUserLoans();
+  }
+});
