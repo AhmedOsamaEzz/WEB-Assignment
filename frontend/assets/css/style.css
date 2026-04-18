@@ -1091,6 +1091,20 @@ body#sign-up-page {
 #borrow-btn:hover {
   opacity: 0.8;
 }
+#edit-btn {
+  border: none;
+  min-width: 10rem;
+  width: max-content; /* Stops the button from stretching to 100% */
+  padding: 1rem 2rem; /* Gives the button some nice inner breathing room */
+  border-radius: var(--radius-md);
+  background: var(--gradient);
+  color: black;
+  cursor: pointer;
+}
+
+#edit-btn:hover {
+  opacity: 0.8;
+}
 
 /* End button */
 /* End book details */
