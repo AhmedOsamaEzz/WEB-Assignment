@@ -12,14 +12,14 @@
       src="https://kit.fontawesome.com/80d75008f5.js"
       crossorigin="anonymous"></script>
     <script type="module" src="../assets/Javascript/UI/authUI.js"></script>
-    <script type = "module" src = "../assets/Javascript/UI/adminUI.js"></script>
+    <script type="module" src="../assets/Javascript/UI/adminUI.js"></script>
   </head>
 
   <body id="admin-dashboard-page">
 
     <!-- NAV BAR -->
     <nav>
-      <h3 class="logo" id = "logo-link">The Midnight Scholar</h3>
+      <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
 
       <div class="links">
         <ul>
@@ -56,20 +56,19 @@
         <!-- Big card -->
         <div class="stat-card stat-card--large">
           <div class="stat-card__label">Total Books</div>
-          <div class="stat-card__number">12,482</div>
+          <div class="stat-card__number" id="stat-total-books">—</div>
           <p class="stat-card__desc">Total books in the library.</p>
           <div class="stat-card__meta">
             <div class="stat-card__meta-item">
               <span class="stat-card__meta-label">Added This Month</span>
-              <span class="stat-card__meta-value">+48</span>
+              <span class="stat-card__meta-value" id="stat-added-month">—</span>
             </div>
             <div class="stat-card__meta-item">
               <span class="stat-card__meta-label">Overdue Returns</span>
-              <span class="stat-card__meta-value">210</span>
+              <span class="stat-card__meta-value" id="stat-overdue-returns">—</span>
             </div>
           </div>
-          <span
-            class="material-symbols-outlined stat-card__deco">menu_book</span>
+          <span class="material-symbols-outlined stat-card__deco">menu_book</span>
         </div>
 
         <!-- Small cards -->
@@ -81,7 +80,7 @@
             </div>
             <div>
               <div class="stat-card__label">Active Loans</div>
-              <div class="stat-card__number stat-card__number--sm">452</div>
+              <div class="stat-card__number stat-card__number--sm" id="stat-active-loans">—</div>
             </div>
           </div>
 
@@ -91,7 +90,7 @@
             </div>
             <div>
               <div class="stat-card__label">Total Members</div>
-              <div class="stat-card__number stat-card__number--sm">1,240</div>
+              <div class="stat-card__number stat-card__number--sm" id="stat-total-members">—</div>
             </div>
           </div>
 
@@ -101,7 +100,7 @@
             </div>
             <div>
               <div class="stat-card__label">Available Books</div>
-              <div class="stat-card__number stat-card__number--sm">9,730</div>
+              <div class="stat-card__number stat-card__number--sm" id="stat-available-books">—</div>
             </div>
           </div>
 
@@ -111,7 +110,7 @@
       <!-- BOTTOM SECTION -->
       <section class="dashboard-bottom">
 
-        <!-- Recent Activity -->
+        <!-- Recent Activity (static — not wired up) -->
         <div class="activity-section">
           <div class="section-header">
             <h3 class="section-title">Recent Activity</h3>
@@ -121,7 +120,7 @@
           <div class="activity-list">
 
             <div class="activity-item">
-              <img src="../assets/images/atomic.jpg" alt="Atomic Habits"
+              <img src="../assets/images/unnamed.png" alt="Atomic Habits"
                 class="activity-book-img" />
               <div class="activity-info">
                 <p class="activity-book-title">Atomic Habits</p>
@@ -130,13 +129,12 @@
               </div>
               <div class="activity-meta">
                 <p class="activity-time">2 hours ago</p>
-                <span class="activity-badge activity-badge--loan">Standard
-                  Loan</span>
+                <span class="activity-badge activity-badge--loan">Standard Loan</span>
               </div>
             </div>
 
             <div class="activity-item activity-item--alt">
-              <img src="../assets/images/mountain.jpg" alt="The Mountain Is You"
+              <img src="../assets/images/unnamed.png" alt="The Mountain Is You"
                 class="activity-book-img" />
               <div class="activity-info">
                 <p class="activity-book-title">The Mountain Is You</p>
@@ -145,13 +143,12 @@
               </div>
               <div class="activity-meta">
                 <p class="activity-time">5 hours ago</p>
-                <span
-                  class="activity-badge activity-badge--returned">Completed</span>
+                <span class="activity-badge activity-badge--returned">Completed</span>
               </div>
             </div>
 
             <div class="activity-item">
-              <img src="../assets/images/power.jpg" alt="The 48 Laws of Power"
+              <img src="../assets/images/unnamed.png" alt="The 48 Laws of Power"
                 class="activity-book-img" />
               <div class="activity-info">
                 <p class="activity-book-title">The 48 Laws of Power</p>
@@ -160,8 +157,7 @@
               </div>
               <div class="activity-meta">
                 <p class="activity-time">Yesterday</p>
-                <span class="activity-badge activity-badge--update">Inventory
-                  Update</span>
+                <span class="activity-badge activity-badge--update">Inventory Update</span>
               </div>
             </div>
 
@@ -176,48 +172,44 @@
             <div class="loan-card__top">
               <div>
                 <p class="loan-card__heading">Book Availability</p>
-                <p class="loan-card__sub">Out of 12,482 total books</p>
+                <p class="loan-card__sub">Out of <span id="loan-total-label">—</span> total books</p>
               </div>
-              <span class="loan-card__total">12,482</span>
+              <span class="loan-card__total" id="loan-total-number">—</span>
             </div>
 
             <div class="loan-bars">
 
               <div class="loan-bar-group">
                 <div class="loan-bar-labels">
-                  <span>Available</span><span>78%</span>
+                  <span>Available</span><span id="loan-pct-available">—</span>
                 </div>
                 <div class="loan-bar-track">
-                  <div class="loan-bar-fill loan-bar-fill--available"
-                    style="width: 78%"></div>
+                  <div class="loan-bar-fill loan-bar-fill--available" id="loan-bar-available" style="width: 0%"></div>
                 </div>
               </div>
 
               <div class="loan-bar-group">
                 <div class="loan-bar-labels">
-                  <span>Borrowed</span><span>18%</span>
+                  <span>Borrowed</span><span id="loan-pct-borrowed">—</span>
                 </div>
                 <div class="loan-bar-track">
-                  <div class="loan-bar-fill loan-bar-fill--borrowed"
-                    style="width: 18%"></div>
+                  <div class="loan-bar-fill loan-bar-fill--borrowed" id="loan-bar-borrowed" style="width: 0%"></div>
                 </div>
               </div>
 
               <div class="loan-bar-group">
                 <div class="loan-bar-labels">
-                  <span>Overdue</span><span>4%</span>
+                  <span>Overdue</span><span id="loan-pct-overdue">—</span>
                 </div>
                 <div class="loan-bar-track">
-                  <div class="loan-bar-fill loan-bar-fill--overdue"
-                    style="width: 4%"></div>
+                  <div class="loan-bar-fill loan-bar-fill--overdue" id="loan-bar-overdue" style="width: 0%"></div>
                 </div>
               </div>
 
             </div>
 
             <div class="loan-card__quote">
-              <p
-                class="loan-card__quote-text">"Knowledge is a private garden; we are merely its tenders."</p>
+              <p class="loan-card__quote-text">"Knowledge is a private garden; we are merely its tenders."</p>
               <p class="loan-card__quote-author">— The First Curator, 1892</p>
             </div>
           </div>

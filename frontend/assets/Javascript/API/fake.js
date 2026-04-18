@@ -16,6 +16,10 @@ const getAvailableCopies = (book) =>
     ? book.availableCopies
     : parseInt(book.copies);
 
+const getHistoryKey = (userToken) => `history_${userToken}`;
+const getHistoryList = (userToken) => JSON.parse(localStorage.getItem(getHistoryKey(userToken))) || [];
+const saveHistoryList = (userToken, list) => localStorage.setItem(getHistoryKey(userToken), JSON.stringify(list));
+
 const FakeAPI = {
   async registerUser(Username, UserEmail, UserPassword, UserRole) {
     return new Promise((resolve, reject) => {
@@ -114,23 +118,113 @@ const FakeAPI = {
     booklist[index].availableCopies = availableCopies - 1;
     saveBooklist(booklist);
 
-    // Link borrowed book to the user
-    const borrowedBooks = getBorrowedList(userToken);
-    borrowedBooks.push({
-      isbn: book.isbn,
-      title: book.title,
-      author: book.author,
-      cover: book.cover,
-      borrowedAt: new Date().toISOString(),
-    });
-    saveBorrowedList(userToken, borrowedBooks);
-    return book;
+  // Link borrowed book to the user
+  const borrowedBooks = getBorrowedList(userToken);
+  const dueDate = new Date();
+  dueDate.setDate(dueDate.getDate() + 14); // 2 week loan
+  borrowedBooks.push({
+    isbn: book.isbn,
+    title: book.title,
+    author: book.author,
+    cover: book.cover,
+    borrowedAt: new Date().toISOString(),
+    dueDate: dueDate.toISOString(),
+    status: "loaned",
+    extended:false
+  });
+  saveBorrowedList(userToken, borrowedBooks);
+  return book;
+  },
+
+  async returnBook(isbn, userToken) {
+    let borrowed = getBorrowedList(userToken);
+    const bookToReturn = borrowed.find(b => b.isbn === isbn);
+    
+    if (bookToReturn) {
+      // 1. Remove from borrowed
+      borrowed = borrowed.filter(b => b.isbn !== isbn);
+      saveBorrowedList(userToken, borrowed);
+
+      // 2. Add to history
+      const history = getHistoryList(userToken);
+      history.push({
+        ...bookToReturn,
+        returnDate: new Date().toLocaleDateString(),
+        status: "returned"
+      });
+      saveHistoryList(userToken, history);
+
+      // 3. Update stock in main list
+      const booklist = getBookList();
+      const idx = booklist.findIndex(b => b.isbn === isbn);
+      if (idx !== -1) {
+        booklist[idx].availableCopies = (booklist[idx].availableCopies || 0) + 1;
+        saveBooklist(booklist);
+      }
+      return { message:"Successfully Returned Book"};
+    }
+    else{
+      return { message:"InValid ISBN"};
+    }
+  },
+
+  async extendLoan(isbn, userToken) {
+    const borrowed = getBorrowedList(userToken);
+    const book = borrowed.find(b => b.isbn === isbn);
+    if(!book) return {message:"InValid ISBN"};
+    if(book.extended){
+      return {message:"Already Extended Book"};
+    }
+    if (book) {
+      const currentDue = new Date(book.dueDate);
+      currentDue.setDate(currentDue.getDate() + 7); // Add 1 week
+      book.dueDate = currentDue.toISOString();
+      book.extended=true;
+      saveBorrowedList(userToken, borrowed);
+    }
+    return {message:"Successfully Extended Book"};
   },
 
   async getUserBorrowedBooks(userToken) {
     return getBorrowedList(userToken);
   },
+  
+  async getUserHistory(userToken) {
+  return getHistoryList(userToken);
+  },
 
+  async getAdminStats() {
+    const booklist = getBookList();
+    const totalBooks     = booklist.reduce((sum, b) => sum + (b.copies || 0), 0);
+    const totalAvailable = booklist.reduce((sum, b) => sum + (getAvailableCopies(b)), 0);
+
+    const users= JSON.parse(localStorage.getItem("users")) || [];
+    const totalMembers = users.length;
+
+    const now = new Date();
+    let activeLoans = 0;
+    let overdueLoans = 0;
+    for (const key of Object.keys(localStorage)) {
+      if (!key.startsWith("borrowedBooks_")) continue;
+      const list = JSON.parse(localStorage.getItem(key)) || [];
+      activeLoans += list.length;
+      overdueLoans += list.filter(b => new Date(b.dueDate) < now).length;
+    }
+    const perAvailable = totalBooks ? Math.round((totalAvailable / totalBooks) * 100) : 0;
+    const perBorrowed  = totalBooks ? Math.round(((totalBooks - totalAvailable) / totalBooks) * 100) : 0;
+    const perOverdue   = totalBooks ? Math.round((overdueLoans / totalBooks) * 100) : 0;
+    return {
+      totalBooks,
+      totalAvailable,
+      totalMembers,
+      activeLoans,
+      overdueLoans,
+      perAvailable,
+      perBorrowed,
+      perOverdue,
+    };
+  },
+  
   addBook(bookData) {
     return new Promise((resolve, reject) => {
       try {

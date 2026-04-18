@@ -407,7 +407,38 @@ const populateEditForm = async () => {
   }
 };
 
-// listeners
+
+const renderAdminDashboard = async () => {
+
+  if (!document.getElementById("admin-dashboard-page")) return;
+  const s = await API.getAdminStats();
+
+  document.getElementById("stat-total-books").textContent      = s.totalBooks.toLocaleString();
+  document.getElementById("stat-added-month").textContent      = s.totalBooks.toLocaleString();// change later
+  document.getElementById("stat-overdue-returns").textContent  = s.overdueLoans;
+  document.getElementById("stat-active-loans").textContent  = s.activeLoans.toLocaleString();
+  document.getElementById("stat-total-members").textContent = s.totalMembers.toLocaleString();
+  document.getElementById("stat-available-books").textContent = s.totalAvailable.toLocaleString();
+  document.getElementById("loan-total-label").textContent = s.totalBooks.toLocaleString();
+  document.getElementById("loan-total-number").textContent = s.totalBooks.toLocaleString();
+
+  const setPct = (labelId, barId, pct) => {
+    document.getElementById(labelId).textContent = pct + "%";
+    document.getElementById(barId).style.width   = pct + "%";
+  };
+
+  setPct("loan-pct-available", "loan-bar-available", s.perAvailable);
+  setPct("loan-pct-borrowed",  "loan-bar-borrowed",  s.perBorrowed);
+  setPct("loan-pct-overdue",   "loan-bar-overdue",   s.perOverdue);
+
+};
+
+
+
+
+
+
+// listeners 
 document.addEventListener("DOMContentLoaded", () => {
   const logo = document.getElementById("logo-link");
   console.log(APP_ROOT2);
@@ -481,4 +512,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
+  
+  if (document.getElementById("admin-dashboard-page")){
+    renderAdminDashboard();
+  }
+
 });
