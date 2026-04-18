@@ -221,6 +221,146 @@ async function initSearchPage() {
   triggerSearch();
 }
 
+
+
+
+async function renderUserDashboard() {
+  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+  if (!User) return;
+  const token = User.token;
+  const borrowed = await API.getUserBorrowedBooks(token);
+  const history  = await API.getUserHistory(token);
+
+  const nameEl = document.getElementById("username");
+  if (nameEl) nameEl.textContent = User.name || "Scholar";
+
+  const emailEl = document.getElementById("email");
+  if (emailEl) emailEl.textContent = User.email || "Scholar@gmail.com";
+
+  const now = new Date();
+  const overdueBooks = borrowed.filter(b => new Date(b.dueDate) < now);
+  const activeCountEl = document.getElementById("active-loans-count");
+  if (activeCountEl) activeCountEl.textContent = borrowed.length;
+  const totalReadEl = document.getElementById("total-read-count");
+  if (totalReadEl) totalReadEl.textContent = history.length;
+  const overdueEl = document.getElementById("overdue-count");
+  if (overdueEl) overdueEl.textContent = overdueBooks.length;
+
+
+  const grid = document.getElementById("ud-books-grid");
+  if (!grid) return;
+
+  if (borrowed.length === 0) {
+    grid.innerHTML = '<p class="ud-book-author" style="padding:1rem;">No active loans.</p>';
+    return;
+  }
+  const recent = borrowed.slice(-3).reverse();
+  grid.innerHTML = recent.map(book => {
+    const due       = new Date(book.dueDate);
+    const daysLeft  = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
+    const isOverdue = daysLeft < 0;
+    const isSoon    = !isOverdue && daysLeft <= 3;
+
+    let dueLabel, dueCls;
+    if (isOverdue) {
+      dueLabel = `Overdue by ${Math.abs(daysLeft)} day${Math.abs(daysLeft) !== 1 ? "s" : ""}`;
+      dueCls   = "ud-due ud-due--overdue";
+    } else if (isSoon) {
+      dueLabel = `Due in ${daysLeft} day${daysLeft !== 1 ? "s" : ""}`;
+      dueCls   = "ud-due ud-due--soon";
+    } else {
+      dueLabel = `Due in ${daysLeft} days`;
+      dueCls   = "ud-due";
+    }
+    let extend= book.extended ? "Extended":"Extend";
+    return `
+      <div class="ud-book-card">
+        <div class="ud-book-cover-wrap">
+          <img src="${book.cover}" alt="${book.title}" class="ud-book-cover" />
+        </div>
+        <div class="ud-book-info">
+          <span class="${dueCls}">${dueLabel}</span>
+          <h3 class="ud-book-title">${book.title}</h3>
+          <p class="ud-book-author">${book.author}</p>
+          <span class="ud-badge ud-badge--loaned">Loaned</span>
+          <div class="ud-book-actions">
+            <button class="ud-btn-ghost btn-extend" data-isbn="${book.isbn}">${extend}</button>
+            <button class="ud-btn-outline btn-return" data-isbn="${book.isbn}">Return</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+  }).join("");
+
+}
+
+document.addEventListener("click", async (e) => {
+  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+  if(!User) return;
+  const isbn = e.target.getAttribute("data-isbn");
+  const token=User.token
+  
+
+  if (e.target.classList.contains("btn-extend")) {
+    const btn=e.target;
+    const response =await API.extendLoan(isbn, token);
+    if(response.message==="Already Extended Book") return;
+    else{
+      btn.disabled=true;
+      renderUserDashboard();
+    }
+  }
+
+  if (e.target.classList.contains("btn-return")) {
+    if (confirm("Are you sure you want to return this book?")) {
+      await API.returnBook(isbn, token);
+      renderUserDashboard();
+      renderUserHistory();
+    }
+  }
+});
+
+async function renderUserHistory() {
+  const tbody = document.getElementById("history-tbody");
+  if (!tbody) return;
+
+  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>`;
+
+  try {
+    const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+    if (!User) return;
+
+    const history = await API.getUserHistory(User.token);
+    if (!history || history.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No borrowing history yet.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = history.map((entry, i) => {
+      const borrowed   = new Date(entry.borrowedAt).toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+      const returned   = entry.returnDate || "—";
+      const isOverdue  = entry.status === "overdue";
+      const badgeCls   = entry.status === "returned" ? "ud-badge--returned" : "ud-badge--overdue";
+      const badgeLabel = entry.status === "returned" ? "Returned" : "Overdue";
+      const altRow     = i % 2 !== 0 ? "ud-tr-alt" : "";
+
+      return `
+        <tr class="${altRow}">
+          <td class="ud-td-title">${entry.title}</td>
+          <td>${entry.author}</td>
+          <td>${borrowed}</td>
+          <td>${returned}</td>
+          <td><span class="ud-badge ${badgeCls}">${badgeLabel}</span></td>
+        </tr>
+      `;
+    }).join("");
+
+  } catch (error) {
+    tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Failed to load history.</td></tr>`;
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const logo = document.getElementById("logo-link");
   if(logo) {
@@ -244,5 +384,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (document.getElementById("book-list")) {
     renderUserLoans();
+  }
+
+  if (document.getElementById("user-dashboard-page")) {
+    renderUserDashboard();
+    renderUserHistory();
   }
 });

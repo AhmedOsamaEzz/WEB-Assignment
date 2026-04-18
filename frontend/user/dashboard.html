@@ -13,7 +13,17 @@
       crossorigin="anonymous"></script>
     <script type="module" src="../assets/Javascript/UI/authUI.js"></script>
     <script type="module" src="../assets/Javascript/UI/userUI.js"></script>
-    
+    <style>
+      /* loaned badge — mirrors the pattern of ud-badge--returned / ud-badge--overdue */
+      .ud-badge--loaned {
+        background: rgba(100, 180, 255, 0.1);
+        color: #7ec8f7;
+      }
+      /* overdue due-label colour */
+      .ud-due--overdue {
+        color: #ffb4ab;
+      }
+    </style>
   </head>
 
   <body id="user-dashboard-page">
@@ -47,25 +57,25 @@
           </div>
           <div class="ud-profile-info">
             <p class="ud-label">Member Since 2024</p>
-            <h1 class="ud-username">Scholar Name</h1>
-            <p class="ud-email">scholar@example.com</p>
+            <h1 class="ud-username" id="username">load</h1>
+            <p class="ud-email" id="email">load</p>
           </div>
         </div>
 
         <!-- Quick Stats Row -->
         <div class="ud-stats-row">
           <div class="ud-stat">
-            <span class="ud-stat-number">4</span>
+            <span class="ud-stat-number" id="active-loans-count">—</span>
             <span class="ud-stat-label">Active Loans</span>
           </div>
           <div class="ud-stat-divider"></div>
           <div class="ud-stat">
-            <span class="ud-stat-number">124</span>
+            <span class="ud-stat-number" id="total-read-count">—</span>
             <span class="ud-stat-label">Total Read</span>
           </div>
           <div class="ud-stat-divider"></div>
           <div class="ud-stat">
-            <span class="ud-stat-number">2</span>
+            <span class="ud-stat-number" id="overdue-count">—</span>
             <span class="ud-stat-label">Overdue</span>
           </div>
         </div>
@@ -78,59 +88,8 @@
           <a href="borrowed.html" class="ud-section-link">View all</a>
         </div>
 
-        <div class="ud-books-grid">
-
-          <!-- Book Card -->
-          <div class="ud-book-card">
-            <div class="ud-book-cover-wrap">
-              <img src="../assets/images/atomic.jpg" alt="Atomic Habits"
-                class="ud-book-cover" />
-            </div>
-            <div class="ud-book-info">
-              <span class="ud-due ud-due--soon">Due in 3 days</span>
-              <h3 class="ud-book-title">Atomic Habits</h3>
-              <p class="ud-book-author">James Clear</p>
-              <div class="ud-book-actions">
-                <button class="ud-btn-ghost">Extend</button>
-                <button class="ud-btn-outline">Return</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card -->
-          <div class="ud-book-card">
-            <div class="ud-book-cover-wrap">
-              <img src="../assets/images/mountain.jpg" alt="The Mountain Is You"
-                class="ud-book-cover" />
-            </div>
-            <div class="ud-book-info">
-              <span class="ud-due">Due in 12 days</span>
-              <h3 class="ud-book-title">The Mountain Is You</h3>
-              <p class="ud-book-author">Brianna Wiest</p>
-              <div class="ud-book-actions">
-                <button class="ud-btn-ghost">Extend</button>
-                <button class="ud-btn-outline">Return</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Book Card -->
-          <div class="ud-book-card">
-            <div class="ud-book-cover-wrap">
-              <img src="../assets/images/power.jpg" alt="The 48 Laws of Power"
-                class="ud-book-cover" />
-            </div>
-            <div class="ud-book-info">
-              <span class="ud-due">Due in 20 days</span>
-              <h3 class="ud-book-title">The 48 Laws of Power</h3>
-              <p class="ud-book-author">Robert Greene</p>
-              <div class="ud-book-actions">
-                <button class="ud-btn-ghost">Extend</button>
-                <button class="ud-btn-outline">Return</button>
-              </div>
-            </div>
-          </div>
-
+        <div class="ud-books-grid" id="ud-books-grid">
+          <!-- populated by renderUserDashboard() -->
         </div>
       </section>
 
@@ -138,9 +97,6 @@
       <section class="ud-section">
         <div class="ud-section-header">
           <h2 class="ud-section-title">Borrowing History</h2>
-          <button class="ud-filter-btn">
-            Filter <span class="material-symbols-outlined">filter_list</span>
-          </button>
         </div>
 
         <div class="ud-table-wrap">
@@ -154,38 +110,7 @@
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td class="ud-td-title">Atomic Habits</td>
-                <td>James Clear</td>
-                <td>Jan 10, 2026</td>
-                <td>Jan 24, 2026</td>
-                <td><span
-                    class="ud-badge ud-badge--returned">Returned</span></td>
-              </tr>
-              <tr class="ud-tr-alt">
-                <td class="ud-td-title">Deep Work</td>
-                <td>Cal Newport</td>
-                <td>Dec 01, 2025</td>
-                <td>Dec 18, 2025</td>
-                <td><span
-                    class="ud-badge ud-badge--returned">Returned</span></td>
-              </tr>
-              <tr>
-                <td class="ud-td-title">Sapiens</td>
-                <td>Yuval Noah Harari</td>
-                <td>Nov 05, 2025</td>
-                <td>—</td>
-                <td><span class="ud-badge ud-badge--overdue">Overdue</span></td>
-              </tr>
-              <tr class="ud-tr-alt">
-                <td class="ud-td-title">The Alchemist</td>
-                <td>Paulo Coelho</td>
-                <td>Oct 20, 2025</td>
-                <td>Nov 02, 2025</td>
-                <td><span
-                    class="ud-badge ud-badge--returned">Returned</span></td>
-              </tr>
+            <tbody id="history-tbody">
             </tbody>
           </table>
         </div>

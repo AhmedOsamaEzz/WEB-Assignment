@@ -7,6 +7,11 @@ const API = {
   borrowBook: FakeAPI.borrowBook,
   getUserBorrowedBooks: FakeAPI.getUserBorrowedBooks,
 
+  getUserHistory: FakeAPI.getUserHistory,
+  extendLoan: FakeAPI.extendLoan,
+  returnBook: FakeAPI.returnBook,
+  
+  getAdminStats: FakeAPI.getAdminStats,
   // Admin Inventory
   addBook: FakeAPI.addBook,
   getBook: FakeAPI.getBook,

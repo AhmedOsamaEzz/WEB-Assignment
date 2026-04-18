@@ -1971,6 +1971,11 @@ body#sign-up-page {
   color: var(--secondary);
 }
 
+.ud-badge--loaned {
+  background: rgba(240, 187, 164, 0.1);
+  color: var(--primary);
+}
+
 .ud-badge--overdue {
   background: rgba(255, 180, 171, 0.1);
   color: #ffb4ab;
@@ -2003,8 +2008,6 @@ body#sign-up-page {
 
 /* ============================================
    INDEX / LANDING PAGE  (#index-page)
-   Save as: assets/css/index.css
-   Link it in index.html only
    ============================================ */
 
 #index-page {
