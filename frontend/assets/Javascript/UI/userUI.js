@@ -44,10 +44,14 @@ function fetchBook(book) {
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(query = "", categories = [], availableOnly = false) {
+async function renderCatalog(
+  query = "",
+  categories = [],
+  availableOnly = false,
+) {
   const cardsContainer = document.getElementById("cards-container");
   const resultsCount = document.getElementById("results-count");
-  if(!cardsContainer) return; 
+  if (!cardsContainer) return;
 
   try {
     const books = await API.getBooks(query, categories, availableOnly);
@@ -58,7 +62,6 @@ async function renderCatalog(query = "", categories = [], availableOnly = false)
       return;
     }
     cardsContainer.innerHTML = books.map(createCard).join("");
-
   } catch (error) {
     cardsContainer.innerHTML = `<p style="color: red;"> Failed to load catalog </p>`;
   }
@@ -94,19 +97,44 @@ async function handleBorrowAction(params) {
   try {
     // Captures the 'isbn' from the URL (e.g., details.html?isbn=123)
     const isbn = new URLSearchParams(window.location.search).get("isbn");
-    const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const storedInfo =
+      localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
     const info = JSON.parse(storedInfo);
     const token = info.token;
     if (!isbn) {
       alert("Error: No book selected.");
       return;
     }
-    console.log(isbn);
-    console.log(token);
     await API.borrowBook(isbn, token);
     alert("Book borrowed successfully");
+    window.location.reload();
   } catch (error) {
     alert("Sorry, book out of stock");
+    console.log(error);
+  }
+}
+
+// this function check if the book is borrwoed or not to prevent a user from borrowing more than one copy (made by ghareeb)
+async function checkBookStatus(token, isbn) {
+  try {
+    const borrowedBooks = await API.getUserBorrowedBooks(token);
+    const isBorrowed = borrowedBooks.some((book) => book.isbn === isbn);
+
+    if (isBorrowed) {
+      disableBorrowButton();
+    }
+  } catch (error) {
+    console.error("Failed to fetch user's borrowed books:", error);
+  }
+}
+
+// this function is to disable the borrown btn if needed (also made by ghareeb)
+function disableBorrowButton() {
+  const borrowBtn = document.getElementById("borrow-btn");
+  if (borrowBtn) {
+    borrowBtn.textContent = "Book already borrowed";
+    borrowBtn.disabled = true;
+    borrowBtn.classList.add("disabled-btn");
   }
 }
 
@@ -117,10 +145,12 @@ async function renderUserLoans() {
   const bookListElement = document.getElementById("book-list");
   if (!bookListElement) return;
 
-  bookListElement.innerHTML = "<p style='text-align: center;'>Loading your borrowed books...</p>";
+  bookListElement.innerHTML =
+    "<p style='text-align: center;'>Loading your borrowed books...</p>";
 
   try {
-    const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const storedInfo =
+      localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
     const info = storedInfo ? JSON.parse(storedInfo) : {};
     const token = info.token;
     if (!token) {
@@ -130,7 +160,8 @@ async function renderUserLoans() {
     const borrowedBooks = await API.getUserBorrowedBooks(token);
 
     if (!borrowedBooks || borrowedBooks.length === 0) {
-      bookListElement.innerHTML = "<p style='text-align: center;'>You have not borrowed any books yet.</p>";
+      bookListElement.innerHTML =
+        "<p style='text-align: center;'>You have not borrowed any books yet.</p>";
       return;
     }
 
@@ -138,8 +169,8 @@ async function renderUserLoans() {
 
     borrowedBooks.forEach((book) => {
       const bookCard = document.createElement("div");
-      bookCard.className = "book-card"; 
-      
+      bookCard.className = "book-card";
+
       const dateBorrowed = new Date(book.borrowedAt).toLocaleDateString();
 
       bookCard.innerHTML = `
@@ -151,10 +182,9 @@ async function renderUserLoans() {
           <p><strong>Borrowed on:</strong> ${dateBorrowed}</p>
         </div>
       `;
-      
+
       bookListElement.appendChild(bookCard);
     });
-
   } catch (error) {
     bookListElement.innerHTML = `
       <div style="color: red; text-align: center; padding: 20px; border: 1px solid red; border-radius: 5px;">
@@ -179,39 +209,40 @@ async function initSearchPage() {
   let currentAvailability = true;
 
   const triggerSearch = () => {
-    if(queryLabel) {
+    if (queryLabel) {
       queryLabel.textContent = currentQuery;
     }
-      const catogriesArray = (currentCategory === "All" ? [] : [currentCategory]);
-      renderCatalog(currentQuery, catogriesArray, currentAvailability);
-  }
+    const catogriesArray = currentCategory === "All" ? [] : [currentCategory];
+    renderCatalog(currentQuery, catogriesArray, currentAvailability);
+  };
 
-  if(searchInput) {
+  if (searchInput) {
     searchInput.addEventListener("input", (e) => {
       currentQuery = e.target.value.trim();
       triggerSearch();
     });
   }
 
-  if(searchForm) {
-    searchForm.addEventListener("submit", (e) => {e.preventDefault()});
+  if (searchForm) {
+    searchForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+    });
   }
 
-  categoryItems.forEach(li => {
-    if (li.querySelector("input")) return; 
+  categoryItems.forEach((li) => {
+    if (li.querySelector("input")) return;
 
-    li.addEventListener("click", function() {
-      categoryItems.forEach(item => item.classList.remove("active"));
+    li.addEventListener("click", function () {
+      categoryItems.forEach((item) => item.classList.remove("active"));
       this.classList.add("active");
-      
+
       currentCategory = this.textContent.trim();
-      triggerSearch(); 
+      triggerSearch();
     });
   });
 
-
   if (availabilityCheckbox) {
-    currentAvailability = availabilityCheckbox.checked; 
+    currentAvailability = availabilityCheckbox.checked;
     availabilityCheckbox.addEventListener("change", (e) => {
       currentAvailability = e.target.checked;
       triggerSearch();
@@ -223,7 +254,7 @@ async function initSearchPage() {
 
 document.addEventListener("DOMContentLoaded", () => {
   const logo = document.getElementById("logo-link");
-  if(logo) {
+  if (logo) {
     logo.addEventListener("click", () => {
       window.location.href = APP_ROOT1 + "user/dashboard.html";
     });
@@ -234,15 +265,35 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (document.getElementById("book-info")) {
-    renderBookDetails();
-    
     const borrowBtn = document.getElementById("borrow-btn");
+    const storedInfo =
+      localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const info = JSON.parse(storedInfo);
+    const token = info.token;
+    const urlParams = new URLSearchParams(window.location.search);
+    const isbn = urlParams.get("isbn");
+    renderBookDetails();
+
     if (borrowBtn) {
+      checkBookStatus(token, isbn);
       borrowBtn.addEventListener("click", handleBorrowAction);
     }
   }
 
   if (document.getElementById("book-list")) {
     renderUserLoans();
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const borrowBtn = document.getElementById("borrow-btn");
+  const storedInfo =
+    localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+  const info = JSON.parse(storedInfo);
+  const token = info.token;
+  const urlParams = new URLSearchParams(window.location.search);
+  const isbn = urlParams.get("isbn");
+  if (borrowBtn) {
+    checkBookStatus(token, isbn);
   }
 });
