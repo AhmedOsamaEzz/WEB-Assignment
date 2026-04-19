@@ -884,6 +884,59 @@ body#sign-up-page {
   padding: 2rem 0;
 }
 
+#search-page .filter-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  user-select: none;
+  padding: 6px 4px;
+  transition: color 0.2s;
+}
+
+#search-page .filter-check:hover {
+  color: var(--text);
+}
+
+/* Hide the default checkbox */
+#search-page input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid var(--primary-dark);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+/* Checked state */
+#search-page input[type="checkbox"]:checked {
+  background: var(--gradient);
+  border-color: var(--primary);
+}
+
+/* Checkmark */
+#search-page input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  width: 3px;
+  height: 8px;
+  border: 2px solid var(--text-dark);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
 /* Start Cards */
 
 #search-page .cards {
