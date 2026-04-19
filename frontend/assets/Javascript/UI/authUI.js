@@ -6,7 +6,7 @@ const scriptUrl = document.currentScript
 const APP_ROOT = scriptUrl
   .split("assets/Javascript/UI/authUI.js")[0]
   .split("assets/js/ui/authUI.js")[0];
-let devMode = true;
+let devMode = false;
 
 function isValidEmail(email) {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
