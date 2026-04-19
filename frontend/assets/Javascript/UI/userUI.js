@@ -255,10 +255,18 @@ async function initSearchPage() {
 
   if (checkRow) {
     const checkbox = checkRow.querySelector("input[type='checkbox']");
-    checkRow.addEventListener("click", (e) => {
-      if (e.target !== checkbox) checkbox.checked = !checkbox.checked;
+
+    checkbox.addEventListener("change", () => {
       currentAvailability = checkbox.checked;
       triggerSearch();
+    });
+
+    checkRow.addEventListener("click", (e) => {
+      if (e.target !== checkbox) {
+        checkbox.checked = !checkbox.checked;
+        currentAvailability = checkbox.checked;
+        triggerSearch();
+      }
     });
   }
 

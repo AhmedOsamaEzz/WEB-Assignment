@@ -842,27 +842,6 @@ body#sign-up-page {
   box-shadow: none;
 }
 
-#search-page .apply-filters-btn {
-  margin-top: 3.125rem;
-  width: 100%;
-  padding: 0.875rem;
-  background: var(--gradient);
-  border: none;
-  border-radius: var(--radius-md);
-  color: var(--text-dark);
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.3s ease;
-}
-
-#search-page .apply-filters-btn:hover {
-  opacity: 0.85;
-}
-
 /* End Filters */
 
 /* Start Results */
@@ -909,7 +888,7 @@ body#sign-up-page {
 
 #search-page .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   /* gap: 1rem; */
 }
 
