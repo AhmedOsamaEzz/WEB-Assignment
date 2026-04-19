@@ -1049,7 +1049,7 @@ body#sign-up-page {
   transition: color 0.2s;
   padding: 10px;
   border-radius: var(--radius-md);
-  transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+  transition: 0.5s;
 }
 
 #search-page button:hover {
@@ -2435,14 +2435,17 @@ nav {
 
 nav .logo {
   user-select: none;
-}
-
-nav .logo a {
   text-decoration: none;
   color: var(--primary);
   font-size: 1.5rem;
   font-weight: 400;
-  transition: color 0.2s;
+  transition: 0.4s;
+  cursor: pointer;
+}
+
+nav .logo:hover {
+  color: hsl(from var(--secondary) h s l / 0.7);
+  transform: scale(1.08);
 }
 
 .links {
@@ -2507,7 +2510,6 @@ nav ul li a:hover::after {
   transition: color 0.2s;
 }
 
-nav .logo:hover a,
 .search-profile a:hover i {
   color: hsl(from var(--secondary) h s l / 0.7);
 }
@@ -2557,10 +2559,16 @@ nav .logo:hover a,
   font-family: var(--sans);
   letter-spacing: 1.2px;
   font-weight: lighter;
+  display: inline-block;
+  transition: 0.5s;
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
 }
 
-.global-footer .cnt p:hover a {
+.global-footer .cnt p a:hover {
   color: var(--text-muted);
+  transform: scale(1.08);
+  background-color: #251812;
 }
 
 .global-footer .copyrights {
