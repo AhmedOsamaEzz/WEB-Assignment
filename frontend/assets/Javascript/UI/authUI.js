@@ -1,8 +1,12 @@
 import API from "../API/api.js";
 
-const scriptUrl = document.currentScript ? document.currentScript.src : import.meta.url;
-const APP_ROOT = scriptUrl.split("assets/Javascript/UI/authUI.js")[0].split("assets/js/ui/authUI.js")[0];
-let devMode = false;
+const scriptUrl = document.currentScript
+  ? document.currentScript.src
+  : import.meta.url;
+const APP_ROOT = scriptUrl
+  .split("assets/Javascript/UI/authUI.js")[0]
+  .split("assets/js/ui/authUI.js")[0];
+let devMode = true;
 
 function isValidEmail(email) {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -21,7 +25,8 @@ function isStrongPassword(password) {
 }
 
 function checkAccess() {
-  const storedUser = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+  const storedUser =
+    localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
   let User = {};
   try {
     User = storedUser ? JSON.parse(storedUser) : {};
@@ -56,21 +61,29 @@ function logout() {
   window.location.href = APP_ROOT + "auth/login.html";
 }
 
-async function handleLoginSubmit(emailInput, passwordInput, rememberCheckbox, loginBtn) {
+async function handleLoginSubmit(
+  emailInput,
+  passwordInput,
+  rememberCheckbox,
+  loginBtn,
+) {
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
   let inputFieldError = false;
 
-  console.log()
+  console.log();
   if (!email) {
-    document.getElementById("login-email-error").innerText = "Email field cannot be empty";
+    document.getElementById("login-email-error").innerText =
+      "Email field cannot be empty";
     inputFieldError = true;
   } else if (!isValidEmail(email)) {
-    document.getElementById("login-email-error").innerText = "Enter a valid email";
+    document.getElementById("login-email-error").innerText =
+      "Enter a valid email";
     inputFieldError = true;
   }
   if (!password) {
-    document.getElementById("login-password-error").innerText = "Password field cannot be empty";
+    document.getElementById("login-password-error").innerText =
+      "Password field cannot be empty";
     inputFieldError = true;
   }
   if (inputFieldError) return;
@@ -82,7 +95,7 @@ async function handleLoginSubmit(emailInput, passwordInput, rememberCheckbox, lo
   try {
     const remember = rememberCheckbox ? rememberCheckbox.checked : false;
     await API.loginUser(email, password, remember);
-    checkAccess(); 
+    checkAccess();
   } catch (error) {
     document.getElementById("login-email-error").innerText = error.message;
     loginBtn.textContent = originalText;
@@ -90,28 +103,38 @@ async function handleLoginSubmit(emailInput, passwordInput, rememberCheckbox, lo
   }
 }
 
-async function handleSignupSubmit(nameInput, emailInput, passwordInput, signupBtn) {
+async function handleSignupSubmit(
+  nameInput,
+  emailInput,
+  passwordInput,
+  signupBtn,
+) {
   const name = nameInput.value.trim();
   const email = emailInput.value.trim();
   const password = passwordInput.value.trim();
   let inputFieldError = false;
 
   if (!name) {
-    document.getElementById("signup-username-error").innerText = "Name can't be empty";
+    document.getElementById("signup-username-error").innerText =
+      "Name can't be empty";
     inputFieldError = true;
   }
   if (!email) {
-    document.getElementById("signup-email-error").innerText = "Email can't be empty";
+    document.getElementById("signup-email-error").innerText =
+      "Email can't be empty";
     inputFieldError = true;
   } else if (!isValidEmail(email)) {
-    document.getElementById("signup-email-error").innerText = "Email must be valid";
+    document.getElementById("signup-email-error").innerText =
+      "Email must be valid";
     inputFieldError = true;
   }
   if (!password) {
-    document.getElementById("signup-password-error").innerText = "Password can't be empty";
+    document.getElementById("signup-password-error").innerText =
+      "Password can't be empty";
     inputFieldError = true;
   } else if (!isStrongPassword(password)) {
-    document.getElementById("signup-password-error").innerText = "Password has to contain a capital letter, a lowercase letter, a symbol and at least 8 characters";
+    document.getElementById("signup-password-error").innerText =
+      "Password has to contain a capital letter, a lowercase letter, a symbol and at least 8 characters";
     inputFieldError = true;
   }
   if (inputFieldError) return;
@@ -121,7 +144,7 @@ async function handleSignupSubmit(nameInput, emailInput, passwordInput, signupBt
   signupBtn.disabled = true;
 
   const adminCheckbox = document.getElementById("create-admin-account");
-  const role = (adminCheckbox && adminCheckbox.checked) ? "admin" : "user";
+  const role = adminCheckbox && adminCheckbox.checked ? "admin" : "user";
 
   try {
     await API.registerUser(name, email, password, role);
@@ -141,8 +164,14 @@ function initUI() {
     const passwordInput = document.getElementById("login-password");
     const rememberCheckbox = document.getElementById("remember-login");
 
-    emailInput.addEventListener("input", () => document.getElementById("login-email-error").innerText = "");
-    passwordInput.addEventListener("input", () => document.getElementById("login-password-error").innerText = "");
+    emailInput.addEventListener(
+      "input",
+      () => (document.getElementById("login-email-error").innerText = ""),
+    );
+    passwordInput.addEventListener(
+      "input",
+      () => (document.getElementById("login-password-error").innerText = ""),
+    );
 
     loginForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -157,9 +186,18 @@ function initUI() {
     const emailInput = document.getElementById("signup-email");
     const passwordInput = document.getElementById("signup-password");
 
-    nameInput.addEventListener("input", () => document.getElementById("signup-username-error").innerText = "");
-    emailInput.addEventListener("input", () => document.getElementById("signup-email-error").innerText = "");
-    passwordInput.addEventListener("input", () => document.getElementById("signup-password-error").innerText = "");
+    nameInput.addEventListener(
+      "input",
+      () => (document.getElementById("signup-username-error").innerText = ""),
+    );
+    emailInput.addEventListener(
+      "input",
+      () => (document.getElementById("signup-email-error").innerText = ""),
+    );
+    passwordInput.addEventListener(
+      "input",
+      () => (document.getElementById("signup-password-error").innerText = ""),
+    );
 
     signupForm.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -175,7 +213,9 @@ if (!devMode) {
   });
 }
 
-const logoutBtn = document.getElementById("logout-btn") || document.getElementById("logout-link");
+const logoutBtn =
+  document.getElementById("logout-btn") ||
+  document.getElementById("logout-link");
 if (logoutBtn) {
   logoutBtn.addEventListener("click", logout);
 }

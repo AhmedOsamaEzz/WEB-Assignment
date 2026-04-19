@@ -998,9 +998,9 @@ body#sign-up-page {
 }
 
 #search-page .unavailable {
-  color: rgb(255, 79, 79);
-  background-color: rgba(189, 0, 0, 0.477);
-  border: 2px solid rgb(255, 41, 41);
+  color: rgb(255, 65, 65);
+  background-color: rgba(189, 0, 0, 0.591);
+  border: 2px solid rgba(255, 41, 41, 0.734);
 }
 
 #search-page #availability {
