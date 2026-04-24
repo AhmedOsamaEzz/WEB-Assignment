@@ -332,11 +332,11 @@ body#sign-up-page {
     border-color 0.2s;
 }
 
-.checkbox-container:hover input ~ .checkmark {
+.checkbox-container:hover input~.checkmark {
   border-color: var(--primary-dark);
 }
 
-.checkbox-container input:checked ~ .checkmark {
+.checkbox-container input:checked~.checkmark {
   background-color: var(--primary-dark);
   border-color: var(--primary-dark);
 }
@@ -347,7 +347,7 @@ body#sign-up-page {
   display: none;
 }
 
-.checkbox-container input:checked ~ .checkmark:after {
+.checkbox-container input:checked~.checkmark:after {
   display: block;
 }
 
@@ -361,7 +361,7 @@ body#sign-up-page {
   transform: rotate(45deg);
 }
 
-.checkbox-container input:focus-visible ~ .checkmark {
+.checkbox-container input:focus-visible~.checkmark {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
@@ -587,16 +587,12 @@ body#sign-up-page {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(
-      ellipse at 20% 50%,
+    radial-gradient(ellipse at 20% 50%,
       rgba(114, 75, 57, 0.3) 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse at 80% 20%,
+      transparent 60%),
+    radial-gradient(ellipse at 80% 20%,
       rgba(240, 187, 164, 0.1) 0%,
-      transparent 50%
-    );
+      transparent 50%);
   pointer-events: none;
   z-index: 0;
 }
@@ -657,14 +653,12 @@ body#sign-up-page {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(240, 187, 164, 0.08) 40%,
-    rgba(114, 75, 57, 0.25) 50%,
-    rgba(240, 187, 164, 0.08) 60%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(240, 187, 164, 0.08) 40%,
+      rgba(114, 75, 57, 0.25) 50%,
+      rgba(240, 187, 164, 0.08) 60%,
+      transparent 100%);
   opacity: 0;
   pointer-events: none;
   border-radius: var(--radius-sm);
@@ -693,7 +687,7 @@ body#sign-up-page {
   }
 }
 
-#search-page main .search-bar > i {
+#search-page main .search-bar>i {
   font-size: 1.5625rem;
   padding: 1.5rem;
   background-color: var(--surface-bright);
@@ -759,6 +753,7 @@ body#sign-up-page {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  user-select: none;
 }
 
 #search-page .filters-section {
@@ -847,27 +842,6 @@ body#sign-up-page {
   box-shadow: none;
 }
 
-#search-page .apply-filters-btn {
-  margin-top: 3.125rem;
-  width: 100%;
-  padding: 0.875rem;
-  background: var(--gradient);
-  border: none;
-  border-radius: var(--radius-md);
-  color: var(--text-dark);
-  font-family: var(--sans);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-#search-page .apply-filters-btn:hover {
-  opacity: 0.85;
-}
-
 /* End Filters */
 
 /* Start Results */
@@ -910,43 +884,125 @@ body#sign-up-page {
   padding: 2rem 0;
 }
 
+#search-page .filter-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  color: var(--text-muted);
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  user-select: none;
+  padding: 6px 4px;
+  transition: color 0.2s;
+}
+
+#search-page .filter-check:hover {
+  color: var(--text);
+}
+
+/* Hide the default checkbox */
+#search-page input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border: 1.5px solid var(--primary-dark);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+/* Checked state */
+#search-page input[type="checkbox"]:checked {
+  background: var(--gradient);
+  border-color: var(--primary);
+}
+
+/* Checkmark */
+#search-page input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 2px;
+  width: 3px;
+  height: 8px;
+  border: 2px solid var(--text-dark);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
 /* Start Cards */
 
 #search-page .cards {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  /* gap: 1rem; */
 }
 
 #search-page .card {
-  margin: 1.25rem;
+  margin: 15px;
   background: var(--surface-high);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  border-radius: var(--radius-sm);
   transition: background 0.3s;
-  cursor: pointer;
-  padding: 20px;
+  cursor: default;
+  padding: 10px;
 }
 
 #search-page .card:hover {
-  background: var(--surface-bright);
+  background-color: hsl(from var(--surface-high) h s l/0.8);
 }
 
 #search-page .card figure {
   margin: 0;
+  border-bottom: 1px solid #6a6a6a;
 }
 
 #search-page .card img {
-  width: 100%;
-  height: 18.75rem;
-  object-fit: cover;
+  margin-left: 10px;
+  margin-top: -35px;
+  width: 160px;
+  height: 260px;
   display: block;
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-sm);
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+}
+
+#search-page .card:hover img {
+  transform: translateY(-7px) scale(1.06);
+  box-shadow: 0px 2px 20px rgba(0, 0, 0, 0.7);
 }
 
 #search-page .card figcaption {
   padding: 0.875rem 1rem 1rem;
-  user-select: none;
+  /* user-select: none; */
+}
+
+#search-page .badge {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  /* font-weight: 200; */
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+  margin: 10px 0 5px 0;
+  background-color: hsl(from var(--primary-dark) h s l / 0.3);
+  width: fit-content;
+  border: 1px solid var(--primary-dark);
+  transition: 0.3s;
+}
+
+#search-page .badge:hover {
+  background-color: transparent;
+  transform: scale(1.1);
 }
 
 #search-page .card .name {
@@ -977,6 +1033,64 @@ body#sign-up-page {
   line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  font-family: var(--sans);
+  font-weight: 300;
+}
+
+#search-page .card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  margin-bottom: 5px;
+}
+
+#search-page .available {
+  color: var(--primary);
+  background-color: hsl(from var(--primary-dark) h s l /0.4);
+}
+
+#search-page .unavailable {
+  color: rgb(255, 65, 65);
+  background-color: rgba(189, 0, 0, 0.591);
+  border: 2px solid rgba(255, 41, 41, 0.734);
+}
+
+#search-page #availability {
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  transition: 0.5s;
+}
+
+#search-page #availability:hover {
+  transform: scale(1.08);
+  background-color: transparent;
+}
+
+
+#search-page .details-btn {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+  padding: 10px;
+  border-radius: var(--radius-md);
+  transition: 0.5s;
+}
+
+#search-page button:hover {
+  transform: scale(1.08);
+}
+
+#search-page .details-btn:hover {
+  color: var(--text-muted);
+  background-color: #33302d;
 }
 
 /* End Cards */
@@ -990,11 +1104,13 @@ body#sign-up-page {
   margin-top: 20px;
   color: var(--primary);
 }
+
 .wrapper {
   display: flex;
   flex-direction: column;
   padding: 2rem;
 }
+
 #book-details-page .book-container {
   width: 100%;
   min-height: 75%;
@@ -1004,6 +1120,7 @@ body#sign-up-page {
 
   flex-wrap: nowrap;
 }
+
 #book-details-page .book-container .image {
   flex: 1;
   width: 100%;
@@ -1016,6 +1133,7 @@ body#sign-up-page {
   flex-direction: column;
   position: relative;
 }
+
 #book-image {
   width: 27rem;
   height: 35rem;
@@ -1041,10 +1159,13 @@ body#sign-up-page {
   gap: 1.5rem;
   margin-left: 1rem;
 }
+
 #book-info .same-row {
   display: flex;
-  flex-direction: row; /* Explicitly state the direction */
-  flex-wrap: nowrap; /* Force them to stay on one line no matter what */
+  flex-direction: row;
+  /* Explicitly state the direction */
+  flex-wrap: nowrap;
+  /* Force them to stay on one line no matter what */
   gap: 1rem;
 }
 
@@ -1077,11 +1198,14 @@ body#sign-up-page {
   /* padding-top: 1rem; */
   width: 100%;
 }
+
 #borrow-btn {
   border: none;
   min-width: 10rem;
-  width: max-content; /* Stops the button from stretching to 100% */
-  padding: 1rem 2rem; /* Gives the button some nice inner breathing room */
+  width: max-content;
+  /* Stops the button from stretching to 100% */
+  padding: 1rem 2rem;
+  /* Gives the button some nice inner breathing room */
   border-radius: var(--radius-md);
   background: var(--gradient);
   color: black;
@@ -1091,11 +1215,14 @@ body#sign-up-page {
 #borrow-btn:hover {
   opacity: 0.8;
 }
+
 #edit-btn {
   border: none;
   min-width: 10rem;
-  width: max-content; /* Stops the button from stretching to 100% */
-  padding: 1rem 2rem; /* Gives the button some nice inner breathing room */
+  width: max-content;
+  /* Stops the button from stretching to 100% */
+  padding: 1rem 2rem;
+  /* Gives the button some nice inner breathing room */
   border-radius: var(--radius-md);
   background: var(--gradient);
   color: black;
@@ -1291,12 +1418,7 @@ body#sign-up-page {
   gap: 5px;
 }
 
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .page-numbers
-  .current-button {
+#bookList-page .main-bookList .table-options-section .table-pagination .page-numbers .current-button {
   color: var(--text-light);
   background-color: transparent;
   outline: none;
@@ -1304,22 +1426,9 @@ body#sign-up-page {
   cursor: pointer;
 }
 
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .page-numbers
-  .not-current-button,
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .prev-btn,
-#bookList-page
-  .main-bookList
-  .table-options-section
-  .table-pagination
-  .next-btn {
+#bookList-page .main-bookList .table-options-section .table-pagination .page-numbers .not-current-button,
+#bookList-page .main-bookList .table-options-section .table-pagination .prev-btn,
+#bookList-page .main-bookList .table-options-section .table-pagination .next-btn {
   color: var(--text-light);
   background-color: transparent;
   outline: none;
@@ -1491,6 +1600,7 @@ body#sign-up-page {
 #admin-dashboard-page .activity-section {
   flex: 7;
 }
+
 #admin-dashboard-page .loan-status-section {
   flex: 5;
 }
@@ -1546,9 +1656,11 @@ body#sign-up-page {
 #admin-dashboard-page .activity-item:first-child {
   border-top: none;
 }
+
 #admin-dashboard-page .activity-item:hover {
   background-color: var(--surface-bright);
 }
+
 #admin-dashboard-page .activity-item--alt {
   background-color: var(--surface-high);
 }
@@ -1689,9 +1801,11 @@ body#sign-up-page {
 #admin-dashboard-page .loan-bar-fill--available {
   background-color: var(--primary);
 }
+
 #admin-dashboard-page .loan-bar-fill--borrowed {
   background-color: var(--secondary);
 }
+
 #admin-dashboard-page .loan-bar-fill--overdue {
   background-color: var(--text-muted);
 }
@@ -1777,7 +1891,7 @@ body#sign-up-page {
 .ud-avatar .material-symbols-outlined {
   font-size: 3rem;
   color: var(--primary);
-  font-variation-settings: "FILL" 1;
+  font-variation-settings: "FILL"1;
 }
 
 .ud-label {
@@ -2163,20 +2277,16 @@ body#sign-up-page {
   position: absolute;
   inset: 0;
   background-image:
-    repeating-linear-gradient(
-      90deg,
+    repeating-linear-gradient(90deg,
       transparent 0px,
       transparent 62px,
       rgba(0, 0, 0, 0.07) 62px,
-      rgba(0, 0, 0, 0.07) 64px
-    ),
-    repeating-linear-gradient(
-      180deg,
+      rgba(0, 0, 0, 0.07) 64px),
+    repeating-linear-gradient(180deg,
       transparent 0px,
       transparent 90px,
       rgba(0, 0, 0, 0.05) 90px,
-      rgba(0, 0, 0, 0.05) 92px
-    );
+      rgba(0, 0, 0, 0.05) 92px);
   pointer-events: none;
   z-index: 0;
 }
@@ -2185,11 +2295,9 @@ body#sign-up-page {
 .ix-glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse 70% 60% at 50% 55%,
-    rgba(114, 75, 57, 0.18) 0%,
-    transparent 70%
-  );
+  background: radial-gradient(ellipse 70% 60% at 50% 55%,
+      rgba(114, 75, 57, 0.18) 0%,
+      transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -2214,6 +2322,7 @@ body#sign-up-page {
     opacity: 0;
     transform: translateY(18px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -2358,14 +2467,17 @@ nav {
 
 nav .logo {
   user-select: none;
-}
-
-nav .logo a {
   text-decoration: none;
   color: var(--primary);
   font-size: 1.5rem;
   font-weight: 400;
-  transition: color 0.2s;
+  transition: 0.4s;
+  cursor: pointer;
+}
+
+nav .logo:hover {
+  color: hsl(from var(--secondary) h s l / 0.7);
+  transform: scale(1.08);
 }
 
 .links {
@@ -2430,7 +2542,6 @@ nav ul li a:hover::after {
   transition: color 0.2s;
 }
 
-nav .logo:hover a,
 .search-profile a:hover i {
   color: hsl(from var(--secondary) h s l / 0.7);
 }
@@ -2480,10 +2591,16 @@ nav .logo:hover a,
   font-family: var(--sans);
   letter-spacing: 1.2px;
   font-weight: lighter;
+  display: inline-block;
+  transition: 0.5s;
+  padding: 5px 10px;
+  border-radius: var(--radius-md);
 }
 
-.global-footer .cnt p:hover a {
+.global-footer .cnt p a:hover {
   color: var(--text-muted);
+  transform: scale(1.08);
+  background-color: #251812;
 }
 
 .global-footer .copyrights {
