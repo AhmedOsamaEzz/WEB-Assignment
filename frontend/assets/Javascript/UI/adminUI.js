@@ -14,13 +14,15 @@ const BOOKS_PER_PAGE = 10;
  * @returns {Promise<void>}
  */
 const deleteBook = async (ISBN) => {
+  const errorContainer = document.getElementById('error-message-container');
+  errorContainer.innerText = '';
+
   if (confirm("Are you Sure you want to delete this book?")) {
-    try {
-      // console.log("try delete" + ISBN);
+    try {;
       await API.deleteBook(ISBN);
       renderAdminInventory();
     } catch (error) {
-      // display error
+      errorContainer.innerText = 'Failed to delete book please try again later';
     }
   }
 };
@@ -71,7 +73,6 @@ const renderAdminInventory = async () => {
       pageNumbersContainer.innerHTML = "";
       return;
     }
-    // console.log(bookList.length);
     // Calculate total pages
     const totalPages = Math.ceil(bookList.length / BOOKS_PER_PAGE);
 
