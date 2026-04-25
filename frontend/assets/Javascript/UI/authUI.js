@@ -31,6 +31,7 @@ function checkAccess() {
   try {
     User = storedUser ? JSON.parse(storedUser) : {};
   } catch (e) {
+    console.log(e);
     User = {};
   }
   const token = User.token || null;
@@ -71,7 +72,6 @@ async function handleLoginSubmit(
   const password = passwordInput.value.trim();
   let inputFieldError = false;
 
-  console.log();
   if (!email) {
     document.getElementById("login-email-error").innerText =
       "Email field cannot be empty";
@@ -97,7 +97,8 @@ async function handleLoginSubmit(
     await API.loginUser(email, password, remember);
     checkAccess();
   } catch (error) {
-    document.getElementById("login-email-error").innerText = error.message;
+    console.log(error);
+    document.getElementById("login-email-error").innerText = "Failed to login, please try again later.";
     loginBtn.textContent = originalText;
     loginBtn.disabled = false;
   }
@@ -150,7 +151,8 @@ async function handleSignupSubmit(
     await API.registerUser(name, email, password, role);
     window.location.href = "login.html";
   } catch (error) {
-    document.getElementById("signup-email-error").innerText = error.message;
+    console.log(error);
+    document.getElementById("signup-email-error").innerText = "Failed to submit signup request, please try again later";
     signupBtn.textContent = originalText;
     signupBtn.disabled = false;
   }

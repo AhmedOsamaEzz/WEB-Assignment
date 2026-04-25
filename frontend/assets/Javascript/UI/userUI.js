@@ -71,6 +71,7 @@ async function renderCatalog(
     }
     cardsContainer.innerHTML = books.map(createCard).join("");
   } catch (error) {
+    console.log(error);
     cardsContainer.innerHTML = `<p style="color: red;"> Failed to load catalog </p>`;
   }
 }
@@ -93,6 +94,7 @@ async function renderBookDetails(params) {
     const book = await API.getBookById(isbn);
     fetchBook(book);
   } catch (error) {
+    console.log(error);
     bookInfo.innerHTML = `<p style="color: red;"> Error loading the book </p>`;
   }
 }
@@ -117,12 +119,16 @@ async function handleBorrowAction(params) {
     alert("Book borrowed successfully");
     window.location.reload();
   } catch (error) {
-    alert("Sorry, book out of stock");
     console.log(error);
+    alert("Sorry, book out of stock");
   }
 }
 
-// this function check if the book is borrwoed or not to prevent a user from borrowing more than one copy (made by ghareeb)
+/**
+ * this function check if the book is borrowed or not to prevent a user from borrowing more than one copy 
+ * @param {string} token 
+ * @param {string} isbn 
+ */
 async function checkBookStatus(token, isbn) {
   try {
     const borrowedBooks = await API.getUserBorrowedBooks(token);
@@ -132,7 +138,8 @@ async function checkBookStatus(token, isbn) {
       disableBorrowButton();
     }
   } catch (error) {
-    console.error("Failed to fetch user's borrowed books:", error);
+      console.log(error);
+    // # TODO figure out what to do
   }
 }
 
@@ -194,6 +201,7 @@ async function renderUserLoans() {
       bookListElement.appendChild(bookCard);
     });
   } catch (error) {
+    console.log(error);
     bookListElement.innerHTML = `
       <div style="color: red; text-align: center; padding: 20px; border: 1px solid red; border-radius: 5px;">
         <strong>Error:</strong> ${error.message}
@@ -418,6 +426,7 @@ async function renderUserHistory() {
       })
       .join("");
   } catch (error) {
+    console.log(error);
     tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Failed to load history.</td></tr>`;
   }
 }
