@@ -124,7 +124,11 @@ async function handleBorrowAction(params) {
   }
 }
 
-// this function check if the book is borrwoed or not to prevent a user from borrowing more than one copy (made by ghareeb)
+/**
+ * this function check if the book is borrowed or not to prevent a user from borrowing more than one copy 
+ * @param {string} token 
+ * @param {string} isbn 
+ */
 async function checkBookStatus(token, isbn) {
   try {
     const borrowedBooks = await API.getUserBorrowedBooks(token);
@@ -135,6 +139,7 @@ async function checkBookStatus(token, isbn) {
     }
   } catch (error) {
       console.log(error);
+    // # TODO figure out what to do
   }
 }
 
