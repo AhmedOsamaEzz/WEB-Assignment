@@ -306,6 +306,16 @@ async function renderCatalog(
 }
 
 /**
+ * Function displays error string in error-message-container div in bookEdit and bookAdd
+ * @param {string} error 
+ */
+const bookSubmitFormError = (error) => {
+  const errorContainer = document.getElementById('error-message-container');
+  errorContainer.innerText = '';
+  errorContainer.innerText = error;
+}
+
+/**
  * Acts as the main controller for adding and editing books.
  * Prevents default form submission, validates inputs, parses strings to integers,
  * handles image reading, communicates with the API, and redirects upon success.
@@ -319,7 +329,7 @@ const handleBookFormSubmit = async (event, mode) => {
   const imageInput = document.getElementById("fileInput");
 
   if (mode == "add" && (!imageInput.files || imageInput.files.length === 0)) {
-    // display error no img
+    bookSubmitFormError("No Image were provided");
     return;
   }
 
@@ -335,8 +345,6 @@ const handleBookFormSubmit = async (event, mode) => {
   const category =
     document.querySelector("#category")?.value || "Uncategorized";
 
-  // if(!title || !author || !isbn || !year || !publisher || !description) return;
-
   const bookData = {
     title,
     author,
@@ -349,7 +357,6 @@ const handleBookFormSubmit = async (event, mode) => {
   };
 
   if (!isValidBook(bookData)) return;
-  // console.log("lizard");
   bookData.year = parseInt(bookData.year);
   bookData.copies = parseInt(bookData.copies);
   bookData.availableCopies = bookData.copies;
@@ -361,20 +368,18 @@ const handleBookFormSubmit = async (event, mode) => {
     bookData.cover = document.querySelector("#image").src;
   }
   if (mode === "add") {
-    // console.log("will add");
     try {
       await API.addBook(bookData);
-      // console.log("added");
       window.location.href = "bookList.html";
     } catch (error) {
-      // failed to add book
+      bookSubmitFormError("Failed to add book");
     }
   } else if (mode === "edit") {
     try {
       await API.updateBook(oldIsbn, bookData);
       window.location.href = "bookList.html";
     } catch (error) {
-      // failed to edit book
+      bookSubmitFormError("Failed to Edit book");
     }
   }
 };
