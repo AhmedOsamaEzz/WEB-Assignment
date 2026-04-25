@@ -22,6 +22,7 @@ const deleteBook = async (ISBN) => {
       await API.deleteBook(ISBN);
       renderAdminInventory();
     } catch (error) {
+      console.log(error);
       errorContainer.innerText = 'Failed to delete book please try again later';
     }
   }
@@ -165,6 +166,7 @@ const renderAdminInventory = async () => {
       }
     };
   } catch (error) {
+    console.log(error);
     errorContainer.innerText = 'Failed to render books please try again later';
   }
 };
@@ -256,6 +258,7 @@ async function renderBookDetails(params) {
     const book = await API.getBookById(isbn);
     fetchBook(book);
   } catch (error) {
+    console.log(error);
     bookInfo.innerHTML = `<p style="color: red;"> Error loading the book </p>`;
   }
 }
@@ -301,6 +304,7 @@ async function renderCatalog(
     }
     cardsContainer.innerHTML = books.map(createCard).join("");
   } catch (error) {
+    console.log(error);
     cardsContainer.innerHTML = `<p style="color: red;"> Failed to load catalog </p>`;
   }
 }
@@ -372,6 +376,7 @@ const handleBookFormSubmit = async (event, mode) => {
       await API.addBook(bookData);
       window.location.href = "bookList.html";
     } catch (error) {
+      console.log(error);
       bookSubmitFormError("Failed to add book");
     }
   } else if (mode === "edit") {
@@ -379,6 +384,7 @@ const handleBookFormSubmit = async (event, mode) => {
       await API.updateBook(oldIsbn, bookData);
       window.location.href = "bookList.html";
     } catch (error) {
+      console.log(error);
       bookSubmitFormError("Failed to Edit book");
     }
   }
@@ -409,6 +415,7 @@ const populateEditForm = async () => {
     const imagePlaceHolder = document.querySelector("#image");
     imagePlaceHolder.src = book.cover;
   } catch (error) {
+    console.log(error);
     bookSubmitFormError("Failed to populate form, redirecting");
     setTimeout(() => (window.location.href = "bookList.html"), 2000); // fake delay for realism
   }

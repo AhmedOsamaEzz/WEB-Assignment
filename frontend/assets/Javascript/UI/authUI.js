@@ -31,6 +31,7 @@ function checkAccess() {
   try {
     User = storedUser ? JSON.parse(storedUser) : {};
   } catch (e) {
+    console.log(e);
     User = {};
   }
   const token = User.token || null;
@@ -96,6 +97,7 @@ async function handleLoginSubmit(
     await API.loginUser(email, password, remember);
     checkAccess();
   } catch (error) {
+    console.log(error);
     document.getElementById("login-email-error").innerText = "Failed to login, please try again later.";
     loginBtn.textContent = originalText;
     loginBtn.disabled = false;
@@ -149,6 +151,7 @@ async function handleSignupSubmit(
     await API.registerUser(name, email, password, role);
     window.location.href = "login.html";
   } catch (error) {
+    console.log(error);
     document.getElementById("signup-email-error").innerText = "Failed to submit signup request, please try again later";
     signupBtn.textContent = originalText;
     signupBtn.disabled = false;
