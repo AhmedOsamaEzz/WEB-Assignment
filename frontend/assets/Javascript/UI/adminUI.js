@@ -409,7 +409,7 @@ const populateEditForm = async () => {
     const imagePlaceHolder = document.querySelector("#image");
     imagePlaceHolder.src = book.cover;
   } catch (error) {
-    // display error
+    bookSubmitFormError("Failed to populate form, redirecting");
     setTimeout(() => (window.location.href = "bookList.html"), 2000); // fake delay for realism
   }
 };
