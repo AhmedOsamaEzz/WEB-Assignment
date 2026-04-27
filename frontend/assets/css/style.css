@@ -1832,6 +1832,572 @@ body#sign-up-page {
   margin: 0;
 }
 
+
+/* ── TAB BAR ─────────────────────────────────────────────── */
+
+#admin-dashboard-page .dashboard-tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid hsl(from var(--text) h s l / 0.07);
+  padding: 0 3rem;
+  margin-top: 1.5rem;
+}
+
+#admin-dashboard-page .dashboard-tab {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px; /* sit on top of the bar-bottom border */
+}
+
+#admin-dashboard-page .dashboard-tab:hover {
+  color: var(--text-light);
+}
+
+#admin-dashboard-page .dashboard-tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* ── PANEL VISIBILITY ────────────────────────────────────── */
+
+#admin-dashboard-page .dashboard-panel {
+  display: none;
+}
+
+#admin-dashboard-page .dashboard-panel.active {
+  display: block;
+}
+
+/* ── USERS TAB ───────────────────────────────────────────── */
+
+#admin-dashboard-page .users-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+#admin-dashboard-page .users-card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#admin-dashboard-page .users-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid hsl(from var(--text) h s l / 0.07);
+  flex-shrink: 0;
+}
+
+#admin-dashboard-page .users-card__title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--text);
+}
+
+/* count pills */
+#admin-dashboard-page .users-count-pill {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+}
+
+#admin-dashboard-page .users-count-pill--pending {
+  background-color: hsl(from var(--secondary) h s l / 0.15);
+  color: var(--secondary);
+}
+
+#admin-dashboard-page .users-count-pill--approved {
+  /* uses the activity-badge--returned green already in the file */
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #4ade80;
+}
+
+/* scrollable list — fixed height so page never grows */
+#admin-dashboard-page .users-scroll-list {
+  overflow-y: auto;
+  height: 320px;
+  padding: 0 1.5rem;
+}
+
+#admin-dashboard-page .users-scroll-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+#admin-dashboard-page .users-scroll-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#admin-dashboard-page .users-scroll-list::-webkit-scrollbar-thumb {
+  background: var(--surface-bright);
+  border-radius: 999px;
+}
+
+/* individual user row */
+#admin-dashboard-page .user-row {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid hsl(from var(--text) h s l / 0.05);
+}
+
+#admin-dashboard-page .user-row:last-child {
+  border-bottom: none;
+}
+
+/* avatar circle with initials */
+#admin-dashboard-page .user-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: var(--surface-bright);
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+#admin-dashboard-page .user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+#admin-dashboard-page .user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#admin-dashboard-page .user-email {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#admin-dashboard-page .user-actions {
+  display: flex;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+/* approve / deny / ban buttons — ghost style matching existing patterns */
+#admin-dashboard-page .btn-approve,
+#admin-dashboard-page .btn-deny,
+#admin-dashboard-page .btn-ban {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.75rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: transparent;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+#admin-dashboard-page .btn-approve:active,
+#admin-dashboard-page .btn-deny:active,
+#admin-dashboard-page .btn-ban:active {
+  transform: scale(0.96);
+}
+
+#admin-dashboard-page .btn-approve {
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #4ade80;
+}
+
+#admin-dashboard-page .btn-approve:hover {
+  background-color: rgba(34, 197, 94, 0.08);
+}
+
+#admin-dashboard-page .btn-deny {
+  border: 1px solid hsl(from var(--text-muted) h s l / 0.25);
+  color: var(--text-muted);
+}
+
+#admin-dashboard-page .btn-deny:hover {
+  background-color: hsl(from var(--text-muted) h s l / 0.08);
+}
+
+#admin-dashboard-page .btn-ban {
+  border: 1px solid hsl(from var(--primary-dark) h s l / 0.5);
+  color: var(--primary);
+}
+
+#admin-dashboard-page .btn-ban:hover {
+  background-color: hsl(from var(--primary-dark) h s l / 0.15);
+}
+
+/* empty state for both lists */
+#admin-dashboard-page .users-empty {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  padding: 2rem 0;
+  text-align: center;
+}
+
+/* ── LOGS TAB ────────────────────────────────────────────── */
+
+#admin-dashboard-page .logs-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+/* search bar — mirrors the table search style already in the project */
+#admin-dashboard-page .logs-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background-color: var(--surface-high);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 0 1rem;
+  height: 2.75rem;
+  transition: border-color 0.2s;
+}
+
+#admin-dashboard-page .logs-search-bar:focus-within {
+  border-color: var(--primary);
+}
+
+#admin-dashboard-page .logs-search-bar i {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+#admin-dashboard-page .logs-search-bar input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 0.875rem;
+  color: var(--text);
+  caret-color: var(--primary);
+  outline: none;
+}
+
+#admin-dashboard-page .logs-search-bar input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+/* filter pill row */
+#admin-dashboard-page .logs-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+/* base filter button */
+#admin-dashboard-page .log-filter-btn {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid hsl(from var(--text) h s l / 0.12);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+#admin-dashboard-page .log-filter-btn:hover {
+  color: var(--text-light);
+  border-color: hsl(from var(--text) h s l / 0.25);
+}
+
+/* ALL — uses neutral surface when active */
+#admin-dashboard-page .log-filter-btn--all.active {
+  background-color: var(--surface-bright);
+  color: var(--text);
+  border-color: transparent;
+}
+
+/* REG. MADE — warm amber, uses --secondary */
+#admin-dashboard-page .log-filter-btn--reg-made.active {
+  background-color: hsl(from var(--secondary) h s l / 0.18);
+  color: var(--secondary);
+  border-color: hsl(from var(--secondary) h s l / 0.4);
+}
+
+/* REG. APPROVED — green */
+#admin-dashboard-page .log-filter-btn--reg-approved.active {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* REG. DENIED — muted red using --text-muted base */
+#admin-dashboard-page .log-filter-btn--reg-denied.active {
+  background-color: rgba(220, 38, 38, 0.12);
+  color: #f87171;
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+/* USER BANNED — warm red, uses --primary as base hue */
+#admin-dashboard-page .log-filter-btn--user-banned.active {
+  background-color: hsl(from var(--primary-dark) h s l / 0.25);
+  color: var(--primary);
+  border-color: hsl(from var(--primary-dark) h s l / 0.5);
+}
+
+/* BOOK ADDED — green (same as reg-approved) */
+#admin-dashboard-page .log-filter-btn--book-added.active {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+/* BOOK DELETED — same warm red as banned */
+#admin-dashboard-page .log-filter-btn--book-deleted.active {
+  background-color: hsl(from var(--primary-dark) h s l / 0.25);
+  color: var(--primary);
+  border-color: hsl(from var(--primary-dark) h s l / 0.5);
+}
+
+/* BOOK EDITED — uses --text-light purple-ish tint */
+#admin-dashboard-page .log-filter-btn--book-edited.active {
+  background-color: hsl(from var(--text-light) h s l / 0.12);
+  color: var(--text-light);
+  border-color: hsl(from var(--text-light) h s l / 0.3);
+}
+
+/* BOOK LOANED — uses --primary (terracotta) */
+#admin-dashboard-page .log-filter-btn--book-loaned.active {
+  background-color: hsl(from var(--primary) h s l / 0.12);
+  color: var(--primary);
+  border-color: hsl(from var(--primary) h s l / 0.3);
+}
+
+/* BOOK RETURNED — neutral muted */
+#admin-dashboard-page .log-filter-btn--book-returned.active {
+  background-color: hsl(from var(--text-muted) h s l / 0.15);
+  color: var(--text-muted);
+  border-color: hsl(from var(--text-muted) h s l / 0.35);
+}
+
+/* LOAN EXTENDED — same as book-loaned */
+#admin-dashboard-page .log-filter-btn--loan-extended.active {
+  background-color: hsl(from var(--primary) h s l / 0.12);
+  color: var(--primary);
+  border-color: hsl(from var(--primary) h s l / 0.3);
+}
+
+/* log card container */
+#admin-dashboard-page .logs-card {
+  background-color: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+#admin-dashboard-page .logs-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid hsl(from var(--text) h s l / 0.07);
+}
+
+#admin-dashboard-page .logs-card__title {
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--text);
+}
+
+#admin-dashboard-page .logs-card__count {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* scrollable log list */
+#admin-dashboard-page .logs-scroll-list {
+  overflow-y: auto;
+  height: 380px;
+  padding: 0 1.5rem;
+}
+
+#admin-dashboard-page .logs-scroll-list::-webkit-scrollbar {
+  width: 3px;
+}
+
+#admin-dashboard-page .logs-scroll-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#admin-dashboard-page .logs-scroll-list::-webkit-scrollbar-thumb {
+  background: var(--surface-bright);
+  border-radius: 999px;
+}
+
+/* individual log row */
+#admin-dashboard-page .log-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid hsl(from var(--text) h s l / 0.05);
+}
+
+#admin-dashboard-page .log-row:last-child {
+  border-bottom: none;
+}
+
+/* the info sentence */
+#admin-dashboard-page .log-info {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  color: var(--text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* timestamp */
+#admin-dashboard-page .log-time {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* empty state */
+#admin-dashboard-page .logs-empty {
+  font-family: var(--sans);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--text-muted);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── LOG TYPE PILLS ──────────────────────────────────────── */
+/*
+   One pill class per action type.
+   All use existing palette variables — no raw hex colours
+   that aren't already in the project.
+*/
+
+#admin-dashboard-page .log-pill {
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+  width: 108px;          /* fixed width so info column always starts at the same x */
+  text-align: center;
+}
+
+/* registration made — amber / secondary */
+#admin-dashboard-page .log-pill--registration-made {
+  background-color: hsl(from var(--secondary) h s l / 0.18);
+  color: var(--secondary);
+}
+
+/* registration approved — green */
+#admin-dashboard-page .log-pill--registration-approved {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+
+/* registration denied — muted red */
+#admin-dashboard-page .log-pill--registration-denied {
+  background-color: rgba(220, 38, 38, 0.12);
+  color: #f87171;
+}
+
+/* user banned — warm primary red */
+#admin-dashboard-page .log-pill--user-banned {
+  background-color: hsl(from var(--primary-dark) h s l / 0.25);
+  color: var(--primary);
+}
+
+/* book added — green */
+#admin-dashboard-page .log-pill--book-added {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+
+/* book deleted — same warm red as banned */
+#admin-dashboard-page .log-pill--book-deleted {
+  background-color: hsl(from var(--primary-dark) h s l / 0.25);
+  color: var(--primary);
+}
+
+/* book edited — text-light tint (subtle purple-ish) */
+#admin-dashboard-page .log-pill--book-edited {
+  background-color: hsl(from var(--text-light) h s l / 0.12);
+  color: var(--text-light);
+}
+
+/* book loaned — primary terracotta */
+#admin-dashboard-page .log-pill--book-loaned {
+  background-color: hsl(from var(--primary) h s l / 0.12);
+  color: var(--primary);
+}
+
+/* book returned — muted neutral */
+#admin-dashboard-page .log-pill--book-returned {
+  background-color: hsl(from var(--text-muted) h s l / 0.15);
+  color: var(--text-muted);
+}
+
+/* loan extended — same as loaned */
+#admin-dashboard-page .log-pill--loan-extended {
+  background-color: hsl(from var(--primary) h s l / 0.12);
+  color: var(--primary);
+}
+
+/* ── END ADMIN DASHBOARD TAB ADDITIONS ───────────────────── */
+
 /* end ADMIN DASHBOARD*/
 
 /* ============================================
