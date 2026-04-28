@@ -445,12 +445,163 @@ const renderAdminDashboard = async () => {
   setPct("loan-pct-borrowed",  "loan-bar-borrowed",  s.perBorrowed);
   setPct("loan-pct-overdue",   "loan-bar-overdue",   s.perOverdue);
 
+  const logs = await API.getLogs();
+  const recent = logs.slice(0, 3);
+  const activityList = document.querySelector(".activity-list");
+  if (activityList && recent.length > 0) {
+    activityList.innerHTML = recent.map(entry => {
+      const date = new Date(entry.when).toLocaleDateString();
+      const pillLabel = entry.what.replace(/_/g, " ");
+      const pillClass = "log-pill log-pill--" + entry.what.replace(/_/g, "-");
+      return `
+        <div class="activity-item">
+          <div class="activity-info">
+            <p class="activity-book-title">${entry.info}</p>
+          </div>
+          <div class="activity-meta">
+            <p class="activity-time">${date}</p>
+            <span class="${pillClass}">${pillLabel}</span>
+          </div>
+        </div>`;
+    }).join("");
+  }
 };
 
 
 
 
 
+
+
+// ── TAB SWITCHING ────────────────────────────────────────────────
+function switchDashboardTab(name) {
+  document.querySelectorAll(".dashboard-tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".dashboard-panel").forEach(p => p.classList.remove("active"));
+  document.getElementById("tab-" + name).classList.add("active");
+  document.getElementById("panel-" + name).classList.add("active");
+}
+
+// ── USERS TAB ────────────────────────────────────────────────────
+async function renderUsersTab() {
+  const pendingList   = document.getElementById("pending-list");
+  const approvedList  = document.getElementById("approved-list");
+  const pendingCount  = document.getElementById("pending-count");
+  const approvedCount = document.getElementById("approved-count");
+  if (!pendingList || !approvedList) return;
+
+  const [pending, approved] = await Promise.all([
+    API.getPendingUsers(),
+    API.getUsers(),
+  ]);
+
+  pendingCount.textContent  = pending.length + " waiting";
+  approvedCount.textContent = approved.length + " active";
+
+  if (pending.length === 0) {
+    pendingList.innerHTML = `<p class="users-empty">No pending registrations.</p>`;
+  } else {
+    pendingList.innerHTML = pending.map(user => {
+      const initials = user.username.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+      return `
+        <div class="user-row">
+          <div class="user-avatar">${initials}</div>
+          <div class="user-info">
+            <div class="user-name">${user.username}</div>
+            <div class="user-email">${user.email}</div>
+          </div>
+          <div class="user-actions">
+            <!-- TODO (auth dev): wire approve button to API.approveUser(user.email, adminWho) then call renderUsersTab() -->
+            <button class="btn-approve" disabled>Approve</button>
+            <!-- TODO (auth dev): wire deny button to API.denyUser(user.email, adminWho) then call renderUsersTab() -->
+            <button class="btn-deny" disabled>Deny</button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  if (approved.length === 0) {
+    approvedList.innerHTML = `<p class="users-empty">No approved members yet.</p>`;
+  } else {
+    approvedList.innerHTML = approved.map(user => {
+      const initials = user.username.split(" ").map(w => w[0]).join("").slice(0, 2).toUpperCase();
+      return `
+        <div class="user-row">
+          <div class="user-avatar">${initials}</div>
+          <div class="user-info">
+            <div class="user-name">${user.username}</div>
+            <div class="user-email">${user.email}</div>
+          </div>
+          <div class="user-actions">
+            <!-- TODO (auth dev): wire ban button to API.banUser(user.email, adminWho) then call renderUsersTab() -->
+            <button class="btn-ban" disabled>Ban</button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+}
+
+// LOGS TAB 
+async function renderLogsTab() {
+  const logList = document.getElementById("log-list");
+  if (!logList) return;
+
+  const logs = await API.getLogs();
+
+  if (logs.length === 0) {
+    logList.innerHTML = "";
+    document.getElementById("logs-empty-msg").style.display = "block";
+    document.getElementById("log-entry-count").textContent = "0 entries";
+    return;
+  }
+
+  logList.innerHTML = logs.map(entry => {
+    const pillClass = "log-pill log-pill--" + entry.what.replace(/_/g, "-");
+    const label     = entry.what.replace(/_/g, " ");
+    const date      = new Date(entry.when).toLocaleDateString();
+    // data-who holds all names in the entry so search matches actor and target
+    const searchable = entry.info.toLowerCase();
+    return `
+      <div class="log-row" data-type="${entry.what}" data-who="${searchable}">
+        <span class="${pillClass}">${label}</span>
+        <span class="log-info">${entry.info}</span>
+        <span class="log-time">${date}</span>
+      </div>`;
+  }).join("");
+
+  document.getElementById("log-entry-count").textContent = logs.length + " entries";
+  document.getElementById("logs-empty-msg").style.display = "none";
+}
+
+// LOG FILTERING 
+let activeLogType = "all";
+
+function setLogFilter(type, el) {
+  activeLogType = type;
+  document.querySelectorAll(".log-filter-btn").forEach(b => b.classList.remove("active"));
+  el.classList.add("active");
+  applyLogFilters();
+}
+
+function applyLogFilters() {
+  const query = document.getElementById("log-search-input").value.trim().toLowerCase();
+  const rows  = document.querySelectorAll("#log-list .log-row");
+  let visible = 0;
+
+  rows.forEach(row => {
+    const typeMatch = activeLogType === "all" || row.dataset.type === activeLogType;
+    const whoMatch  = !query || row.dataset.who.includes(query);
+    const show      = typeMatch && whoMatch;
+    row.style.display = show ? "" : "none";
+    if (show) visible++;
+  });
+
+  document.getElementById("log-entry-count").textContent = visible + (visible === 1 ? " entry" : " entries");
+  document.getElementById("logs-empty-msg").style.display = visible === 0 ? "block" : "none";
+}
+
+window.switchDashboardTab = switchDashboardTab;
+window.setLogFilter = setLogFilter;
+window.applyLogFilters = applyLogFilters;
 
 // listeners 
 document.addEventListener("DOMContentLoaded", () => {
@@ -529,6 +680,8 @@ document.addEventListener("DOMContentLoaded", () => {
   
   if (document.getElementById("admin-dashboard-page")){
     renderAdminDashboard();
+    renderUsersTab();
+    renderLogsTab();
   }
 
 });

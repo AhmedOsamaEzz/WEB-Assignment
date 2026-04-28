@@ -21,6 +21,14 @@ const API = {
 
   loginUser : FakeAPI.loginUser,
   registerUser : FakeAPI.registerUser
+  ,
+  // new dashboard functions
+  getLogs:         FakeAPI.getLogs,
+  getPendingUsers: FakeAPI.getPendingUsers,
+  getUsers:        FakeAPI.getUsers,
+  approveUser:     FakeAPI.approveUser,
+  denyUser:        FakeAPI.denyUser,
+  banUser:         FakeAPI.banUser,
 };
 
 export default API;
