@@ -20,6 +20,15 @@ const getHistoryKey = (userToken) => `history_${userToken}`;
 const getHistoryList = (userToken) => JSON.parse(localStorage.getItem(getHistoryKey(userToken))) || [];
 const saveHistoryList = (userToken, list) => localStorage.setItem(getHistoryKey(userToken), JSON.stringify(list));
 
+const LOGS_KEY = "logs";// new logs list
+const getLogList = () => JSON.parse(localStorage.getItem(LOGS_KEY)) || [];
+const saveLogList = (list) => localStorage.setItem(LOGS_KEY, JSON.stringify(list));
+//Note: check write log for more info on logs
+
+const PENDING_KEY = "pendingUsers";// new pending users list
+const getPendingList = () => JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
+const savePendingList = (list) => localStorage.setItem(PENDING_KEY, JSON.stringify(list));
+
 const FakeAPI = {
   async registerUser(Username, UserEmail, UserPassword, UserRole) {
     return new Promise((resolve, reject) => {
@@ -38,9 +47,18 @@ const FakeAPI = {
             password: UserPassword,
             role: UserRole,
           };
+
           users.push(NewUser);
           localStorage.setItem("users", JSON.stringify(users));
-
+          // pushes new user into pending list instead of directly into users list
+          // const pending = getPendingList();
+          // pending.push(NewUser);
+          // savePendingList(pending);
+          FakeAPI.writeLog(
+            "registration_made",// the action
+            {token:btoa(UserEmail + ":"),name: Username },//who did it store both token and name
+            `${Username} registered`// info (display message)
+          );
           resolve({ message: "User registered successfully" });
         } catch (error) {
           reject({ message: "Database error: Could not process user list." });
@@ -133,6 +151,10 @@ const FakeAPI = {
     extended:false
   });
   saveBorrowedList(userToken, borrowedBooks);
+  const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+  const Actor = allUsers.find(u => btoa(u.email + ":") === userToken);
+  const Who = { token: userToken, name: Actor ? Actor.username : "Unknown" };
+  FakeAPI.writeLog("book_loaned", Who, `${Who.name} loaned "${book.title}"`);
   return book;
   },
 
@@ -161,6 +183,10 @@ const FakeAPI = {
         booklist[idx].availableCopies = (booklist[idx].availableCopies || 0) + 1;
         saveBooklist(booklist);
       }
+      const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+      const Actor = allUsers.find(u => btoa(u.email + ":") === userToken);
+      const Who = { token: userToken, name: Actor ? Actor.username : "Unknown" };
+      FakeAPI.writeLog("book_returned", Who, `${Who.name} returned "${bookToReturn.title}"`);
       return { message:"Successfully Returned Book"};
     }
     else{
@@ -182,6 +208,10 @@ const FakeAPI = {
       book.extended=true;
       saveBorrowedList(userToken, borrowed);
     }
+    const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const Actor = allUsers.find(u => btoa(u.email + ":") === userToken);
+    const Who = { token: userToken, name: Actor ? Actor.username : "Unknown" };
+    FakeAPI.writeLog("loan_extended", Who, `${Who.name} extended "${book.title}"`);
     return {message:"Successfully Extended Book"};
   },
 
@@ -238,6 +268,11 @@ const FakeAPI = {
         }
         booklist.push(bookData);
         localStorage.setItem("booklist", JSON.stringify(booklist));
+
+        const Session = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info") || "{}");
+        const Who = { token: Session.token || "unknown", name: Session.name || "Admin" };
+        FakeAPI.writeLog("book_added", Who, `${Who.name} added "${bookData.title}"`);
+
         resolve({ success: true, message: "Book added successfully!" });
       } catch (error) {
         reject(new Error("An error occurred in add book"));
@@ -279,6 +314,11 @@ const FakeAPI = {
         booklist[index] = newData;
         booklist[index].availableCopies = booklist[index].copies - booked;
         localStorage.setItem("booklist", JSON.stringify(booklist));
+
+        const Session = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info") || "{}");
+        const Who = { token: Session.token || "unknown", name: Session.name || "Admin" };
+        FakeAPI.writeLog("book_edited", Who, `${Who.name} edited "${newData.title}"`);
+
         resolve({ success: true, message: "Book updated successfully!" });
       } catch (error) {
         reject(new Error("an error in edit"));
@@ -289,15 +329,62 @@ const FakeAPI = {
     return new Promise((resolve, reject) => {
       try {
         const booklist = JSON.parse(localStorage.getItem("booklist"));
+        const deletedBook = booklist.find(b => String(b.isbn) === String(isbn));
+
         const updatedList = booklist.filter(
           (b) => String(b.isbn) !== String(isbn),
         );
         localStorage.setItem("booklist", JSON.stringify(updatedList));
+
+        const Session = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info") || "{}");
+        const Who = { token: Session.token || "unknown", name: Session.name || "Admin" };
+        FakeAPI.writeLog("book_deleted", Who, `${Who.name} deleted "${deletedBook ? deletedBook.title : isbn}"`);
+
         resolve({ success: true, message: "deleted" });
       } catch (error) {
         reject(new Error("error in delete"));
       }
     });
+  },
+  // new functions for admin dashboard rework
+  writeLog(what, who, info) {
+    const logs = getLogList();
+    logs.unshift({ what, who, info, when: new Date().toISOString() }); //unshift push front like a queue
+    // what is the action that has been made
+    // who is the person usually stored as both it's token and it's username (can be changed later)
+    // info is the actual displayed message in the dashboard
+    // when is just the date
+    saveLogList(logs);
+  },
+  
+  async getLogs() {
+    return getLogList();
+  },
+  
+  async getPendingUsers() {
+    return getPendingList();
+  },
+  
+  async getUsers() {
+    return JSON.parse(localStorage.getItem("users")) || [];
+  },
+  
+  // TODO (auth dev): move user from pendingUsers to users, then call:
+  // FakeAPI.writeLog("registration_approved", adminWho, `${adminName} approved ${userName}`)
+  async approveUser(email, adminWho) {
+    throw new Error("approveUser not yet implemented");
+  },
+  
+  // TODO (auth dev): remove user from pendingUsers, then call:
+  // FakeAPI.writeLog("registration_denied", adminWho, `${adminName} denied ${userName}`)
+  async denyUser(email, adminWho) {
+    throw new Error("denyUser not yet implemented");
+  },
+  
+  // TODO (auth dev): remove user from users list, then call:
+  // FakeAPI.writeLog("user_banned", adminWho, `${adminName} banned ${userName}`)
+  async banUser(email, adminWho) {
+    throw new Error("banUser not yet implemented");
   },
 };
 
