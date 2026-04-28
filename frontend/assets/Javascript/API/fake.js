@@ -1,0 +1,393 @@
+// storage helpers
+const BOOKLIST_KEY = "booklist";
+
+const getBookList = () => JSON.parse(localStorage.getItem(BOOKLIST_KEY)) || [];
+const saveBooklist = (list) =>
+  localStorage.setItem(BOOKLIST_KEY, JSON.stringify(list));
+
+const getBorrowedKey = (userToken) => `borrowedBooks_${userToken}`;
+const getBorrowedList = (userToken) =>
+  JSON.parse(localStorage.getItem(getBorrowedKey(userToken))) || [];
+const saveBorrowedList = (userToken, list) =>
+  localStorage.setItem(getBorrowedKey(userToken), JSON.stringify(list));
+
+const getAvailableCopies = (book) =>
+  book.availableCopies !== undefined
+    ? book.availableCopies
+    : parseInt(book.copies);
+
+const getHistoryKey = (userToken) => `history_${userToken}`;
+const getHistoryList = (userToken) => JSON.parse(localStorage.getItem(getHistoryKey(userToken))) || [];
+const saveHistoryList = (userToken, list) => localStorage.setItem(getHistoryKey(userToken), JSON.stringify(list));
+
+const LOGS_KEY = "logs";// new logs list
+const getLogList = () => JSON.parse(localStorage.getItem(LOGS_KEY)) || [];
+const saveLogList = (list) => localStorage.setItem(LOGS_KEY, JSON.stringify(list));
+//Note: check write log for more info on logs
+
+const PENDING_KEY = "pendingUsers";// new pending users list
+const getPendingList = () => JSON.parse(localStorage.getItem(PENDING_KEY)) || [];
+const savePendingList = (list) => localStorage.setItem(PENDING_KEY, JSON.stringify(list));
+
+const FakeAPI = {
+  async registerUser(Username, UserEmail, UserPassword, UserRole) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          const users = JSON.parse(localStorage.getItem("users")) || [];
+
+          const EmailTaken = users.some((u) => u.email === UserEmail);
+          if (EmailTaken) {
+            return reject({ message: "Email already registered" });
+          }
+
+          const NewUser = {
+            email: UserEmail,
+            username: Username,
+            password: UserPassword,
+            role: UserRole,
+          };
+
+          users.push(NewUser);
+          localStorage.setItem("users", JSON.stringify(users));
+          // pushes new user into pending list instead of directly into users list
+          // const pending = getPendingList();
+          // pending.push(NewUser);
+          // savePendingList(pending);
+          FakeAPI.writeLog(
+            "registration_made",// the action
+            {token:btoa(UserEmail + ":"),name: Username },//who did it store both token and name
+            `${Username} registered`// info (display message)
+          );
+          resolve({ message: "User registered successfully" });
+        } catch (error) {
+          reject({ message: "Database error: Could not process user list." });
+        }
+      }, 800);
+    });
+  },
+  async loginUser(UserEmail, UserPassword, StayloggedIn) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        try {
+          const users = JSON.parse(localStorage.getItem("users")) || [];
+          const foundUser = users.find(
+            (u) => u.email === UserEmail && u.password === UserPassword,
+          );
+          if (!foundUser)
+            return reject({ message: "Invalid email or password" });
+          const user_info = {
+            // fake hashing base 64
+            token: btoa(foundUser.email + ":"),
+            role: foundUser.role,
+            name: foundUser.username,
+          };
+          if (StayloggedIn == true) {
+            localStorage.setItem("user_info", JSON.stringify(user_info));
+          } else {
+            sessionStorage.setItem("user_info", JSON.stringify(user_info));
+          }
+          resolve({ message: "User logged in successfully" });
+        } catch (error) {
+          reject({ message: "Database error: Could not process user list." });
+        }
+      }, 800);
+    });
+  },
+  async getBooks(query = "", categories = [], availableOnly = false) {
+    const books = getBookList();
+    const q = query.trim().toLowerCase();
+    const cats = categories.map((c) => c.toLowerCase());
+    const filterByCategory = cats.length > 0 && !cats.includes("all");
+
+    return books.filter((book) => {
+      const matchesQuery =
+        !q ||
+        book.title.toLowerCase().includes(q) ||
+        book.author.toLowerCase().includes(q);
+
+      const matchesCategory =
+        !filterByCategory || cats.includes(book.category.toLowerCase());
+
+      const matchesAvail = !availableOnly || getAvailableCopies(book) > 0;
+
+      return matchesQuery && matchesCategory && matchesAvail;
+    });
+  },
+
+  async getBookById(ISBN) {
+    const book = getBookList().find((b) => b.isbn === ISBN);
+    if (!book) throw new Error("book not found");
+    return book;
+  },
+
+  async borrowBook(ISBN, userToken) {
+    const booklist = getBookList();
+    const index = booklist.findIndex((b) => b.isbn === ISBN);
+
+    if (index === -1) throw new Error("book not found");
+
+    const book = booklist[index];
+    const availableCopies = getAvailableCopies(book);
+
+    if (availableCopies <= 0) throw new Error("book out of stock");
+
+    // Decrement available copies
+    booklist[index].availableCopies = availableCopies - 1;
+    saveBooklist(booklist);
+
+  // Link borrowed book to the user
+  const borrowedBooks = getBorrowedList(userToken);
+  const dueDate = new Date();
+  dueDate.setDate(dueDate.getDate() + 14); // 2 week loan
+  borrowedBooks.push({
+    isbn: book.isbn,
+    title: book.title,
+    author: book.author,
+    cover: book.cover,
+    borrowedAt: new Date().toISOString(),
+    dueDate: dueDate.toISOString(),
+    status: "loaned",
+    extended:false
+  });
+  saveBorrowedList(userToken, borrowedBooks);
+  const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+  const Actor = allUsers.find(u => btoa(u.email + ":") === userToken);
+  const Who = { token: userToken, name: Actor ? Actor.username : "Unknown" };
+  FakeAPI.writeLog("book_loaned", Who, `${Who.name} loaned "${book.title}"`);
+  return book;
+  },
+
+  async returnBook(isbn, userToken) {
+    let borrowed = getBorrowedList(userToken);
+    const bookToReturn = borrowed.find(b => b.isbn === isbn);
+    
+    if (bookToReturn) {
+      // 1. Remove from borrowed
+      borrowed = borrowed.filter(b => b.isbn !== isbn);
+      saveBorrowedList(userToken, borrowed);
+
+      // 2. Add to history
+      const history = getHistoryList(userToken);
+      history.push({
+        ...bookToReturn,
+        returnDate: new Date().toLocaleDateString(),
+        status: "returned"
+      });
+      saveHistoryList(userToken, history);
+
+      // 3. Update stock in main list
+      const booklist = getBookList();
+      const idx = booklist.findIndex(b => b.isbn === isbn);
+      if (idx !== -1) {
+        booklist[idx].availableCopies = (booklist[idx].availableCopies || 0) + 1;
+        saveBooklist(booklist);
+      }
+      const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+      const Actor = allUsers.find(u => btoa(u.email + ":") === userToken);
+      const Who = { token: userToken, name: Actor ? Actor.username : "Unknown" };
+      FakeAPI.writeLog("book_returned", Who, `${Who.name} returned "${bookToReturn.title}"`);
+      return { message:"Successfully Returned Book"};
+    }
+    else{
+      return { message:"InValid ISBN"};
+    }
+  },
+
+  async extendLoan(isbn, userToken) {
+    const borrowed = getBorrowedList(userToken);
+    const book = borrowed.find(b => b.isbn === isbn);
+    if(!book) return {message:"InValid ISBN"};
+    if(book.extended){
+      return {message:"Already Extended Book"};
+    }
+    if (book) {
+      const currentDue = new Date(book.dueDate);
+      currentDue.setDate(currentDue.getDate() + 7); // Add 1 week
+      book.dueDate = currentDue.toISOString();
+      book.extended=true;
+      saveBorrowedList(userToken, borrowed);
+    }
+    const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const Actor = allUsers.find(u => btoa(u.email + ":") === userToken);
+    const Who = { token: userToken, name: Actor ? Actor.username : "Unknown" };
+    FakeAPI.writeLog("loan_extended", Who, `${Who.name} extended "${book.title}"`);
+    return {message:"Successfully Extended Book"};
+  },
+
+  async getUserBorrowedBooks(userToken) {
+    return getBorrowedList(userToken);
+  },
+  
+  async getUserHistory(userToken) {
+  return getHistoryList(userToken);
+  },
+
+  async getAdminStats() {
+    const booklist = getBookList();
+    const totalBooks     = booklist.reduce((sum, b) => sum + (b.copies || 0), 0);
+    const totalAvailable = booklist.reduce((sum, b) => sum + (getAvailableCopies(b)), 0);
+
+    const users= JSON.parse(localStorage.getItem("users")) || [];
+    const totalMembers = users.length;
+
+    const now = new Date();
+    let activeLoans = 0;
+    let overdueLoans = 0;
+    for (const key of Object.keys(localStorage)) {
+      if (!key.startsWith("borrowedBooks_")) continue;
+      const list = JSON.parse(localStorage.getItem(key)) || [];
+      activeLoans += list.length;
+      overdueLoans += list.filter(b => new Date(b.dueDate) < now).length;
+    }
+    const perAvailable = totalBooks ? Math.round((totalAvailable / totalBooks) * 100) : 0;
+    const perBorrowed  = totalBooks ? Math.round(((totalBooks - totalAvailable) / totalBooks) * 100) : 0;
+    const perOverdue   = totalBooks ? Math.round((overdueLoans / totalBooks) * 100) : 0;
+    return {
+      totalBooks,
+      totalAvailable,
+      totalMembers,
+      activeLoans,
+      overdueLoans,
+      perAvailable,
+      perBorrowed,
+      perOverdue,
+    };
+  },
+  
+  addBook(bookData) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist")) || [];
+        const isDuplicate = booklist.some(
+          (book) => book.isbn === bookData.isbn,
+        );
+        if (isDuplicate) {
+          reject(new Error("A book with this ISBN already exists"));
+          return;
+        }
+        booklist.push(bookData);
+        localStorage.setItem("booklist", JSON.stringify(booklist));
+
+        const Session = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info") || "{}");
+        const Who = { token: Session.token || "unknown", name: Session.name || "Admin" };
+        FakeAPI.writeLog("book_added", Who, `${Who.name} added "${bookData.title}"`);
+
+        resolve({ success: true, message: "Book added successfully!" });
+      } catch (error) {
+        reject(new Error("An error occurred in add book"));
+      }
+    });
+  },
+
+  getBook(oldisbn) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist"));
+        const index = booklist.findIndex((book) => book.isbn === oldisbn);
+        if (index !== -1) {
+          resolve({ success: true, data: booklist[index] });
+        } else {
+          reject(new Error("book not found"));
+          return;
+        }
+      } catch (error) {
+        reject(new Error("error in finding the book"));
+      }
+    });
+  },
+  editBook(oldisbn, newData) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist"));
+        const isDuplicate = booklist.some((book) => book.isbn === newData.isbn);
+        if (isDuplicate && newData.isbn !== oldisbn) {
+          reject(new Error("A book with this ISBN already exists"));
+          return;
+        }
+        const index = booklist.findIndex((book) => book.isbn === oldisbn);
+        if (index === -1) {
+          reject(new Error("book not found"));
+          return;
+        }
+        let booked = booklist[index].copies - booklist[index].availableCopies;
+        booklist[index] = newData;
+        booklist[index].availableCopies = booklist[index].copies - booked;
+        localStorage.setItem("booklist", JSON.stringify(booklist));
+
+        const Session = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info") || "{}");
+        const Who = { token: Session.token || "unknown", name: Session.name || "Admin" };
+        FakeAPI.writeLog("book_edited", Who, `${Who.name} edited "${newData.title}"`);
+
+        resolve({ success: true, message: "Book updated successfully!" });
+      } catch (error) {
+        reject(new Error("an error in edit"));
+      }
+    });
+  },
+  deleteBook(isbn) {
+    return new Promise((resolve, reject) => {
+      try {
+        const booklist = JSON.parse(localStorage.getItem("booklist"));
+        const deletedBook = booklist.find(b => String(b.isbn) === String(isbn));
+
+        const updatedList = booklist.filter(
+          (b) => String(b.isbn) !== String(isbn),
+        );
+        localStorage.setItem("booklist", JSON.stringify(updatedList));
+
+        const Session = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info") || "{}");
+        const Who = { token: Session.token || "unknown", name: Session.name || "Admin" };
+        FakeAPI.writeLog("book_deleted", Who, `${Who.name} deleted "${deletedBook ? deletedBook.title : isbn}"`);
+
+        resolve({ success: true, message: "deleted" });
+      } catch (error) {
+        reject(new Error("error in delete"));
+      }
+    });
+  },
+  // new functions for admin dashboard rework
+  writeLog(what, who, info) {
+    const logs = getLogList();
+    logs.unshift({ what, who, info, when: new Date().toISOString() }); //unshift push front like a queue
+    // what is the action that has been made
+    // who is the person usually stored as both it's token and it's username (can be changed later)
+    // info is the actual displayed message in the dashboard
+    // when is just the date
+    saveLogList(logs);
+  },
+  
+  async getLogs() {
+    return getLogList();
+  },
+  
+  async getPendingUsers() {
+    return getPendingList();
+  },
+  
+  async getUsers() {
+    return JSON.parse(localStorage.getItem("users")) || [];
+  },
+  
+  // TODO (auth dev): move user from pendingUsers to users, then call:
+  // FakeAPI.writeLog("registration_approved", adminWho, `${adminName} approved ${userName}`)
+  async approveUser(email, adminWho) {
+    throw new Error("approveUser not yet implemented");
+  },
+  
+  // TODO (auth dev): remove user from pendingUsers, then call:
+  // FakeAPI.writeLog("registration_denied", adminWho, `${adminName} denied ${userName}`)
+  async denyUser(email, adminWho) {
+    throw new Error("denyUser not yet implemented");
+  },
+  
+  // TODO (auth dev): remove user from users list, then call:
+  // FakeAPI.writeLog("user_banned", adminWho, `${adminName} banned ${userName}`)
+  async banUser(email, adminWho) {
+    throw new Error("banUser not yet implemented");
+  },
+};
+
+// ---------- export ----------
+
+export default FakeAPI;

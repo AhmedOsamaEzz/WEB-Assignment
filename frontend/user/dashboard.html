@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Dashboard — The Midnight Scholar</title>
+    <link rel="stylesheet" href="../assets/css/normalize.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+    <script
+      src="https://kit.fontawesome.com/80d75008f5.js"
+      crossorigin="anonymous"></script>
+    <script type="module" src="../assets/Javascript/UI/authUI.js"></script>
+    <script type="module" src="../assets/Javascript/UI/userUI.js"></script>
+    <style>
+      /* loaned badge — mirrors the pattern of ud-badge--returned / ud-badge--overdue */
+      .ud-badge--loaned {
+        background: rgba(100, 180, 255, 0.1);
+        color: #7ec8f7;
+      }
+      /* overdue due-label colour */
+      .ud-due--overdue {
+        color: #ffb4ab;
+      }
+    </style>
+  </head>
+
+  <body id="user-dashboard-page">
+
+    <!-- NAV BAR (matches your existing nav style) -->
+    <nav>
+      <h3 class="logo" id = "logo-link">The Midnight Scholar</h3>
+
+      <div class="links">
+        <ul>
+          <li><a href="borrowed.html">My Books</a></li>
+          <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="#" id="logout-link">Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="search-profile">
+        <a href="search.html"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="dashboard.html"><i class="fa-solid fa-circle-user"></i></a>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main class="ud-main">
+
+      <!-- WELCOME HEADER + PROFILE INFO -->
+      <header class="ud-header">
+        <div class="ud-profile-block">
+          <div class="ud-avatar">
+            <span class="material-symbols-outlined">account_circle</span>
+          </div>
+          <div class="ud-profile-info">
+            <p class="ud-label">Member Since 2026</p>
+            <h1 class="ud-username" id="username">load</h1>
+            <p class="ud-email" id="email">load</p>
+          </div>
+        </div>
+
+        <!-- Quick Stats Row -->
+        <div class="ud-stats-row">
+          <div class="ud-stat">
+            <span class="ud-stat-number" id="active-loans-count">—</span>
+            <span class="ud-stat-label">Active Loans</span>
+          </div>
+          <div class="ud-stat-divider"></div>
+          <div class="ud-stat">
+            <span class="ud-stat-number" id="total-read-count">—</span>
+            <span class="ud-stat-label">Total Read</span>
+          </div>
+          <div class="ud-stat-divider"></div>
+          <div class="ud-stat">
+            <span class="ud-stat-number" id="overdue-count">—</span>
+            <span class="ud-stat-label">Overdue</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- CURRENTLY BORROWED -->
+      <section class="ud-section">
+        <div class="ud-section-header">
+          <h2 class="ud-section-title">Currently Borrowed</h2>
+          <a href="borrowed.html" class="ud-section-link">View all</a>
+        </div>
+
+        <div class="ud-books-grid" id="ud-books-grid">
+          <!-- populated by renderUserDashboard() -->
+        </div>
+      </section>
+
+      <!-- BORROWING HISTORY -->
+      <section class="ud-section">
+        <div class="ud-section-header">
+          <h2 class="ud-section-title">Borrowing History</h2>
+        </div>
+
+        <div class="ud-table-wrap">
+          <table class="ud-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Borrowed</th>
+                <th>Returned</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="history-tbody">
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <hr class="global-hr" />
+    <footer class="global-footer">
+      <p class="name">The Midnight Scholar</p>
+      <div class="cnt">
+        <p><a href="#">PRIVACY POLICY</a></p>
+        <p><a href="#">TERMS OF ACCESS</a></p>
+        <p><a href="#">CONTACT CURATOR</a></p>
+      </div>
+      <p class="copyrights">&copy; 2026 The Midnight Scholar Private Archive.
+        All rights reserved.</p>
+    </footer>
+
+  </body>
+</html>

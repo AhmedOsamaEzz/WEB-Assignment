@@ -8,23 +8,21 @@
     <script
       src="https://kit.fontawesome.com/80d75008f5.js"
       crossorigin="anonymous"></script>
-    <script src="../assets/Javascript/auth.js"></script>
-    <script src="../assets/Javascript/edit.js" defer></script>
-    <script src="../assets/Javascript/bookList.js"></script>
+    <script type="module" src="../assets/Javascript/UI/authUI.js"></script>
+    <script type = "module" src = "../assets/Javascript/UI/adminUI.js"></script>
     <title>edit book</title>
   </head>
 
   <body>
     <header>
       <nav>
-        <h3 class="logo"><a href="../index.html">The Midnight Scholar</a></h3>
+        <h3 class="logo" id = "logo-link">The Midnight Scholar</h3>
 
         <div class="links">
           <ul>
-            <li><a href="../index.html">Home</a></li>
-            <li><a href="borrowed.html">My Books</a></li>
+            <li><a href="bookList.html">All Books</a></li>
             <li><a href="dashboard.html">Dashboard</a></li>
-            <li><a href="../auth/login.html" onclick="logout()">Logout</a></li>
+            <li><a href="#" id="logout-link">Logout</a></li>
           </ul>
         </div>
 
@@ -43,7 +41,8 @@
           type="file"
           id="fileInput"
           accept="image/*"
-          style="display: none" />
+          style="display: none"
+        />
         <div class="upload-icon"><i class="fas fa-camera"></i></div>
       </div>
 
@@ -59,7 +58,8 @@
             <input
               id="author"
               type="text"
-              placeholder="enter the book Author" />
+              placeholder="enter the book Author"
+            />
           </div>
           <div class="label-input">
             <label for="isbn">Book ISBN</label>
@@ -88,14 +88,16 @@
             <input
               id="publicationYear"
               type="text"
-              placeholder="enter the book Publication year" />
+              placeholder="enter the book Publication year"
+            />
           </div>
           <div class="label-input">
             <label for="publisher">Publisher</label>
             <input
               id="publisher"
               type="text"
-              placeholder="enter the book Publisher" />
+              placeholder="enter the book Publisher"
+            />
           </div>
         </div>
 
@@ -104,15 +106,18 @@
           <input
             id="totalCopies"
             type="number"
-            placeholder="enter the book Total Copies" />
+            placeholder="enter the book Total Copies"
+          />
         </div>
 
         <div class="label-input">
           <label for="description">Book description</label>
           <textarea
             id="description"
-            placeholder="enter the book description"></textarea>
+            placeholder="enter the book description"
+          ></textarea>
         </div>
+         <div id="error-message-container" class="error-msg"></div>
         <div class="form-button">
           <button class="btn-primary" id="editbtn" type="submit">submit</button>
         </div>

@@ -9,18 +9,18 @@
       src="https://kit.fontawesome.com/80d75008f5.js"
       crossorigin="anonymous"></script>
     <title>Search</title>
-    <script src="../assets/Javascript/auth.js"></script>
+    <script type="module" src="../assets/Javascript/UI/authUI.js"></script>
+    <script type="module" src="../assets/Javascript/UI/userUI.js"></script>
   </head>
   <body id="search-page">
     <nav>
-      <h3 class="logo"><a href="../index.html">The Midnight Scholar</a></h3>
+      <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
 
       <div class="links">
         <ul>
-          <li><a href="../index.html">Home</a></li>
           <li><a href="borrowed.html">My Books</a></li>
           <li><a href="dashboard.html">Dashboard</a></li>
-          <li><a href="../auth/login.html" onclick="logout()">Logout</a></li>
+          <li><a href="#" id="logout-link">Logout</a></li>
         </ul>
       </div>
 
@@ -53,11 +53,10 @@
         <div class="filters-section">
           <h4>Availability</h4>
           <ul>
-            <li><input type="checkbox" class="filter-check" value="available"
-                checked /> Available Now</li>
+            <li><input type="checkbox" class="filter-check" value="available" />
+              Available Only</li>
           </ul>
         </div>
-        <button class="apply-filters-btn">Apply Filters</button>
       </aside>
 
       <div class="main-content">
@@ -123,6 +122,5 @@
         &copy; 2026 The Midnight Scholar Private Archive. All rights reserved.
       </p>
     </footer>
-    <script src="../assets/Javascript/search.js"></script>
   </body>
 </html>

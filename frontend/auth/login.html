@@ -4,10 +4,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../assets/css/style.css" />
     <link rel="stylesheet" href="../assets/css/normalize.css" />
-    <script src="../assets/Javascript/auth.js"></script>
+    <script type="module" src="../assets/Javascript/UI/authUI.js"></script>
     <title>nice library</title>
   </head>
-
   <body id="login-page">
     <main class="main-content">
       <div class="bg-blur blur-primary"></div>
@@ -21,14 +20,11 @@
         <div class="login-card">
           <form class="login-form">
             <label for="email" class="form-label">username (email)</label>
-            <input
-              type="text"
-              placeholder="username@gmail.com"
-              class="input-field" />
+            <input type="text" placeholder="username@gmail.com" class="input-field" id = "login-email"/>
             <div class="error-msg" id="login-email-error"></div>
 
             <label for="password" class="form-label">password</label>
-            <input type="password" placeholder="******" class="input-field" />
+            <input type="password" placeholder="******" class="input-field" id = "login-password"/>
             <div class="error-msg" id="login-password-error"></div>
             <!-- TODO  -->
             <!-- add forgot password here later -->
