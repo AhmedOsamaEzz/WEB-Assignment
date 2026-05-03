@@ -1,0 +1,1 @@
+from authe.services.security import admin_required
