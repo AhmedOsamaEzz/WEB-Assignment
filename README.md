@@ -1,4 +1,8 @@
 current structure
+dependencies : 
+- django
+- Pillow
+
 
 ```
 ├── README.md

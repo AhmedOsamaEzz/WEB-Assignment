@@ -1,0 +1,339 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Dashboard — The Midnight Scholar</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+    />
+    <script type="module" src="https://kit.fontawesome.com/80d75008f5.js" crossorigin="anonymous"></script>
+    <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
+    <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
+  </head>
+
+  <body id="admin-dashboard-page">
+    <!-- NAV BAR -->
+    <nav>
+      <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
+        <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+      </a>
+
+      <div class="links">
+        <ul>
+          <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
+          <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+          <li><a href="#" id="logout-link">Logout</a></li>
+        </ul>
+      </div>
+
+      <div class="search-profile">
+        <a href="{% url 'admin_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
+      </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <header class="dashboard-header">
+      <div>
+        <h2 class="dashboard-title">Archive Intelligence</h2>
+        <p class="dashboard-subtitle">Admin Overview — Management Suite</p>
+      </div>
+      <a href="bookAdd.html" class="btn-primary btn-new-entry">
+        <span class="material-symbols-outlined">add</span>
+        New Entry
+      </a>
+    </header>
+
+    <!-- TAB BAR -->
+    <div class="dashboard-tab-bar">
+      <button class="dashboard-tab active" id="tab-overview" onclick="switchDashboardTab('overview')">Overview</button>
+      <button class="dashboard-tab" id="tab-users" onclick="switchDashboardTab('users')">Users</button>
+      <button class="dashboard-tab" id="tab-logs" onclick="switchDashboardTab('logs')">Logs</button>
+    </div>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+      <!-- ==================== OVERVIEW TAB ==================== -->
+      <section class="dashboard-panel active" id="panel-overview">
+        <div class="stats-grid">
+          <div class="stat-card stat-card--large">
+            <div class="stat-card__label">Total Books</div>
+            <div class="stat-card__number" id="stat-total-books">—</div>
+            <p class="stat-card__desc">Total books in the library.</p>
+            <div class="stat-card__meta">
+              <div class="stat-card__meta-item">
+                <span class="stat-card__meta-label">Added This Month</span>
+                <span class="stat-card__meta-value" id="stat-added-month">—</span>
+              </div>
+              <div class="stat-card__meta-item">
+                <span class="stat-card__meta-label">Overdue Returns</span>
+                <span class="stat-card__meta-value" id="stat-overdue-returns">—</span>
+              </div>
+            </div>
+            <span class="material-symbols-outlined stat-card__deco">menu_book</span>
+          </div>
+
+          <div class="stat-cards-col">
+            <div class="stat-card stat-card--small">
+              <div class="stat-card__icon">
+                <span class="material-symbols-outlined">auto_stories</span>
+              </div>
+              <div>
+                <div class="stat-card__label">Active Loans</div>
+                <div class="stat-card__number stat-card__number--sm" id="stat-active-loans">—</div>
+              </div>
+            </div>
+            <div class="stat-card stat-card--small">
+              <div class="stat-card__icon">
+                <span class="material-symbols-outlined">group</span>
+              </div>
+              <div>
+                <div class="stat-card__label">Total Members</div>
+                <div class="stat-card__number stat-card__number--sm" id="stat-total-members">—</div>
+              </div>
+            </div>
+            <div class="stat-card stat-card--small">
+              <div class="stat-card__icon">
+                <span class="material-symbols-outlined">book</span>
+              </div>
+              <div>
+                <div class="stat-card__label">Available Books</div>
+                <div class="stat-card__number stat-card__number--sm" id="stat-available-books">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-bottom">
+          <div class="activity-section">
+            <div class="section-header">
+              <h3 class="section-title">Recent Activity</h3>
+              <a
+                href="#"
+                class="section-link"
+                onclick="
+                  switchDashboardTab('logs');
+                  return false;
+                "
+                >View Full Log</a
+              >
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <img src="../assets/images/unnamed.png" alt="Atomic Habits" class="activity-book-img" />
+                <div class="activity-info">
+                  <p class="activity-book-title">Atomic Habits</p>
+                  <p class="activity-book-sub">Loaned to <span class="activity-name">Dr. Alistair Sterling</span></p>
+                </div>
+                <div class="activity-meta">
+                  <p class="activity-time">2 hours ago</p>
+                  <span class="activity-badge activity-badge--loan">Standard Loan</span>
+                </div>
+              </div>
+              <div class="activity-item activity-item--alt">
+                <img src="../assets/images/unnamed.png" alt="The Mountain Is You" class="activity-book-img" />
+                <div class="activity-info">
+                  <p class="activity-book-title">The Mountain Is You</p>
+                  <p class="activity-book-sub">Returned by <span class="activity-name">Julianne Vance</span></p>
+                </div>
+                <div class="activity-meta">
+                  <p class="activity-time">5 hours ago</p>
+                  <span class="activity-badge activity-badge--returned">Completed</span>
+                </div>
+              </div>
+              <div class="activity-item">
+                <img src="../assets/images/unnamed.png" alt="The 48 Laws of Power" class="activity-book-img" />
+                <div class="activity-info">
+                  <p class="activity-book-title">The 48 Laws of Power</p>
+                  <p class="activity-book-sub">Added by <span class="activity-name">Admin</span></p>
+                </div>
+                <div class="activity-meta">
+                  <p class="activity-time">Yesterday</p>
+                  <span class="activity-badge activity-badge--update">Inventory Update</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="loan-status-section">
+            <h3 class="section-title">Loan Status</h3>
+            <div class="loan-card">
+              <div class="loan-card__top">
+                <div>
+                  <p class="loan-card__heading">Book Availability</p>
+                  <p class="loan-card__sub">Out of <span id="loan-total-label">—</span> total books</p>
+                </div>
+                <span class="loan-card__total" id="loan-total-number">—</span>
+              </div>
+              <div class="loan-bars">
+                <div class="loan-bar-group">
+                  <div class="loan-bar-labels"><span>Available</span><span id="loan-pct-available">—</span></div>
+                  <div class="loan-bar-track">
+                    <div class="loan-bar-fill loan-bar-fill--available" id="loan-bar-available" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="loan-bar-group">
+                  <div class="loan-bar-labels"><span>Borrowed</span><span id="loan-pct-borrowed">—</span></div>
+                  <div class="loan-bar-track">
+                    <div class="loan-bar-fill loan-bar-fill--borrowed" id="loan-bar-borrowed" style="width: 0%"></div>
+                  </div>
+                </div>
+                <div class="loan-bar-group">
+                  <div class="loan-bar-labels"><span>Overdue</span><span id="loan-pct-overdue">—</span></div>
+                  <div class="loan-bar-track">
+                    <div class="loan-bar-fill loan-bar-fill--overdue" id="loan-bar-overdue" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="loan-card__quote">
+                <p class="loan-card__quote-text">"Knowledge is a private garden; we are merely its tenders."</p>
+                <p class="loan-card__quote-author">— The First Curator, 1892</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== USERS TAB ==================== -->
+      <section class="dashboard-panel" id="panel-users">
+        <div class="users-grid">
+          <div class="users-card">
+            <div class="users-card__head">
+              <span class="users-card__title">Pending Registrations</span>
+              <span class="users-count-pill users-count-pill--pending" id="pending-count">—</span>
+            </div>
+            <div class="users-scroll-list" id="pending-list">
+              <!-- populated by renderUsersTab() in adminUI.js -->
+            </div>
+          </div>
+
+          <div class="users-card">
+            <div class="users-card__head">
+              <span class="users-card__title">Approved Members</span>
+              <span class="users-count-pill users-count-pill--approved" id="approved-count">—</span>
+            </div>
+            <div class="users-scroll-list" id="approved-list">
+              <!-- populated by renderUsersTab() in adminUI.js -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== LOGS TAB ==================== -->
+      <section class="dashboard-panel" id="panel-logs">
+        <div class="logs-controls">
+          <div class="logs-search-bar">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="log-search-input" placeholder="Search by username…" oninput="applyLogFilters()" />
+          </div>
+          <div class="logs-filter-row">
+            <button
+              class="log-filter-btn log-filter-btn--all active"
+              data-type="all"
+              onclick="setLogFilter('all', this)"
+            >
+              All
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--reg-made"
+              data-type="registration_made"
+              onclick="setLogFilter('registration_made', this)"
+            >
+              Reg. made
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--reg-approved"
+              data-type="registration_approved"
+              onclick="setLogFilter('registration_approved', this)"
+            >
+              Reg. approved
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--reg-denied"
+              data-type="registration_denied"
+              onclick="setLogFilter('registration_denied', this)"
+            >
+              Reg. denied
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--user-banned"
+              data-type="user_banned"
+              onclick="setLogFilter('user_banned', this)"
+            >
+              User banned
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--book-added"
+              data-type="book_added"
+              onclick="setLogFilter('book_added', this)"
+            >
+              Book added
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--book-deleted"
+              data-type="book_deleted"
+              onclick="setLogFilter('book_deleted', this)"
+            >
+              Book deleted
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--book-edited"
+              data-type="book_edited"
+              onclick="setLogFilter('book_edited', this)"
+            >
+              Book edited
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--book-loaned"
+              data-type="book_loaned"
+              onclick="setLogFilter('book_loaned', this)"
+            >
+              Book loaned
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--book-returned"
+              data-type="book_returned"
+              onclick="setLogFilter('book_returned', this)"
+            >
+              Book returned
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--loan-extended"
+              data-type="loan_extended"
+              onclick="setLogFilter('loan_extended', this)"
+            >
+              Loan extended
+            </button>
+          </div>
+        </div>
+
+        <div class="logs-card">
+          <div class="logs-card__head">
+            <span class="logs-card__title">Activity Log</span>
+            <span class="logs-card__count" id="log-entry-count">— entries</span>
+          </div>
+          <div class="logs-scroll-list" id="log-list">
+            <!-- populated by renderLogsTab() in adminUI.js -->
+          </div>
+          <p class="logs-empty" id="logs-empty-msg" style="display: none">No entries match your search.</p>
+        </div>
+      </section>
+    </main>
+
+    <hr class="global-hr" />
+    <footer class="global-footer">
+      <p class="name">The Midnight Scholar</p>
+      <div class="cnt">
+        <p><a href="#">PRIVACY POLICY</a></p>
+        <p><a href="#">TERMS OF ACCESS</a></p>
+        <p><a href="#">CONTACT CURATOR</a></p>
+      </div>
+      <p class="copyrights">&copy; 2026 The Midnight Scholar Private Archive. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
