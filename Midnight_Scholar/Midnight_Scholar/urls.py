@@ -42,7 +42,6 @@ urlpatterns = [
     path('libadmin/books/list/', admin_required(TemplateView.as_view(template_name='admin/bookList.html')), name='admin_book_list'),
     path('libadmin/search/', admin_required(TemplateView.as_view(template_name='admin/search.html')), name='admin_search'),
 
-    path('api/books/', include('books.urls')),
     path('api/loans/', include('loans.urls')),
 
     # auth stuff
