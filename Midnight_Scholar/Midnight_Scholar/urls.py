@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from authe.services.security import admin_required
@@ -45,6 +45,8 @@ urlpatterns = [
     # auth stuff
     path('login/', authe_views.CustomLoginView.as_view(), name='login'),
     path('signup/', authe_views.signupView, name='signup'),
+
+    path('api/books/', include('books.urls')),
     
 ]
 
