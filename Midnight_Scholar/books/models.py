@@ -7,6 +7,10 @@ class Book(models.Model):
     description = models.TextField(blank=True, null=True)
     isbn = models.CharField(max_length=13, unique=True, help_text="13 Character ISBN number")
     
+    year = models.PositiveIntegerField()
+    publisher = models.CharField(max_length=255)
+    category = models.CharField(max_length=100, default='Uncategorized')
+    
     cover_image = models.ImageField(upload_to='book_covers/', blank=True, null=True)
     
     total_copies = models.PositiveIntegerField(default=1)

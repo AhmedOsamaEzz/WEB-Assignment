@@ -1,4 +1,5 @@
 import FakeAPI from "/static/Javascript/API/fake.js";
+import RealAPI from "/static/Javascript/API/real.js";
 
 const API = {
   // Catalog & Borrowing
@@ -13,7 +14,7 @@ const API = {
   
   getAdminStats: FakeAPI.getAdminStats,
   // Admin Inventory
-  addBook: FakeAPI.addBook,
+  addBook: RealAPI.addBook,
   getBook: FakeAPI.getBook,
   editBook: FakeAPI.editBook,
   updateBook: FakeAPI.editBook, 
