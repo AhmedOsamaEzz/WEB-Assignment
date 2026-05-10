@@ -14,7 +14,7 @@ const API = {
   
   getAdminStats: FakeAPI.getAdminStats,
   // Admin Inventory
-  addBook: FakeAPI.addBook,
+  addBook: RealAPI.addBook,
   getBook: FakeAPI.getBook,
   editBook: FakeAPI.editBook,
   updateBook: FakeAPI.editBook, 

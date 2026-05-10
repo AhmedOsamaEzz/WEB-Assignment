@@ -47,6 +47,8 @@ urlpatterns = [
     # auth stuff
     path('login/', authe_views.CustomLoginView.as_view(), name='login'),
     path('signup/', authe_views.signupView, name='signup'),
+
+    path('api/books/', include('books.urls')),
     
 ]
 

@@ -355,7 +355,7 @@ const handleBookFormSubmit = async (event, mode) => {
   bookData.availableCopies = bookData.copies;
 
   if (imageInput.files && imageInput.files.length > 0) {
-    const img = await readImageAsync(imageInput.files[0]);
+    const img = imageInput.files[0]; // don't convert to base 64
     bookData.cover = img;
   } else {
     bookData.cover = document.querySelector("#image").src;
@@ -363,7 +363,7 @@ const handleBookFormSubmit = async (event, mode) => {
   if (mode === "add") {
     try {
       await API.addBook(bookData);
-      window.location.href = "/admin/books/list/";
+      window.location.href = "/libadmin/books/list/";
     } catch (error) {
       console.log(error);
       bookSubmitFormError("Failed to add book");
@@ -371,7 +371,7 @@ const handleBookFormSubmit = async (event, mode) => {
   } else if (mode === "edit") {
     try {
       await API.updateBook(oldIsbn, bookData);
-      window.location.href = "/admin/books/list/";
+      window.location.href = "/libadmin/books/list/";
     } catch (error) {
       console.log(error);
       bookSubmitFormError("Failed to Edit book");
@@ -406,7 +406,7 @@ const populateEditForm = async () => {
   } catch (error) {
     console.log(error);
     bookSubmitFormError("Failed to populate form, redirecting");
-    setTimeout(() => (window.location.href = "/admin/books/list/"), 2000); // fake delay for realism
+    setTimeout(() => (window.location.href = "/libadmin/books/list/"), 2000); // fake delay for realism
   }
 };
 
@@ -605,7 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log(APP_ROOT2);
   if (logo) {
     logo.addEventListener("click", () => {
-      window.location.href = "/admin/dashboard/";
+      window.location.href = "/libadmin/dashboard/";
     });
   }
 
@@ -621,7 +621,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (editBtn) {
           const isbn = editBtn.getAttribute("data-isbn");
-          window.location.href = `/admin/books/edit/?isbn=${isbn}`;
+          window.location.href = `/libadmin/books/edit/?isbn=${isbn}`;
         }
 
         if (deleteBtn) {
@@ -668,7 +668,7 @@ document.addEventListener("DOMContentLoaded", () => {
       editbtn.addEventListener("click", (e) => {
         const urlParams = new URLSearchParams(window.location.search);
         const isbn = urlParams.get("isbn");
-        window.location.href = `/admin/books/edit/?isbn=${isbn}`;
+        window.location.href = `/libadmin/books/edit/?isbn=${isbn}`;
       });
     }
   }
