@@ -1,11 +1,12 @@
 import FakeAPI from "/static/Javascript/API/fake.js";
+import RealAPI from "/static/Javascript/API/real.js";
 
 const API = {
   // Catalog & Borrowing
   getBooks: FakeAPI.getBooks,
   getBookById: FakeAPI.getBookById,
   borrowBook: FakeAPI.borrowBook,
-  getUserBorrowedBooks: FakeAPI.getUserBorrowedBooks,
+  getUserBorrowedBooks: RealAPI.getUserBorrowedBooks,
 
   getUserHistory: FakeAPI.getUserHistory,
   extendLoan: FakeAPI.extendLoan,

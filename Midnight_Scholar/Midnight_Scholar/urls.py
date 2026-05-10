@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from authe.services.security import admin_required
@@ -41,6 +41,8 @@ urlpatterns = [
     path('libadmin/books/edit/', admin_required(TemplateView.as_view(template_name='admin/bookEdit.html')), name='admin_book_edit'),
     path('libadmin/books/list/', admin_required(TemplateView.as_view(template_name='admin/bookList.html')), name='admin_book_list'),
     path('libadmin/search/', admin_required(TemplateView.as_view(template_name='admin/search.html')), name='admin_search'),
+
+    path('api/loans/', include('loans.urls')),
 
     # auth stuff
     path('login/', authe_views.CustomLoginView.as_view(), name='login'),
