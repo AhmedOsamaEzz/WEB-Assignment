@@ -156,14 +156,7 @@ async function renderUserLoans() {
   bookListElement.innerHTML = "<p style='text-align: center;'>Loading your borrowed books...</p>";
 
   try {
-    const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-    const info = storedInfo ? JSON.parse(storedInfo) : {};
-    const token = info.token;
-    if (!token) {
-      throw new Error("You must be logged in to view your borrowed books.");
-    }
-
-    const borrowedBooks = await API.getUserBorrowedBooks(token);
+    const borrowedBooks = await API.getUserBorrowedBooks();
 
     if (!borrowedBooks || borrowedBooks.length === 0) {
       bookListElement.innerHTML = "<p style='text-align: center;'>You have not borrowed any books yet.</p>";

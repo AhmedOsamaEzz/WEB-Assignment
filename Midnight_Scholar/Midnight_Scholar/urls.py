@@ -43,6 +43,8 @@ urlpatterns = [
 path('libadmin/books/list/', admin_required(book_views.book_list), name='admin_book_list'),
     path('libadmin/search/', admin_required(TemplateView.as_view(template_name='admin/search.html')), name='admin_search'),
 
+    path('api/loans/', include('loans.urls')),
+
     # auth stuff
     path('login/', authe_views.CustomLoginView.as_view(), name='login'),
     path('signup/', authe_views.signupView, name='signup'),
