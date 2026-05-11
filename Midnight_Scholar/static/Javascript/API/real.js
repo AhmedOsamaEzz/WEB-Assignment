@@ -1,5 +1,7 @@
 async function getUserBorrowedBooks() {
-  const response = await fetch('/api/loans/borrowed/');
+  const response = await fetch('/api/loans/borrowed/', {
+    credentials: "same-origin",
+  });
 
   if (!response.ok) {
     if (response.status === 401) {
