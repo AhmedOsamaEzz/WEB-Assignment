@@ -92,6 +92,7 @@ def delete_book(request, isbn):
     try:
         book = Book.objects.get(isbn=isbn)
         book.delete()
+        # log from here
         return JsonResponse({
             'success': True,
             'message': 'The book has been deleted.'
