@@ -13,18 +13,14 @@ const BOOKS_PER_PAGE = 10;
  * @param {string} ISBN - The unique ISBN of the book to delete.
  * @returns {Promise<void>}
  */
-const deleteBook = async (ISBN) => {
-  const errorContainer = document.getElementById("error-message-container");
-  errorContainer.innerText = "";
-
-  if (confirm("Are you Sure you want to delete this book?")) {
-    try {
-      await API.deleteBook(ISBN);
-      renderAdminInventory();
-    } catch (error) {
-      console.log(error);
-      errorContainer.innerText = "Failed to delete book please try again later";
-    }
+const deleteBook = async (isbn) => {
+  if (!confirm('Are you sure you want to delete this book?')) return;
+  try {
+    const result = await API.deleteBook(isbn);
+    document.querySelector(`.delete-btn[data-isbn="${isbn}"]`).closest('tr').remove();
+    window.location.reload();
+  } catch (err) {
+    alert(err.message || 'Failed to delete book.');
   }
 };
 
@@ -43,129 +39,6 @@ const readImageAsync = (file) => {
   });
 };
 
-/**
- * Fetches the list of books from the API and renders them into the admin inventory table.
- * Handles DOM manipulation, loading states, rendering rows, and pagination logic.
- * * @async
- * @returns {Promise<void>}
- */
-const renderAdminInventory = async () => {
-  const errorContainer = document.getElementById("error-message-container");
-  errorContainer.innerText = "";
-  const tbody = document.querySelector("tbody");
-  const pageNumbersContainer = document.querySelector(".page-numbers");
-  const prevBtn = document.querySelector(".prev-btn");
-  const nextBtn = document.querySelector(".next-btn");
-  try {
-    tbody.innerHTML = `
-    <tr>
-    <td colspan="7" style="text-align: center;">loading...</td>
-    </tr>
-    `;
-
-    const bookList = await API.getBooks();
-
-    tbody.innerHTML = "";
-    if (bookList.length === 0) {
-      tbody.innerHTML = `
-      <tr>
-      <td colspan="7" style="text-align: center;">No books in the archive yet.</td>
-      </tr>
-      `;
-      pageNumbersContainer.innerHTML = "";
-      return;
-    }
-    // Calculate total pages
-    const totalPages = Math.ceil(bookList.length / BOOKS_PER_PAGE);
-
-    // Clamp currentPage in case books were deleted
-    if (currentPage > totalPages) currentPage = totalPages;
-
-    // Slice the booklist to only get the current page's books
-    const startIndex = (currentPage - 1) * BOOKS_PER_PAGE;
-    const currentBooks = bookList.slice(startIndex, startIndex + BOOKS_PER_PAGE);
-
-    // Render rows
-    currentBooks.forEach((book) => {
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
-      <td>
-      <div class="book-title-column">
-      <img src="${book.cover}" class="mini-book-image" alt = "Book Cover"/>
-      <div>
-      <label class="book-title-text">${book.title}</label>
-      <br />
-      <label class="book-isbn-label">ISBN-${book.isbn}</label>
-      </div>
-      </div>
-      </td>
-      <td>${book.author}</td>
-      <td><label class="book-category-column">${book.category}</label></td>
-      <td class="books-count">${book.copies}</td>
-      <td class="books-count">${book.availableCopies}</td>
-      <td class="books-count">${book.copies - book.availableCopies}</td>
-      <td class="book-action-column">
-      <div class="book-action-cell">
-      <button class = "edit-btn" data-isbn = "${book.isbn}">
-      <i class="fa-solid fa-pen"></i>
-      </button>
-      <button class = "delete-btn" data-isbn = "${book.isbn}">
-      <i class="fa-solid fa-trash-can"></i>
-      </button>
-      </div>
-      </td>
-      `;
-
-      tbody.appendChild(row);
-    });
-
-    // Pagination: calculate a window of 5 pages around currentPage
-    let startPage = Math.max(1, currentPage - 2);
-    let endPage = startPage + 4;
-
-    // Clamp endPage and shift startPage back if needed
-    if (endPage > totalPages) {
-      endPage = totalPages;
-      startPage = Math.max(1, endPage - 4);
-    }
-
-    // Render page number buttons
-    pageNumbersContainer.innerHTML = "";
-    for (let i = startPage; i <= endPage; i++) {
-      const pageBtn = document.createElement("button");
-      pageBtn.textContent = i;
-      pageBtn.className = i === currentPage ? "current-button" : "not-current-button";
-      pageBtn.addEventListener("click", () => {
-        currentPage = i;
-        renderAdminInventory();
-      });
-
-      pageNumbersContainer.appendChild(pageBtn);
-    }
-
-    // Prev button
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.onclick = () => {
-      if (currentPage > 1) {
-        currentPage--;
-        renderAdminInventory();
-      }
-    };
-
-    // Next button
-    nextBtn.disabled = currentPage === totalPages;
-    nextBtn.onclick = () => {
-      if (currentPage < totalPages) {
-        currentPage++;
-        renderAdminInventory();
-      }
-    };
-  } catch (error) {
-    console.log(error);
-    errorContainer.innerText = "Failed to render books please try again later";
-  }
-};
 
 /**
  * Validates the raw text data extracted from the HTML form.
@@ -612,7 +485,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //booklist stuff
   console.log("here");
   if (document.getElementById("bookList-page")) {
-    renderAdminInventory();
     const tbody = document.querySelector("tbody");
     if (tbody) {
       tbody.addEventListener("click", (event) => {
