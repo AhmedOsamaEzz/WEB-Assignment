@@ -1,10 +1,11 @@
 from django.shortcuts import render
 import json
 from django.http import JsonResponse
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_POST, require_GET
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
+from django.db.models import Q
 from .models import Book
 import re
 from datetime import date
@@ -111,3 +112,67 @@ def book_list(request):
     page_no = request.GET.get('page')
     page_to_show = paginator.get_page(page_no)
     return render(request, 'admin/bookList.html', {'page_to_show':page_to_show})
+
+
+@require_GET
+def search_books(request):
+    """
+    Server-side search endpoint that returns book results in JSON format.
+    Filters books by query (title/author), categories, and availability.
+    
+    Query parameters:
+    - query: Search text (optional)
+    - categories: Comma-separated category list (optional)
+    - available_only: Boolean flag for available books only (optional)
+    """
+    try:
+        query = request.GET.get('query', '').strip().lower()
+        categories_param = request.GET.get('categories', '').strip()
+        available_only = request.GET.get('available_only', 'false').lower() == 'true'
+        
+        # Parse categories
+        categories = [cat.strip() for cat in categories_param.split(',') if cat.strip()]
+        
+        # Start with all books
+        books = Book.objects.all()
+        
+        # Filter by search query (title or author)
+        if query:
+            books = books.filter(
+                Q(title__icontains=query) | Q(author__icontains=query)
+            )
+        
+        # Filter by categories
+        if categories and 'all' not in [cat.lower() for cat in categories]:
+            books = books.filter(category__in=categories)
+        
+        # Filter by availability
+        if available_only:
+            books = books.filter(available_copies__gt=0)
+        
+        # Convert to list with JSON-serializable data
+        books_data = []
+        for book in books:
+            books_data.append({
+                'isbn': book.isbn,
+                'title': book.title,
+                'author': book.author,
+                'year': book.year,
+                'category': book.category,
+                'description': book.description,
+                'cover': book.cover_image.url if book.cover_image else '/static/images/default-cover.png',
+                'copies': book.available_copies,
+                'availableCopies': book.available_copies,
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'results': books_data,
+            'count': len(books_data)
+        })
+    
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=500)
