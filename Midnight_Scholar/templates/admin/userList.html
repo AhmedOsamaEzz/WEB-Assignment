@@ -1,0 +1,378 @@
+{% load static crispy_forms_tags %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Users — The Midnight Scholar</title>
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+    <script type="module" src="https://kit.fontawesome.com/80d75008f5.js"
+      crossorigin="anonymous"></script>
+    <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
+    <script type="module"
+      src="{% static 'Javascript/UI/adminUI.js' %}"></script>
+
+    <style>
+      #admin-users-page {
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 2rem 3rem 0 3rem;
+      }
+
+      .dashboard-title {
+        font-family: var(--serif);
+        font-size: 2rem;
+        color: var(--text);
+        margin: 0 0 0.25rem 0;
+      }
+
+      .dashboard-subtitle {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-muted);
+        margin: 0;
+      }
+
+      .users-main {
+        flex: 1;
+        padding: 2rem 3rem 3rem;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      /* Filter bar */
+      .filter-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.75rem;
+        display: flex;
+        gap: 1rem;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        box-shadow: var(--shadow);
+      }
+
+      .filter-card label {
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--text-muted);
+        font-family: var(--sans);
+        margin-bottom: 0.35rem;
+        display: block;
+      }
+
+      .filter-card input[type="text"],
+      .filter-card select {
+        background: var(--surface-high);
+        border: 1px solid transparent;
+        border-radius: var(--radius-md);
+        color: var(--text);
+        padding: 0.65rem 1rem;
+        font-family: var(--sans);
+        font-size: 0.9rem;
+        transition: border-color 0.2s;
+        outline: none;
+        min-width: 220px;
+      }
+
+      .filter-card input[type="text"]:focus,
+      .filter-card select:focus { border-color: var(--primary); }
+
+      .filter-card select option { background: var(--surface-high); color: var(--text); }
+      .filter-card .mb-3 { margin-bottom: 0 !important; }
+
+      .search-btn {
+        background: var(--gradient);
+        color: var(--bg);
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 0.65rem 1.4rem;
+        font-family: var(--sans);
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: opacity 0.2s, transform 0.1s;
+        white-space: nowrap;
+        box-shadow: var(--shadow);
+      }
+
+      .search-btn:hover  { opacity: 0.85; }
+      .search-btn:active { transform: scale(0.97); }
+
+      /* Table */
+      .table-card {
+        background: var(--surface);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+      }
+
+      .users-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.875rem;
+      }
+
+      .users-table thead tr th {
+        background: var(--surface-high);
+        color: var(--text-muted);
+        font-family: var(--sans);
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        padding: 0.9rem 1.25rem;
+        font-weight: 600;
+        text-align: left;
+      }
+
+      .users-table tbody tr {
+        border-bottom: 1px solid rgba(255,255,255,0.04);
+        transition: background 0.15s;
+      }
+
+      .users-table tbody tr:last-child { border-bottom: none; }
+      .users-table tbody tr:hover { background: var(--surface-bright); }
+
+      .users-table tbody td {
+        padding: 1rem 1.25rem;
+        color: var(--text-light);
+        vertical-align: middle;
+      }
+
+      .user-name  { font-family: var(--serif); font-weight: 600; color: var(--text) !important; }
+      .user-email { color: var(--text-muted) !important; }
+
+      /* Status badges */
+      .status-badge {
+        display: inline-block;
+        padding: 0.2rem 0.65rem;
+        border-radius: var(--radius-sm);
+        font-size: 0.6rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+
+      .status-pending  { background: rgba(255,193,7,0.12);  color: #ffc107; }
+      .status-approved { background: rgba(240,187,164,0.1); color: var(--primary); }
+      .status-banned   { background: rgba(220,53,69,0.12);  color: #ff6b6b; }
+
+      /* Action buttons */
+      .action-btn {
+        border: none;
+        border-radius: var(--radius-md);
+        padding: 0.35rem 0.85rem;
+        font-family: var(--sans);
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: opacity 0.2s, transform 0.1s;
+      }
+
+      .action-btn:hover  { opacity: 0.8; }
+      .action-btn:active { transform: scale(0.96); }
+
+      .btn-approve { background: rgba(240,187,164,0.15); color: var(--primary); }
+      .btn-deny    { background: rgba(220,53,69,0.15);   color: #ff6b6b; }
+      .btn-ban     { background: rgba(255,193,7,0.15);   color: #ffc107; }
+      .btn-unban   { background: rgba(23,162,184,0.15);  color: #4dd0e1; }
+
+      .empty-msg {
+        text-align: center;
+        color: var(--text-muted);
+        padding: 3rem 1rem !important;
+        font-style: italic;
+        font-family: var(--serif);
+      }
+
+      /* Pagination */
+      .pagination-row {
+        display: flex;
+        justify-content: center;
+        gap: 0.35rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+      }
+
+      .page-btn {
+        background: var(--surface);
+        color: var(--text-muted);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-radius: var(--radius-md);
+        padding: 0.45rem 0.85rem;
+        font-size: 0.8rem;
+        text-decoration: none;
+        font-family: var(--sans);
+        transition: background 0.2s, color 0.2s;
+      }
+
+      .page-btn:hover { background: var(--surface-bright); color: var(--text); }
+
+      .page-btn.current {
+        background: var(--primary-dark);
+        color: var(--primary);
+        border-color: var(--primary-dark);
+        font-weight: 700;
+      }
+    </style>
+  </head>
+
+  <body id="admin-users-page">
+
+    <!-- NAV BAR -->
+    <nav>
+      <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
+        <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+      </a>
+      <div class="links">
+        <ul>
+          <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
+          <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
+          <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+          <li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
+        </ul>
+      </div>
+      <div class="search-profile">
+        <a href="{% url 'admin_search' %}"><i
+            class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="{% url 'admin_dashboard' %}"><i
+            class="fa-solid fa-circle-user"></i></a>
+      </div>
+    </nav>
+
+    <!-- PAGE HEADER -->
+    <header class="dashboard-header">
+      <div>
+        <h2 class="dashboard-title">User Management</h2>
+        <p class="dashboard-subtitle">Manage library members and
+          registrations</p>
+      </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="users-main">
+
+      <!-- SEARCH & FILTERS -->
+      <div class="filter-card">
+        <form id="filter-form" style="display:contents">
+          {% csrf_token %}
+          {{ filter_form|crispy }}
+        </form>
+        <button class="search-btn" onclick="searchUsers()">
+          <i class="fa-solid fa-magnifying-glass"></i> Search
+        </button>
+      </div>
+
+      <!-- USERS TABLE -->
+      <div class="table-card">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th>Joined</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            {% for user in page_to_show %}
+            <tr class="user-row" data-user-id="{{ user.id }}"
+              data-status="{{ user.status }}">
+              <td class="user-name">{{ user.name }}</td>
+              <td class="user-email">{{ user.email }}</td>
+              <td>
+                <span
+                  class="status-badge status-{{ user.status }}">{{user.status}}</span>
+              </td>
+              <td>{{ user.date_joined|date:"Y-m-d H:i" }}</td>
+              <td>
+                {% if user.status == 'pending' %}
+                <button class="action-btn btn-approve"
+                  onclick="approveUserFromDashboard('{{ user.id }}')">
+                  <i class="fa-solid fa-check"></i> Approve
+                </button>
+                <button class="action-btn btn-deny"
+                  onclick="denyUserFromDashboard('{{ user.id }}')">
+                  <i class="fa-solid fa-times"></i> Deny
+                </button>
+                {% elif user.status == 'approved' %}
+                <button class="action-btn btn-ban"
+                  onclick="banUserFromDashboard('{{ user.id }}')">
+                  <i class="fa-solid fa-ban"></i> Ban
+                </button>
+                {% elif user.status == 'banned' %}
+                <button class="action-btn btn-unban"
+                  onclick="unbanUserFromDashboard('{{ user.id }}')">
+                  <i class="fa-solid fa-undo"></i> Unban
+                </button>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="5" class="empty-msg">No users found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINATION -->
+      {% if page_to_show.has_other_pages %}
+      <div class="pagination-row">
+        {% if page_to_show.has_previous %}
+        <a class="page-btn" href="?page=1">« First</a>
+        <a class="page-btn"
+          href="?page={{ page_to_show.previous_page_number }}">‹ Prev</a>
+        {% endif %}
+
+        {% for num in page_to_show.paginator.page_range %}
+        <a
+          class="page-btn {% if page_to_show.number == num %}current{% endif %}"
+          href="?page={{ num }}">{{ num }}</a>
+        {% endfor %}
+
+        {% if page_to_show.has_next %}
+        <a class="page-btn"
+          href="?page={{ page_to_show.next_page_number }}">Next ›</a>
+        <a class="page-btn"
+          href="?page={{ page_to_show.paginator.num_pages }}">Last »</a>
+        {% endif %}
+      </div>
+      {% endif %}
+
+    </main>
+
+  </body>
+</html>

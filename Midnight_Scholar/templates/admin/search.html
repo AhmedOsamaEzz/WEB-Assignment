@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <script src="https://kit.fontawesome.com/80d75008f5.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/80d75008f5.js"
+      crossorigin="anonymous"></script>
     <title>Search</title>
     <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
     <script type="module" src="{% static 'Javascript/UI/userUI.js' %}"></script>
@@ -20,14 +21,22 @@
       <div class="links">
         <ul>
           <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
+          <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
           <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-          <li><a href="#" id="logout-link">Logout</a></li>
+          <li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
         </ul>
       </div>
 
       <div class="search-profile">
-        <a href="{% url 'admin_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
+        <a href="{% url 'admin_search' %}"><i
+            class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="{% url 'admin_dashboard' %}"><i
+            class="fa-solid fa-circle-user"></i></a>
       </div>
     </nav>
 
@@ -55,19 +64,20 @@
           <h4>Availability</h4>
           <ul>
             <li>
-              <input type="checkbox" class="filter-check" value="available" checked />
+              <input type="checkbox" class="filter-check" value="available"
+                checked />
               Available Now
             </li>
           </ul>
         </div>
-        <button class="apply-filters-btn">Apply Filters</button>
       </aside>
 
       <div class="main-content">
         <div class="hero">
           <div class="middle-text">
             <p class="head">Explore the <span>Infinite</span></p>
-            <p>Discover, organize, and explore our comprehensive archive of rare editions.</p>
+            <p>Discover, organize, and explore our comprehensive archive of rare
+              editions.</p>
           </div>
           <form class="search-bar">
             <i class="fa-solid fa-book-open"></i>
@@ -82,8 +92,10 @@
         <div class="results-cnt" id="results-cnt">
           <div class="results-header">
             <div>
-              <p class="results-query">Results for: <span id="query-label"></span></p>
-              <p class="results-count"><span id="results-count">0</span> books found</p>
+              <p class="results-query">Results for: <span
+                  id="query-label"></span></p>
+              <p class="results-count"><span id="results-count">0</span> books
+                found</p>
             </div>
           </div>
           <div class="cards" id="cards-container">
@@ -115,7 +127,8 @@
         <p><a href="#">TERMS OF ACCESS</a></p>
         <p><a href="#">CONTACT CURATOR</a></p>
       </div>
-      <p class="copyrights">&copy; 2026 The Midnight Scholar Private Archive. All rights reserved.</p>
+      <p class="copyrights">&copy; 2026 The Midnight Scholar Private Archive.
+        All rights reserved.</p>
     </footer>
   </body>
 </html>
