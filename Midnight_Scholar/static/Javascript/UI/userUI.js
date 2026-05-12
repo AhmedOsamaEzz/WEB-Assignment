@@ -132,7 +132,9 @@ async function checkBookStatus(token, isbn) {
     }
   } catch (error) {
     console.log(error);
-    // # TODO figure out what to do
+    disableBorrowButton();
+    const borrowBtn = document.getElementById("borrow-btn");
+    if (borrowBtn) borrowBtn.textContent = "Unable to verify borrowing status";
   }
 }
 
