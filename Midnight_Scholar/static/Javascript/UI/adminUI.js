@@ -550,4 +550,66 @@ document.addEventListener("DOMContentLoaded", () => {
     renderUsersTab();
     renderLogsTab();
   }
+
+  if (document.getElementById("loanList-page")) {
+    LoanList();
+  }
 });
+
+
+function LoanList() {
+  const modal      = document.getElementById('action-modal');
+  const modalTitle = document.getElementById('modal-title');
+  const modalBody  = document.getElementById('modal-body');
+  const confirmBtn = document.getElementById('modal-confirm-btn');
+  const cancelBtn  = document.getElementById('modal-cancel-btn');
+  const form       = document.getElementById('loan-action-form');
+  const formLoanId = document.getElementById('form-loan-id');
+  const formAction = document.getElementById('form-action');
+
+  if (!modal) return;
+  document.querySelectorAll('.loan-btn, .return-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const action = btn.dataset.action;
+      const book   = btn.dataset.book;
+      const user   = btn.dataset.user;
+      formLoanId.value = btn.dataset.loanId;
+      formAction.value = action;
+      if (action === 'loan') {
+        modalTitle.textContent = 'Confirm Loan';
+        modalBody.textContent  = `Hand "${book}" to ${user}? This will mark the book as borrowed.`;
+        confirmBtn.textContent = 'Loan Book';
+        confirmBtn.className   = 'modal-confirm modal-confirm-loan';
+      } else {
+        modalTitle.textContent = 'Confirm Return';
+        modalBody.textContent  = `Mark "${book}" as returned from ${user}?`;
+        confirmBtn.textContent = 'Confirm Return';
+        confirmBtn.className   = 'modal-confirm modal-confirm-return';
+      }
+      modal.classList.add('open');
+    });
+  });
+  confirmBtn.addEventListener('click', async () => {
+  const formData = new FormData(form);
+  try {
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: formData,
+    });
+    const data = await response.json();
+    modal.classList.remove('open');
+    if (data.success) {
+      window.location.href = window.location.href;
+    } else {
+      const errorContainer = document.getElementById('error-message-container');
+      errorContainer.textContent = data.message;
+    }
+  } catch (err) {
+    console.error('Loan action failed:', err);
+  }
+});
+  cancelBtn.addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', e => {
+    if (e.target === modal) modal.classList.remove('open');
+  });
+}
