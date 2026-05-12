@@ -1863,7 +1863,8 @@ body#sign-up-page {
   color: var(--text-muted);
   cursor: pointer;
   transition: color 0.2s, border-color 0.2s;
-  margin-bottom: -1px; /* sit on top of the bar-bottom border */
+  margin-bottom: -1px;
+  /* sit on top of the bar-bottom border */
 }
 
 #admin-dashboard-page .dashboard-tab:hover {
@@ -2339,7 +2340,8 @@ body#sign-up-page {
   padding: 0.2rem 0.65rem;
   border-radius: 999px;
   flex-shrink: 0;
-  width: 108px;          /* fixed width so info column always starts at the same x */
+  width: 108px;
+  /* fixed width so info column always starts at the same x */
   text-align: center;
 }
 
@@ -3067,6 +3069,22 @@ nav ul {
   align-items: center;
 }
 
+nav ul li button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: hsl(from var(--text) h s l / 0.7);
+  /* match your link color */
+  text-decoration: none;
+  /* or underline, whatever your links use */
+}
+
+nav ul li button:hover {
+  color: var(--text-light);
+}
+
 nav ul li a {
   text-decoration: none;
   color: hsl(from var(--text) h s l / 0.7);
@@ -3081,6 +3099,22 @@ nav ul li a:hover {
   color: var(--text-light);
 }
 
+nav ul li button {
+  position: relative;
+}
+
+nav ul li button::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  bottom: -10px;
+  left: 0;
+  background-color: var(--text-muted);
+  transform: scaleX(0);
+  transition: transform 0.3s ease-in-out;
+}
+
 nav ul li a::after {
   content: "";
   position: absolute;
@@ -3093,7 +3127,7 @@ nav ul li a::after {
   transition: transform 0.3s ease-in-out;
 }
 
-nav ul li a:hover::after {
+nav ul li a:hover::after, nav ul li button:hover::after {
   transform: scaleX(1);
 }
 
