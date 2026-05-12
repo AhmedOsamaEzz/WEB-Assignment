@@ -129,6 +129,56 @@ const RealAPI = {
     if (!data.success) throw new Error(data.message);
     return data;
   },
+
+  async getPendingUsers() {
+    const response = await fetch('/api/users/pending/', { credentials: 'same-origin' });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || 'Failed to fetch pending users');
+    return data.users;
+  },
+
+  async getApprovedUsers() {
+    const response = await fetch('/api/users/approved/', { credentials: 'same-origin' });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || 'Failed to fetch approved users');
+    return data.users;
+  },
+
+  async approveUser(email) {
+    const response = await fetch('/api/users/approve/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || 'Failed to approve user');
+    return data;
+  },
+
+  async banUser(email) {
+    const response = await fetch('/api/users/ban/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || 'Failed to ban user');
+    return data;
+  },
+
+  async denyUser(email) {
+    const response = await fetch('/api/users/deny/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+      credentials: 'same-origin',
+      body: JSON.stringify({ email }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || 'Failed to deny user');
+    return data;
+  },
 };
 
 export default RealAPI;

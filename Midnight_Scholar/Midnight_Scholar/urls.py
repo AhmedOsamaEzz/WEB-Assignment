@@ -50,6 +50,13 @@ urlpatterns = [
     path('login/', authe_views.CustomLoginView.as_view(), name='login'),
     path('signup/', authe_views.signupView, name='signup'),
 
+    # user management API (admin only)
+    path('api/users/pending/', authe_views.get_pending_users, name='api_users_pending'),
+    path('api/users/approved/', authe_views.get_approved_users, name='api_users_approved'),
+    path('api/users/approve/', authe_views.approve_user, name='api_users_approve'),
+    path('api/users/deny/', authe_views.deny_user, name='api_users_deny'),
+    path('api/users/ban/', authe_views.ban_user, name='api_users_ban'),
+
     path('api/books/', include('books.urls')),
     
 ]
