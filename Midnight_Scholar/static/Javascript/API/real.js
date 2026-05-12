@@ -39,6 +39,17 @@ const RealAPI = {
     }
   },
 
+  async borrowBook(isbn, _token) {
+    const response = await fetch(`/api/loans/borrow/${isbn}/`, {
+      method: "POST",
+      headers: { "X-CSRFToken": getCookie("csrftoken") },
+      credentials: "same-origin",
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || "Failed to borrow book");
+    return data;
+  },
+
   async getUserBorrowedBooks() {
     const response = await fetch("/api/loans/borrowed/", {
       credentials: "same-origin",
@@ -90,6 +101,19 @@ const RealAPI = {
     });
     const data = await response.json();
     if (!data.success) throw new Error(data.message || "Failed to remove book");
+    return data;
+  },
+
+  async getBookById(isbn) {
+    const response = await fetch(`/api/books/detail/${isbn}/`, {
+      credentials: "same-origin",
+    });
+    if (!response.ok) {
+      if (response.status === 404) throw new Error("Book not found");
+      throw new Error("Failed to fetch book");
+    }
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || "Book not found");
     return data;
   },
 

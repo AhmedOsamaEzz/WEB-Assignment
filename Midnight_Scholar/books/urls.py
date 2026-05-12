@@ -7,4 +7,5 @@ urlpatterns = [
     path('delete/<str:isbn>/', views.delete_book, name='delete_book'),
     path('search/', views.search_books, name='search_books'),
     path('edit/<str:isbn>/', views.edit_book, name='edit_book'),
+    path('detail/<str:isbn>/', views.get_book, name='get_book'),
 ]

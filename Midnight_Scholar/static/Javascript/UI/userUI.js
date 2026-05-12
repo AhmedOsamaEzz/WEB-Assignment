@@ -109,8 +109,8 @@ async function handleBorrowAction(params) {
     const isbn = new URLSearchParams(window.location.search).get("isbn");
     const storedInfo =
       localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-    const info = JSON.parse(storedInfo);
-    const token = info.token;
+    const info = storedInfo ? JSON.parse(storedInfo) : null;
+    const token = info?.token;
     if (!isbn) {
       alert("Error: No book selected.");
       return;
@@ -120,7 +120,7 @@ async function handleBorrowAction(params) {
     window.location.reload();
   } catch (error) {
     console.log(error);
-    alert("Sorry, book out of stock");
+    alert(error.message || "Sorry, book out of stock");
   }
 }
 
@@ -454,8 +454,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const borrowBtn = document.getElementById("borrow-btn");
     const storedInfo =
       localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-    const info = JSON.parse(storedInfo);
-    const token = info.token;
+    const info = storedInfo ? JSON.parse(storedInfo) : null;
+    const token = info?.token;
     const urlParams = new URLSearchParams(window.location.search);
     const isbn = urlParams.get("isbn");
     renderBookDetails();
@@ -475,8 +475,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const borrowBtn = document.getElementById("borrow-btn");
   const storedInfo =
     localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-  const info = JSON.parse(storedInfo);
-  const token = info.token;
+  const info = storedInfo ? JSON.parse(storedInfo) : null;
+  const token = info?.token;
   const urlParams = new URLSearchParams(window.location.search);
   const isbn = urlParams.get("isbn");
   if (borrowBtn) {

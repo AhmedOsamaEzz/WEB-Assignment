@@ -4,8 +4,8 @@ import RealAPI from "/static/Javascript/API/real.js";
 const API = {
   // Catalog & Borrowing
   getBooks: RealAPI.getBooks,
-  getBookById: FakeAPI.getBookById,
-  borrowBook: FakeAPI.borrowBook,
+  getBookById: RealAPI.getBookById,
+  borrowBook: RealAPI.borrowBook,
   getUserBorrowedBooks: RealAPI.getUserBorrowedBooks,
 
   getUserHistory: FakeAPI.getUserHistory,

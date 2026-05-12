@@ -106,6 +106,27 @@ def delete_book(request, isbn):
 
     
 
+@require_GET
+def get_book(request, isbn):
+    try:
+        book = Book.objects.get(isbn=isbn)
+        return JsonResponse({
+            'success': True,
+            'isbn': book.isbn,
+            'title': book.title,
+            'author': book.author,
+            'year': book.year,
+            'publisher': book.publisher,
+            'copies': book.total_copies,
+            'availableCopies': book.available_copies,
+            'description': book.description or '',
+            'category': book.category,
+            'cover': book.cover_image.url if book.cover_image else '',
+        })
+    except Book.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Book not found'}, status=404)
+
+
 @require_POST
 def edit_book(request, isbn):
     if not request.user.is_authenticated or getattr(request.user, 'role', 'user') != 'admin':
