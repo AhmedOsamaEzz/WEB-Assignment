@@ -118,6 +118,17 @@ const RealAPI = {
     if (!data.success) throw new Error(data.message || "Failed to update book");
     return data;
   },
+
+  async borrowBook(isbn) {
+    const response = await fetch("/api/loans/borrow/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie("csrftoken") },
+      body: JSON.stringify({ isbn }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message);
+    return data;
+  },
 };
 
 export default RealAPI;

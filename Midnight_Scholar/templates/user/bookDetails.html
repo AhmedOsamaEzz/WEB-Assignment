@@ -15,8 +15,8 @@
   <body id="book-details-page">
     <header id="header">
       <nav>
-        <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
-            <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+        <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
+          <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
         </a>
 
         <div class="links">
@@ -39,24 +39,30 @@
     <div class="wrapper">
       <div class="book-container">
         <div class="image">
-          <img id="book-image" src="../assets/images/download.webp" alt="Book Image" />
+          <img id="book-image" src="{{ book.cover_image.url }}" alt="Book Image" />
         </div>
 
         <div id="book-info">
-          <p id="title">Title :</p>
+          <p id="title">Title : {{ book.title }}</p>
           <div class="same-row">
-            <p id="author">Author :</p>
-            <p id="isbn">ISBN :</p>
+            <p id="author">Author : {{ book.author }}</p>
+            <p id="isbn">ISBN : {{ book.isbn }}</p>
           </div>
           <div class="same-row">
-            <p id="category">Category :</p>
-            <p id="status">Status :</p>
+            <p id="category">Category : {{ book.category }}</p>
+            <p id="status">Status : {% if book.available_copies > 0 %} Available {% else %} Out of Stock {% endif %}</p>
           </div>
-          <p id="description">Description :</p>
+          <p id="description">Description : {{ book.description }}</p>
         </div>
       </div>
       <div class="btnnn">
+        {% if is_active %}
+        <button class="btn-primary disabled-btn" id="borrow-btn" disabled>Already Reserved</button>
+        {% elif book.available_copies == 0 %}
+        <button class="btn-primary disabled-btn" id="borrow-btn" disabled>Out of Stock</button>
+        {% else %}
         <button class="btn-primary" id="borrow-btn">Borrow this book</button>
+        {% endif %}
       </div>
     </div>
 
