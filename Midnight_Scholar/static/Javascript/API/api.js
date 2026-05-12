@@ -17,7 +17,7 @@ const API = {
   addBook: RealAPI.addBook,
   getBook: FakeAPI.getBook,
   editBook: FakeAPI.editBook,
-  updateBook: FakeAPI.editBook,
+  updateBook: RealAPI.updateBook,
   deleteBook: RealAPI.deleteBook,
 
   loginUser: FakeAPI.loginUser,
