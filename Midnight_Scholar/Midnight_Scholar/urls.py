@@ -16,8 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 from authe.services.security import admin_required
 from authe import views as authe_views
 from django.conf import settings
@@ -25,15 +26,23 @@ from django.conf.urls.static import static
 from books import views as book_views
 
 
+def home_view(request):
+    if request.user.is_authenticated:
+        if getattr(request.user, 'role', 'user') == 'admin':
+            return redirect('admin_dashboard')
+        return redirect('user_dashboard')
+    return render(request, 'index.html')
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('', home_view, name='home'),
     # path('login/', TemplateView.as_view(template_name='auth/login.html'), name='login'),
     # path('signup/', TemplateView.as_view(template_name='auth/signup.html'), name='signup'),
-    path('user/dashboard/', TemplateView.as_view(template_name='user/dashboard.html'), name='user_dashboard'),
-    path('user/books/', TemplateView.as_view(template_name='user/bookDetails.html'), name='user_book_details'),
-    path('user/borrowed/', TemplateView.as_view(template_name='user/borrowed.html'), name='user_borrowed'),
-    path('user/search/', TemplateView.as_view(template_name='user/search.html'), name='user_search'),
+    path('user/dashboard/', login_required(TemplateView.as_view(template_name='user/dashboard.html')), name='user_dashboard'),
+    path('user/books/', login_required(TemplateView.as_view(template_name='user/bookDetails.html')), name='user_book_details'),
+    path('user/borrowed/', login_required(TemplateView.as_view(template_name='user/borrowed.html')), name='user_borrowed'),
+    path('user/search/', login_required(TemplateView.as_view(template_name='user/search.html')), name='user_search'),
     
     # path('libadmin/dashboard/', TemplateView.as_view(template_name='admin/dashboard.html'), name='admin_dashboard'),
     path('libadmin/dashboard/', admin_required(TemplateView.as_view(template_name='admin/dashboard.html')), name='admin_dashboard'),

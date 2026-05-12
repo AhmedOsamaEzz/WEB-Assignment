@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView
 
 class CustomLoginView(LoginView):
     template_name = 'auth/login.html'
+    redirect_authenticated_user = True
 
     def form_valid(self, form):
         user = form.get_user()
@@ -24,8 +25,7 @@ class CustomLoginView(LoginView):
 
         if getattr(user, 'role', 'user') == 'admin':
             return reverse('admin_dashboard')
-        else:
-            return reverse('user_dashboard')
+        return reverse('user_dashboard')
 
 
 from .forms import SignupForm
