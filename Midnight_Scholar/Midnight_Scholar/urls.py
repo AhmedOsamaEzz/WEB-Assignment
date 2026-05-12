@@ -31,7 +31,7 @@ urlpatterns = [
     # path('login/', TemplateView.as_view(template_name='auth/login.html'), name='login'),
     # path('signup/', TemplateView.as_view(template_name='auth/signup.html'), name='signup'),
     path('user/dashboard/', TemplateView.as_view(template_name='user/dashboard.html'), name='user_dashboard'),
-    path('user/books/', TemplateView.as_view(template_name='user/bookDetails.html'), name='user_book_details'),
+    path('user/books/', book_views.book_details, name='user_book_details'),
     path('user/borrowed/', TemplateView.as_view(template_name='user/borrowed.html'), name='user_borrowed'),
     path('user/search/', TemplateView.as_view(template_name='user/search.html'), name='user_search'),
     

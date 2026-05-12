@@ -14,13 +14,13 @@ const BOOKS_PER_PAGE = 10;
  * @returns {Promise<void>}
  */
 const deleteBook = async (isbn) => {
-  if (!confirm('Are you sure you want to delete this book?')) return;
+  if (!confirm("Are you sure you want to delete this book?")) return;
   try {
     const result = await API.deleteBook(isbn);
-    document.querySelector(`.delete-btn[data-isbn="${isbn}"]`).closest('tr').remove();
+    document.querySelector(`.delete-btn[data-isbn="${isbn}"]`).closest("tr").remove();
     window.location.reload();
   } catch (err) {
-    alert(err.message || 'Failed to delete book.');
+    alert(err.message || "Failed to delete book.");
   }
 };
 
@@ -38,7 +38,6 @@ const readImageAsync = (file) => {
     reader.readAsDataURL(file);
   });
 };
-
 
 /**
  * Validates the raw text data extracted from the HTML form.
@@ -556,60 +555,59 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-
 function LoanList() {
-  const modal      = document.getElementById('action-modal');
-  const modalTitle = document.getElementById('modal-title');
-  const modalBody  = document.getElementById('modal-body');
-  const confirmBtn = document.getElementById('modal-confirm-btn');
-  const cancelBtn  = document.getElementById('modal-cancel-btn');
-  const form       = document.getElementById('loan-action-form');
-  const formLoanId = document.getElementById('form-loan-id');
-  const formAction = document.getElementById('form-action');
+  const modal = document.getElementById("action-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalBody = document.getElementById("modal-body");
+  const confirmBtn = document.getElementById("modal-confirm-btn");
+  const cancelBtn = document.getElementById("modal-cancel-btn");
+  const form = document.getElementById("loan-action-form");
+  const formLoanId = document.getElementById("form-loan-id");
+  const formAction = document.getElementById("form-action");
 
   if (!modal) return;
-  document.querySelectorAll('.loan-btn, .return-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+  document.querySelectorAll(".loan-btn, .return-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
       const action = btn.dataset.action;
-      const book   = btn.dataset.book;
-      const user   = btn.dataset.user;
+      const book = btn.dataset.book;
+      const user = btn.dataset.user;
       formLoanId.value = btn.dataset.loanId;
       formAction.value = action;
-      if (action === 'loan') {
-        modalTitle.textContent = 'Confirm Loan';
-        modalBody.textContent  = `Hand "${book}" to ${user}? This will mark the book as borrowed.`;
-        confirmBtn.textContent = 'Loan Book';
-        confirmBtn.className   = 'modal-confirm modal-confirm-loan';
+      if (action === "loan") {
+        modalTitle.textContent = "Confirm Loan";
+        modalBody.textContent = `Hand "${book}" to ${user}? This will mark the book as borrowed.`;
+        confirmBtn.textContent = "Loan Book";
+        confirmBtn.className = "modal-confirm modal-confirm-loan";
       } else {
-        modalTitle.textContent = 'Confirm Return';
-        modalBody.textContent  = `Mark "${book}" as returned from ${user}?`;
-        confirmBtn.textContent = 'Confirm Return';
-        confirmBtn.className   = 'modal-confirm modal-confirm-return';
+        modalTitle.textContent = "Confirm Return";
+        modalBody.textContent = `Mark "${book}" as returned from ${user}?`;
+        confirmBtn.textContent = "Confirm Return";
+        confirmBtn.className = "modal-confirm modal-confirm-return";
       }
-      modal.classList.add('open');
+      modal.classList.add("open");
     });
   });
-  confirmBtn.addEventListener('click', async () => {
-  const formData = new FormData(form);
-  try {
-    const response = await fetch(form.action, {
-      method: 'POST',
-      body: formData,
-    });
-    const data = await response.json();
-    modal.classList.remove('open');
-    if (data.success) {
-      window.location.href = window.location.href;
-    } else {
-      const errorContainer = document.getElementById('error-message-container');
-      errorContainer.textContent = data.message;
+  confirmBtn.addEventListener("click", async () => {
+    const formData = new FormData(form);
+    try {
+      const response = await fetch(form.getAttribute("action"), {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      modal.classList.remove("open");
+      if (data.success) {
+        window.location.href = window.location.href;
+      } else {
+        const errorContainer = document.getElementById("error-message-container");
+        errorContainer.textContent = data.message;
+      }
+    } catch (err) {
+      console.error("Loan action failed:", err);
     }
-  } catch (err) {
-    console.error('Loan action failed:', err);
-  }
-});
-  cancelBtn.addEventListener('click', () => modal.classList.remove('open'));
-  modal.addEventListener('click', e => {
-    if (e.target === modal) modal.classList.remove('open');
+  });
+  cancelBtn.addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("open");
   });
 }

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
@@ -9,8 +9,25 @@ from django.db.models import Q
 from .models import Book
 import re
 from datetime import date
+from loans.models import Loan
 
 # Create your views here.
+
+def book_details(request):
+    isbn = request.GET.get('isbn')
+    book = get_object_or_404(Book, isbn=isbn)
+    
+    # check if user already has an active loan for this book
+    is_active = Loan.objects.filter(
+        user=request.user,
+        book=book,
+        status__in=['reserved', 'borrowed']
+    ).exists()
+
+    return render(request, 'user/bookDetails.html', {
+    'book': book,
+    'is_active': is_active,
+})
 
 def get_book(request, isbn):
     try:

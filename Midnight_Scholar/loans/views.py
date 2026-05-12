@@ -18,7 +18,7 @@ def loan_list(request):
         loan_list = loan_list.filter(status__in=['reserved', 'borrowed'])
     paginator = Paginator(loan_list.order_by('-reserved_at'), 15)
     page_to_show = paginator.get_page(request.GET.get('page'))
-    return render(request, 'loanList.html', {
+    return render(request, 'admin/loanList.html', {
         'page_to_show': page_to_show,
         'current_status': status,
         'today': datetime.date.today(),
@@ -48,8 +48,8 @@ def loan_action(request):
         return JsonResponse({'success': False, 'message': 'Loan not found.'}, status=404)
 
 def borrowed_books(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'error': 'Authentication required'}, status=401)
+    # if not request.user.is_authenticated:
+    #     return JsonResponse({'error': 'Authentication required'}, status=401)
 
     loans = (
         Loan.objects
@@ -79,7 +79,7 @@ def borrowed_books(request):
 @require_POST
 def borrow_book(request):
     try:
-        body = json.load(request.body)
+        body = json.loads(request.body)
         isbn = body.get('isbn')
         book = Book.objects.get(isbn=isbn)
         is_exists = Loan.objects.filter(

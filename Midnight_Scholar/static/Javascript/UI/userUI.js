@@ -42,21 +42,15 @@ function fetchBook(book) {
   document.getElementById("isbn").textContent = `ISBN: ${book.isbn}`;
   document.getElementById("title").textContent = `Title: ${book.title}`;
   document.getElementById("author").textContent = `Author: ${book.author}`;
-  document.getElementById("category").textContent =
-    `Category: ${book.category}`;
-  document.getElementById("description").textContent =
-    `Description: ${book.description}`;
+  document.getElementById("category").textContent = `Category: ${book.category}`;
+  document.getElementById("description").textContent = `Description: ${book.description}`;
 }
 
 /**
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(
-  query = "",
-  categories = [],
-  availableOnly = false,
-) {
+async function renderCatalog(query = "", categories = [], availableOnly = false) {
   const cardsContainer = document.getElementById("cards-container");
   const resultsCount = document.getElementById("results-count");
   if (!cardsContainer) return;
@@ -105,21 +99,16 @@ async function renderBookDetails(params) {
  */
 async function handleBorrowAction() {
   try {
-    // Captures the 'isbn' from the URL (e.g., details.html?isbn=123)
     const isbn = new URLSearchParams(window.location.search).get("isbn");
-    const storedInfo =
-      localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-    const info = JSON.parse(storedInfo);
-    const token = info.token;
     if (!isbn) {
       alert("Error: No book selected.");
       return;
     }
-    await API.borrowBook(isbn, token);
-    alert("Book borrowed successfully");
+    await API.borrowBook(isbn);
+    alert("Book reserved successfully.");
     window.location.reload();
   } catch (error) {
-    alert(error.message || 'Sorry, something went wrong.');
+    alert(error.message || "Sorry, something went wrong.");
   }
 }
 
@@ -131,7 +120,7 @@ async function handleBorrowAction() {
 async function checkBookStatus(isbn) {
   try {
     const borrowedBooks = await API.getUserBorrowedBooks();
-    const isActive = borrowedBooks.some(book => book.isbn === isbn);
+    const isActive = borrowedBooks.some((book) => book.isbn === isbn);
     if (isActive) disableBorrowButton();
   } catch (error) {
     console.log(error);
@@ -157,15 +146,13 @@ async function renderUserLoans() {
   const bookListElement = document.getElementById("book-list");
   if (!bookListElement) return;
 
-  bookListElement.innerHTML =
-    "<p style='text-align: center;'>Loading your borrowed books...</p>";
+  bookListElement.innerHTML = "<p style='text-align: center;'>Loading your borrowed books...</p>";
 
   try {
     const borrowedBooks = await API.getUserBorrowedBooks();
 
     if (!borrowedBooks || borrowedBooks.length === 0) {
-      bookListElement.innerHTML =
-        "<p style='text-align: center;'>You have not borrowed any books yet.</p>";
+      bookListElement.innerHTML = "<p style='text-align: center;'>You have not borrowed any books yet.</p>";
       return;
     }
 
@@ -205,12 +192,8 @@ async function renderUserLoans() {
 async function initSearchPage() {
   const searchInput = document.querySelector(".search-bar input");
   const searchForm = document.querySelector(".search-bar");
-  const categoryItems = document.querySelectorAll(
-    ".filters-section:nth-child(2) ul li",
-  );
-  const checkRow = document.querySelector(
-    ".filters .filters-section:nth-child(3) ul li",
-  );
+  const categoryItems = document.querySelectorAll(".filters-section:nth-child(2) ul li");
+  const checkRow = document.querySelector(".filters .filters-section:nth-child(3) ul li");
   const queryLabel = document.getElementById("query-label");
 
   let currentQuery = "";
@@ -280,9 +263,7 @@ async function initSearchPage() {
 }
 
 async function renderUserDashboard() {
-  const User = JSON.parse(
-    localStorage.getItem("user_info") || sessionStorage.getItem("user_info"),
-  );
+  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
   if (!User) return;
   const token = User.token;
   const borrowed = await API.getUserBorrowedBooks(token);
@@ -307,8 +288,7 @@ async function renderUserDashboard() {
   if (!grid) return;
 
   if (borrowed.length === 0) {
-    grid.innerHTML =
-      '<p class="ud-book-author" style="padding:1rem;">No active loans.</p>';
+    grid.innerHTML = '<p class="ud-book-author" style="padding:1rem;">No active loans.</p>';
     return;
   }
   const recent = borrowed.slice(-3).reverse();
@@ -353,9 +333,7 @@ async function renderUserDashboard() {
 }
 
 document.addEventListener("click", async (e) => {
-  const User = JSON.parse(
-    localStorage.getItem("user_info") || sessionStorage.getItem("user_info"),
-  );
+  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
   if (!User) return;
   const isbn = e.target.getAttribute("data-isbn");
   const token = User.token;
@@ -386,9 +364,7 @@ async function renderUserHistory() {
   tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>`;
 
   try {
-    const User = JSON.parse(
-      localStorage.getItem("user_info") || sessionStorage.getItem("user_info"),
-    );
+    const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
     if (!User) return;
 
     const history = await API.getUserHistory(User.token);
@@ -399,20 +375,14 @@ async function renderUserHistory() {
 
     tbody.innerHTML = history
       .map((entry, i) => {
-        const borrowed = new Date(entry.borrowedAt).toLocaleDateString(
-          "en-US",
-          {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          },
-        );
+        const borrowed = new Date(entry.borrowedAt).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
         const returned = entry.returnDate || "—";
         const isOverdue = entry.status === "overdue";
-        const badgeCls =
-          entry.status === "returned"
-            ? "ud-badge--returned"
-            : "ud-badge--overdue";
+        const badgeCls = entry.status === "returned" ? "ud-badge--returned" : "ud-badge--overdue";
         const badgeLabel = entry.status === "returned" ? "Returned" : "Overdue";
         const altRow = i % 2 !== 0 ? "ud-tr-alt" : "";
 
@@ -447,16 +417,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (document.getElementById("book-info")) {
     const borrowBtn = document.getElementById("borrow-btn");
-    const storedInfo =
-      localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-    const info = JSON.parse(storedInfo);
-    const token = info.token;
     const urlParams = new URLSearchParams(window.location.search);
     const isbn = urlParams.get("isbn");
-    renderBookDetails();
 
     if (borrowBtn) {
-      checkBookStatus(token, isbn);
       borrowBtn.addEventListener("click", handleBorrowAction);
     }
   }
@@ -468,15 +432,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const borrowBtn = document.getElementById("borrow-btn");
-  const storedInfo =
-    localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-  const info = JSON.parse(storedInfo);
-  const token = info.token;
+  // const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+  // const info = JSON.parse(storedInfo);
+  // const token = info.token;
   const urlParams = new URLSearchParams(window.location.search);
   const isbn = urlParams.get("isbn");
-  if (borrowBtn) {
-    checkBookStatus(token, isbn);
-  }
 
   if (document.getElementById("user-dashboard-page")) {
     renderUserDashboard();
