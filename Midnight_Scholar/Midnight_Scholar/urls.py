@@ -22,6 +22,7 @@ from authe.services.security import admin_required
 from authe import views as authe_views
 from django.conf import settings
 from django.conf.urls.static import static
+from books import views as book_views
 
 
 urlpatterns = [
@@ -39,8 +40,10 @@ urlpatterns = [
     path('libadmin/books/add/', admin_required(TemplateView.as_view(template_name='admin/bookAdd.html')), name='admin_book_add'),
     path('libadmin/books/details/', admin_required(TemplateView.as_view(template_name='admin/bookDetails.html')), name='admin_book_details'),
     path('libadmin/books/edit/', admin_required(TemplateView.as_view(template_name='admin/bookEdit.html')), name='admin_book_edit'),
-    path('libadmin/books/list/', admin_required(TemplateView.as_view(template_name='admin/bookList.html')), name='admin_book_list'),
+path('libadmin/books/list/', admin_required(book_views.book_list), name='admin_book_list'),
     path('libadmin/search/', admin_required(TemplateView.as_view(template_name='admin/search.html')), name='admin_search'),
+
+    path('api/loans/', include('loans.urls')),
 
     # auth stuff
     path('login/', authe_views.CustomLoginView.as_view(), name='login'),

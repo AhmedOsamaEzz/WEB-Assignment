@@ -19,3 +19,6 @@ class Book(models.Model):
 
     def __str__(self):
         return f"{self.title} by {self.author}"
+    @property
+    def borrowed_copies(self):
+        return self.total_copies - self.available_copies

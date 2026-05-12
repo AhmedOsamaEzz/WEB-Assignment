@@ -6,30 +6,29 @@ const API = {
   getBooks: FakeAPI.getBooks,
   getBookById: FakeAPI.getBookById,
   borrowBook: FakeAPI.borrowBook,
-  getUserBorrowedBooks: FakeAPI.getUserBorrowedBooks,
+  getUserBorrowedBooks: RealAPI.getUserBorrowedBooks,
 
   getUserHistory: FakeAPI.getUserHistory,
   extendLoan: FakeAPI.extendLoan,
   returnBook: FakeAPI.returnBook,
-  
+
   getAdminStats: FakeAPI.getAdminStats,
   // Admin Inventory
   addBook: RealAPI.addBook,
   getBook: FakeAPI.getBook,
   editBook: FakeAPI.editBook,
-  updateBook: FakeAPI.editBook, 
-  deleteBook: FakeAPI.deleteBook,
+  updateBook: FakeAPI.editBook,
+  deleteBook: RealAPI.deleteBook,
 
-  loginUser : FakeAPI.loginUser,
-  registerUser : FakeAPI.registerUser
-  ,
+  loginUser: FakeAPI.loginUser,
+  registerUser: FakeAPI.registerUser,
   // new dashboard functions
-  getLogs:         FakeAPI.getLogs,
+  getLogs: FakeAPI.getLogs,
   getPendingUsers: FakeAPI.getPendingUsers,
-  getUsers:        FakeAPI.getUsers,
-  approveUser:     FakeAPI.approveUser,
-  denyUser:        FakeAPI.denyUser,
-  banUser:         FakeAPI.banUser,
+  getUsers: FakeAPI.getUsers,
+  approveUser: FakeAPI.approveUser,
+  denyUser: FakeAPI.denyUser,
+  banUser: FakeAPI.banUser,
 };
 
 export default API;

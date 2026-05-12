@@ -4,12 +4,12 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from .models import Book
 import re
 from datetime import date
 
 # Create your views here.
-
 @require_POST
 def add_book(request):
     try:
@@ -86,3 +86,28 @@ def add_book(request):
 
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+@require_POST
+def delete_book(request, isbn):
+    try:
+        book = Book.objects.get(isbn=isbn)
+        book.delete()
+        # log from here
+        return JsonResponse({
+            'success': True,
+            'message': 'The book has been deleted.'
+        }, status=200)
+    except Book.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'message': 'Book not found.'
+        }, status=404)
+
+    
+
+def book_list(request):
+    book_list = Book.objects.all()
+    paginator = Paginator(book_list, 7)
+    page_no = request.GET.get('page')
+    page_to_show = paginator.get_page(page_no)
+    return render(request, 'admin/bookList.html', {'page_to_show':page_to_show})
