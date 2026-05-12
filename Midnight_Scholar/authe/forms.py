@@ -15,7 +15,7 @@ class SignupForm(forms.ModelForm):
         user.username = self.cleaned_data['email']
         user.set_password(self.cleaned_data['password'])
         # comment or uncomment this line until someone implements login
-        user.role = 'admin'
+        # user.role = 'admin'
         if commit:
             user.save()
         return user

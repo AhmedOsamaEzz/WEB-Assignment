@@ -3184,3 +3184,159 @@ nav ul li a:hover::after {
 }
 
 /* End Global Footer */
+
+
+        .filter-tabs {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 1rem;
+        }
+
+        .filter-tab {
+          padding: 0.4rem 1.1rem;
+          border: 1.5px solid var(--border-color, #ccc);
+          border-radius: 20px;
+          background: transparent;
+          cursor: pointer;
+          font-size: 0.85rem;
+          font-weight: 500;
+          text-decoration: none;
+          color: inherit;
+          transition: background 0.15s, color 0.15s;
+        }
+
+        .filter-tab:hover {
+          background: var(--accent-light, #f0f0f0);
+        }
+
+        .filter-tab.active {
+          background: var(--primary-color, #1a1a1a);
+          color: #fff;
+          border-color: var(--primary-color, #1a1a1a);
+        }
+        .status-badge {
+          display: inline-block;
+          padding: 0.25rem 0.7rem;
+          border-radius: 12px;
+          font-size: 0.78rem;
+          font-weight: 600;
+          letter-spacing: 0.03em;
+          text-transform: capitalize;
+        }
+        .status-reserved {
+          background: #fff3cd;
+          color: #856404;
+        }
+        .status-borrowed {
+          background: #d1e7dd;
+          color: #0f5132;
+        }
+        .loan-btn {
+          background: #198754;
+          color: #fff;
+          border: none;
+          border-radius: 6px;
+          padding: 0.35rem 0.75rem;
+          cursor: pointer;
+          font-size: 0.82rem;
+          font-weight: 500;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          transition: opacity 0.15s;
+        }
+        .loan-btn:hover { opacity: 0.85; }
+        .return-btn {
+          background: #0d6efd;
+          color: #fff;
+          border: none;
+          border-radius: 6px;
+          padding: 0.35rem 0.75rem;
+          cursor: pointer;
+          font-size: 0.82rem;
+          font-weight: 500;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          transition: opacity 0.15s;
+        }
+        .return-btn:hover { opacity: 0.85; }
+        .due-overdue {
+          color: #dc3545;
+          font-weight: 600;
+        }
+        .user-column {
+          display: flex;
+          flex-direction: column;
+        }
+        .user-name {
+          font-weight: 600;
+        }
+        .user-email {
+          font-size: 0.78rem;
+          opacity: 0.6;
+        }
+        .modal-overlay {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.45);
+          z-index: 999;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .modal-overlay.open {
+          display: flex;
+        }
+
+        .modal-box {
+          background: #fff;
+          border-radius: 10px;
+          padding: 2rem;
+          max-width: 380px;
+          width: 90%;
+          text-align: center;
+          box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+        }
+
+        .modal-box h3 {
+          margin: 0 0 0.5rem;
+          font-size: 1.1rem;
+        }
+
+        .modal-box p {
+          font-size: 0.9rem;
+          opacity: 0.75;
+          margin: 0 0 1.5rem;
+        }
+
+        .modal-actions {
+          display: flex;
+          gap: 0.75rem;
+          justify-content: center;
+        }
+
+        .modal-confirm-loan   { background: #198754; color: #fff; }
+        .modal-confirm-return { background: #0d6efd; color: #fff; }
+
+        .modal-cancel {
+          background: transparent;
+          border: 1.5px solid #ccc;
+          border-radius: 6px;
+          padding: 0.45rem 1.1rem;
+          cursor: pointer;
+          font-size: 0.88rem;
+        }
+
+        .modal-confirm {
+          border: none;
+          border-radius: 6px;
+          padding: 0.45rem 1.1rem;
+          cursor: pointer;
+          font-size: 0.88rem;
+          font-weight: 600;
+          transition: opacity 0.15s;
+        }
+
+        .modal-confirm:hover { opacity: 0.85; }
