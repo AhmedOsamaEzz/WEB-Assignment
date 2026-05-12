@@ -13,6 +13,7 @@ class User(AbstractUser):
     STATUS_CHOICES = (
         ('pending', 'Pending'),
         ('approved', 'Approved'),
+        ('denied', 'Denied'),
         ('banned', 'Banned'),
     )
 

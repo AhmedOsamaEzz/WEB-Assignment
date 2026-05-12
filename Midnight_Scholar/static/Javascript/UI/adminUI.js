@@ -368,10 +368,8 @@ async function renderUsersTab() {
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
-            <!-- TODO (auth dev): wire approve button to API.approveUser(user.email, adminWho) then call renderUsersTab() -->
-            <button class="btn-approve" disabled>Approve</button>
-            <!-- TODO (auth dev): wire deny button to API.denyUser(user.email, adminWho) then call renderUsersTab() -->
-            <button class="btn-deny" disabled>Deny</button>
+            <button class="btn-approve" data-email="${user.email}">Approve</button>
+            <button class="btn-deny" data-email="${user.email}">Deny</button>
           </div>
         </div>`;
       })
@@ -397,13 +395,44 @@ async function renderUsersTab() {
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
-            <!-- TODO (auth dev): wire ban button to API.banUser(user.email, adminWho) then call renderUsersTab() -->
-            <button class="btn-ban" disabled>Ban</button>
+            <button class="btn-ban" data-email="${user.email}">Ban</button>
           </div>
         </div>`;
       })
       .join("");
   }
+
+  // wire ban button
+  approvedList.addEventListener("click", async (e) => {
+    const banBtn = e.target.closest(".btn-ban");
+    if (!banBtn) return;
+    const email = banBtn.dataset.email;
+    try {
+      await API.banUser(email);
+      await renderUsersTab();
+    } catch (err) {
+      alert(err.message || "Ban failed.");
+    }
+  });
+
+  // wire approve / deny buttons
+  pendingList.addEventListener("click", async (e) => {
+    const approveBtn = e.target.closest(".btn-approve");
+    const denyBtn    = e.target.closest(".btn-deny");
+    if (!approveBtn && !denyBtn) return;
+
+    const email = (approveBtn || denyBtn).dataset.email;
+    try {
+      if (approveBtn) {
+        await API.approveUser(email);
+      } else {
+        await API.denyUser(email);
+      }
+      await renderUsersTab();
+    } catch (err) {
+      alert(err.message || "Action failed.");
+    }
+  });
 }
 
 // LOGS TAB
