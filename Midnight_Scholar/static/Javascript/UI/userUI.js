@@ -42,15 +42,21 @@ function fetchBook(book) {
   document.getElementById("isbn").textContent = `ISBN: ${book.isbn}`;
   document.getElementById("title").textContent = `Title: ${book.title}`;
   document.getElementById("author").textContent = `Author: ${book.author}`;
-  document.getElementById("category").textContent = `Category: ${book.category}`;
-  document.getElementById("description").textContent = `Description: ${book.description}`;
+  document.getElementById("category").textContent =
+    `Category: ${book.category}`;
+  document.getElementById("description").textContent =
+    `Description: ${book.description}`;
 }
 
 /**
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(query = "", categories = [], availableOnly = false) {
+async function renderCatalog(
+  query = "",
+  categories = [],
+  availableOnly = false,
+) {
   const cardsContainer = document.getElementById("cards-container");
   const resultsCount = document.getElementById("results-count");
   if (!cardsContainer) return;
@@ -99,11 +105,18 @@ async function renderBookDetails(params) {
  */
 async function handleBorrowAction() {
   try {
-    const isbn = new URLSearchParams(window.location.search).get('isbn');
-    if (!isbn) { alert('Error: No book selected.'); return; }
-
-    await API.borrowBook(isbn);
-    alert('Book reserved successfully.');
+    // Captures the 'isbn' from the URL (e.g., details.html?isbn=123)
+    const isbn = new URLSearchParams(window.location.search).get("isbn");
+    const storedInfo =
+      localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const info = JSON.parse(storedInfo);
+    const token = info.token;
+    if (!isbn) {
+      alert("Error: No book selected.");
+      return;
+    }
+    await API.borrowBook(isbn, token);
+    alert("Book borrowed successfully");
     window.location.reload();
   } catch (error) {
     alert(error.message || 'Sorry, something went wrong.');
@@ -122,6 +135,9 @@ async function checkBookStatus(isbn) {
     if (isActive) disableBorrowButton();
   } catch (error) {
     console.log(error);
+    disableBorrowButton();
+    const borrowBtn = document.getElementById("borrow-btn");
+    if (borrowBtn) borrowBtn.textContent = "Unable to verify borrowing status";
   }
 }
 // this function is to disable the borrown btn if needed (also made by ghareeb)
@@ -141,13 +157,15 @@ async function renderUserLoans() {
   const bookListElement = document.getElementById("book-list");
   if (!bookListElement) return;
 
-  bookListElement.innerHTML = "<p style='text-align: center;'>Loading your borrowed books...</p>";
+  bookListElement.innerHTML =
+    "<p style='text-align: center;'>Loading your borrowed books...</p>";
 
   try {
     const borrowedBooks = await API.getUserBorrowedBooks();
 
     if (!borrowedBooks || borrowedBooks.length === 0) {
-      bookListElement.innerHTML = "<p style='text-align: center;'>You have not borrowed any books yet.</p>";
+      bookListElement.innerHTML =
+        "<p style='text-align: center;'>You have not borrowed any books yet.</p>";
       return;
     }
 
@@ -187,13 +205,26 @@ async function renderUserLoans() {
 async function initSearchPage() {
   const searchInput = document.querySelector(".search-bar input");
   const searchForm = document.querySelector(".search-bar");
-  const categoryItems = document.querySelectorAll(".filters-section:nth-child(2) ul li");
-  const checkRow = document.querySelector(".filters .filters-section:nth-child(3) ul li");
+  const categoryItems = document.querySelectorAll(
+    ".filters-section:nth-child(2) ul li",
+  );
+  const checkRow = document.querySelector(
+    ".filters .filters-section:nth-child(3) ul li",
+  );
   const queryLabel = document.getElementById("query-label");
 
   let currentQuery = "";
   let currentCategory = "All";
   let currentAvailability = false;
+
+  // Debouncer for search input
+  let searchTimeout;
+  const debouncedSearch = () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      triggerSearch();
+    }, 300);
+  };
 
   const triggerSearch = () => {
     if (queryLabel) {
@@ -206,7 +237,7 @@ async function initSearchPage() {
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
       currentQuery = e.target.value.trim();
-      triggerSearch();
+      debouncedSearch(); // Use debounced search instead of direct trigger
     });
   }
 
@@ -224,7 +255,7 @@ async function initSearchPage() {
       this.classList.add("active");
 
       currentCategory = this.textContent.trim();
-      triggerSearch();
+      triggerSearch(); // Immediate search for category changes
     });
   });
 
@@ -233,14 +264,14 @@ async function initSearchPage() {
 
     checkbox.addEventListener("change", () => {
       currentAvailability = checkbox.checked;
-      triggerSearch();
+      triggerSearch(); // Immediate search for availability filter changes
     });
 
     checkRow.addEventListener("click", (e) => {
       if (e.target !== checkbox) {
         checkbox.checked = !checkbox.checked;
         currentAvailability = checkbox.checked;
-        triggerSearch();
+        triggerSearch(); // Immediate search for availability filter changes
       }
     });
   }
@@ -249,7 +280,9 @@ async function initSearchPage() {
 }
 
 async function renderUserDashboard() {
-  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+  const User = JSON.parse(
+    localStorage.getItem("user_info") || sessionStorage.getItem("user_info"),
+  );
   if (!User) return;
   const token = User.token;
   const borrowed = await API.getUserBorrowedBooks(token);
@@ -274,7 +307,8 @@ async function renderUserDashboard() {
   if (!grid) return;
 
   if (borrowed.length === 0) {
-    grid.innerHTML = '<p class="ud-book-author" style="padding:1rem;">No active loans.</p>';
+    grid.innerHTML =
+      '<p class="ud-book-author" style="padding:1rem;">No active loans.</p>';
     return;
   }
   const recent = borrowed.slice(-3).reverse();
@@ -319,7 +353,9 @@ async function renderUserDashboard() {
 }
 
 document.addEventListener("click", async (e) => {
-  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+  const User = JSON.parse(
+    localStorage.getItem("user_info") || sessionStorage.getItem("user_info"),
+  );
   if (!User) return;
   const isbn = e.target.getAttribute("data-isbn");
   const token = User.token;
@@ -350,7 +386,9 @@ async function renderUserHistory() {
   tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>`;
 
   try {
-    const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+    const User = JSON.parse(
+      localStorage.getItem("user_info") || sessionStorage.getItem("user_info"),
+    );
     if (!User) return;
 
     const history = await API.getUserHistory(User.token);
@@ -361,14 +399,20 @@ async function renderUserHistory() {
 
     tbody.innerHTML = history
       .map((entry, i) => {
-        const borrowed = new Date(entry.borrowedAt).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        });
+        const borrowed = new Date(entry.borrowedAt).toLocaleDateString(
+          "en-US",
+          {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          },
+        );
         const returned = entry.returnDate || "—";
         const isOverdue = entry.status === "overdue";
-        const badgeCls = entry.status === "returned" ? "ud-badge--returned" : "ud-badge--overdue";
+        const badgeCls =
+          entry.status === "returned"
+            ? "ud-badge--returned"
+            : "ud-badge--overdue";
         const badgeLabel = entry.status === "returned" ? "Returned" : "Overdue";
         const altRow = i % 2 !== 0 ? "ud-tr-alt" : "";
 
@@ -403,7 +447,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (document.getElementById("book-info")) {
     const borrowBtn = document.getElementById("borrow-btn");
-    const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+    const storedInfo =
+      localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
     const info = JSON.parse(storedInfo);
     const token = info.token;
     const urlParams = new URLSearchParams(window.location.search);
@@ -423,7 +468,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   const borrowBtn = document.getElementById("borrow-btn");
-  const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
+  const storedInfo =
+    localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
   const info = JSON.parse(storedInfo);
   const token = info.token;
   const urlParams = new URLSearchParams(window.location.search);
