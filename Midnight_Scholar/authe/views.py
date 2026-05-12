@@ -6,6 +6,19 @@ from django.contrib.auth.views import LoginView
 class CustomLoginView(LoginView):
     template_name = 'auth/login.html'
 
+    def form_valid(self, form):
+        user = form.get_user()
+
+        if getattr(user, 'status', None) == 'pending':
+            form.add_error(None, 'Your account is pending approval. Please wait for an admin to activate it. :)')
+            return self.form_invalid(form)
+
+        if getattr(user, 'status', None) == 'banned':
+            form.add_error(None, 'Your account has been banned. Please contact support.')
+            return self.form_invalid(form)
+
+        return super().form_valid(form)
+
     def get_success_url(self):
         user = self.request.user 
 
