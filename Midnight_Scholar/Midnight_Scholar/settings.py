@@ -41,8 +41,12 @@ INSTALLED_APPS = [
     'books',
     'loans',
     'logs',
+    'crispy_forms',
+    'crispy_bootstrap5',
 
 ]
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -126,3 +130,4 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static', 
 ]
 AUTH_USER_MODEL = 'authe.User'
+LOGOUT_REDIRECT_URL = 'home'

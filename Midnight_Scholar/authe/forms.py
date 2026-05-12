@@ -19,3 +19,20 @@ class SignupForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    
+class UserFilterForm(forms.Form):
+    query = forms.CharField(
+        required=False,
+        label='',
+        widget=forms.TextInput(attrs={'placeholder': 'Search by name or email...'})
+    )
+    status = forms.ChoiceField(
+        required=False,
+        label='',
+        choices=[
+            ('', 'All Users'),
+            ('pending', 'Pending'),
+            ('approved', 'Approved'),
+            ('banned', 'Banned'),
+        ]
+    )
