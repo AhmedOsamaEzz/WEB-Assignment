@@ -25,9 +25,16 @@
             
             {% if form.errors %}
               <div class="error-msg" style="color: red; margin-bottom: 10px;">
-               Invalid username or password. Please try again.
+                {% if form.non_field_errors %}
+                  {% for error in form.non_field_errors %}
+                    {{ error }}
+                  {% endfor %}
+                {% else %}
+                  Invalid username or password. Please try again.
+                {% endif %}
               </div>
             {% endif %}
+            
             <label for="email" class="form-label">username (email)</label>
             <input type="text" placeholder="username@gmail.com" class="input-field" id="login-email" name="username" />
             <div class="error-msg" id="login-email-error"></div>
