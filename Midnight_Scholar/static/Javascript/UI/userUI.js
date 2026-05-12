@@ -103,7 +103,7 @@ async function renderBookDetails(params) {
  * The function `handleBorrowAction` attempts to borrow a book using an API call and displays a success
  * message if successful, or an out-of-stock message if the book is unavailable.
  */
-async function handleBorrowAction(params) {
+async function handleBorrowAction() {
   try {
     // Captures the 'isbn' from the URL (e.g., details.html?isbn=123)
     const isbn = new URLSearchParams(window.location.search).get("isbn");
@@ -119,8 +119,7 @@ async function handleBorrowAction(params) {
     alert("Book borrowed successfully");
     window.location.reload();
   } catch (error) {
-    console.log(error);
-    alert("Sorry, book out of stock");
+    alert(error.message || 'Sorry, something went wrong.');
   }
 }
 
@@ -129,14 +128,11 @@ async function handleBorrowAction(params) {
  * @param {string} token
  * @param {string} isbn
  */
-async function checkBookStatus(token, isbn) {
+async function checkBookStatus(isbn) {
   try {
-    const borrowedBooks = await API.getUserBorrowedBooks(token);
-    const isBorrowed = borrowedBooks.some((book) => book.isbn === isbn);
-
-    if (isBorrowed) {
-      disableBorrowButton();
-    }
+    const borrowedBooks = await API.getUserBorrowedBooks();
+    const isActive = borrowedBooks.some(book => book.isbn === isbn);
+    if (isActive) disableBorrowButton();
   } catch (error) {
     console.log(error);
     disableBorrowButton();
@@ -144,7 +140,6 @@ async function checkBookStatus(token, isbn) {
     if (borrowBtn) borrowBtn.textContent = "Unable to verify borrowing status";
   }
 }
-
 // this function is to disable the borrown btn if needed (also made by ghareeb)
 function disableBorrowButton() {
   const borrowBtn = document.getElementById("borrow-btn");
