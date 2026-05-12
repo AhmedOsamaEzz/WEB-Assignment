@@ -1,22 +1,54 @@
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Book
 import re
 from datetime import date
+from loans.models import Loan
 
 # Create your views here.
-@require_POST
-@login_required(login_url='login')
-def add_book(request):
-    if getattr(request.user, 'role', 'user') != 'admin':
-        return JsonResponse({'success': False, 'message': 'Admin access required'}, status=403)
 
+def book_details(request):
+    isbn = request.GET.get('isbn')
+    book = get_object_or_404(Book, isbn=isbn)
+    
+    # check if user already has an active loan for this book
+    is_active = Loan.objects.filter(
+        user=request.user,
+        book=book,
+        status__in=['reserved', 'borrowed']
+    ).exists()
+
+    return render(request, 'user/bookDetails.html', {
+    'book': book,
+    'is_active': is_active,
+})
+
+def get_book(request, isbn):
+    try:
+        book = Book.objects.get(isbn=isbn)
+        return JsonResponse({
+            'success': True,
+            'isbn': book.isbn,
+            'title': book.title,
+            'author': book.author,
+            'year': book.year,
+            'publisher': book.publisher,
+            'copies': book.total_copies,
+            'availableCopies': book.available_copies,
+            'description': book.description or '',
+            'category': book.category,
+            'cover': book.cover_image.url if book.cover_image else '',
+        })
+    except Book.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Book not found'}, status=404)
+@require_POST
+def add_book(request):
     try:
         title       = request.POST.get('title', '').strip()
         author      = request.POST.get('author', '').strip()
@@ -93,11 +125,7 @@ def add_book(request):
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 @require_POST
-@login_required(login_url='login')
 def delete_book(request, isbn):
-    if getattr(request.user, 'role', 'user') != 'admin':
-        return JsonResponse({'success': False, 'message': 'Admin access required'}, status=403)
-
     try:
         book = Book.objects.get(isbn=isbn)
         book.delete()
@@ -115,9 +143,8 @@ def delete_book(request, isbn):
     
 
 @require_POST
-@login_required(login_url='login')
 def edit_book(request, isbn):
-    if getattr(request.user, 'role', 'user') != 'admin':
+    if not request.user.is_authenticated or getattr(request.user, 'role', 'user') != 'admin':
         return JsonResponse({'success': False, 'message': 'Admin access required'}, status=403)
 
     try:

@@ -4,6 +4,13 @@ function getCookie(name) {
   if (parts.length === 2) return parts.pop().split(";").shift();
 }
 
+function getCSRFToken() {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith("csrftoken="))
+    ?.split("=")[1];
+}
+
 const RealAPI = {
   async getBooks(query = "", categories = [], availableOnly = false) {
     try {
@@ -43,7 +50,6 @@ const RealAPI = {
     const response = await fetch("/api/loans/borrowed/", {
       credentials: "same-origin",
     });
-
     if (!response.ok) {
       if (response.status === 401) {
         throw new Error("Please log in to view your borrowed books.");
@@ -51,7 +57,6 @@ const RealAPI = {
 
       throw new Error("Failed to fetch borrowed books");
     }
-
     return response.json();
   },
 
@@ -116,6 +121,17 @@ const RealAPI = {
 
     const data = await response.json();
     if (!data.success) throw new Error(data.message || "Failed to update book");
+    return data;
+  },
+
+  async borrowBook(isbn) {
+    const response = await fetch("/api/loans/borrow/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-CSRFToken": getCSRFToken() },
+      body: JSON.stringify({ isbn }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message);
     return data;
   },
 };
