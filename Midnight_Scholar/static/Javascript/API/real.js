@@ -7,13 +7,11 @@ function getCookie(name) {
 const RealAPI = {
   async getBooks(query = "", categories = [], availableOnly = false) {
     try {
-      // Format categories
       let categoriesParam = "";
       if (categories && categories.length > 0) {
         categoriesParam = categories.join(",");
       }
 
-      // Build query URL string
       const params = new URLSearchParams();
       if (query) params.append("query", query);
       if (categoriesParam) params.append("categories", categoriesParam);
@@ -48,11 +46,24 @@ const RealAPI = {
       if (response.status === 401) {
         throw new Error("Please log in to view your borrowed books.");
       }
-
       throw new Error("Failed to fetch borrowed books");
     }
 
     return response.json();
+  },
+
+  async borrowBook(isbn) {
+    const response = await fetch("/api/loans/borrow/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: JSON.stringify({ isbn }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message);
+    return data;
   },
 
   async addBook(bookData) {
@@ -119,6 +130,20 @@ const RealAPI = {
     return data;
   },
 
+  async getLogs() {
+    const response = await fetch("/api/logs/", { credentials: "same-origin" });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || "Failed to fetch logs");
+    return data.logs;
+  },
+
+  async getAdminStats() {
+    const response = await fetch("/api/stats/", { credentials: "same-origin" });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || "Failed to fetch stats");
+    return data;
+  },
+
   // User Management Functions
   async getPendingUsers() {
     try {
@@ -135,7 +160,6 @@ const RealAPI = {
         throw new Error(data.message || "Failed to fetch pending users");
       }
 
-      // Convert to format expected by dashboard
       return data.data.map((user) => ({
         ...user,
         username: user.name,
@@ -146,7 +170,7 @@ const RealAPI = {
     }
   },
 
-  async getUsers() {
+  async getApprovedUsers() {
     try {
       const response = await fetch("/api/users/search/?status=approved", {
         credentials: "same-origin",
@@ -161,7 +185,6 @@ const RealAPI = {
         throw new Error(data.message || "Failed to fetch users");
       }
 
-      // Convert to format expected by dashboard
       return data.data.map((user) => ({
         ...user,
         username: user.name,
@@ -211,8 +234,7 @@ const RealAPI = {
       });
 
       const data = await response.json();
-      if (!data.success)
-        throw new Error(data.message || "Failed to approve user");
+      if (!data.success) throw new Error(data.message || "Failed to approve user");
       return data;
     } catch (error) {
       console.error("Error approving user:", error);
@@ -275,8 +297,7 @@ const RealAPI = {
       });
 
       const data = await response.json();
-      if (!data.success)
-        throw new Error(data.message || "Failed to unban user");
+      if (!data.success) throw new Error(data.message || "Failed to unban user");
       return data;
     } catch (error) {
       console.error("Error unbanning user:", error);

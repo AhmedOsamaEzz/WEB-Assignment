@@ -5,27 +5,24 @@ const API = {
   // Catalog & Borrowing
   getBooks: RealAPI.getBooks,
   getBookById: FakeAPI.getBookById,
-  borrowBook: FakeAPI.borrowBook,
+  borrowBook: RealAPI.borrowBook,
   getUserBorrowedBooks: RealAPI.getUserBorrowedBooks,
-
   getUserHistory: FakeAPI.getUserHistory,
   extendLoan: FakeAPI.extendLoan,
   returnBook: FakeAPI.returnBook,
-
-  getAdminStats: FakeAPI.getAdminStats,
+  getAdminStats: RealAPI.getAdminStats,
   // Admin Inventory
   addBook: RealAPI.addBook,
   getBook: FakeAPI.getBook,
   editBook: FakeAPI.editBook,
   updateBook: RealAPI.updateBook,
   deleteBook: RealAPI.deleteBook,
-
   loginUser: FakeAPI.loginUser,
   registerUser: FakeAPI.registerUser,
   // new dashboard functions
-  getLogs: FakeAPI.getLogs,
+  getLogs: RealAPI.getLogs,
   getPendingUsers: RealAPI.getPendingUsers,
-  getUsers: RealAPI.getUsers,
+  getUsers: RealAPI.getApprovedUsers,
   approveUser: RealAPI.approveUser,
   denyUser: RealAPI.denyUser,
   banUser: RealAPI.banUser,

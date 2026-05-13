@@ -17,10 +17,7 @@ const deleteBook = async (isbn) => {
   if (!confirm("Are you sure you want to delete this book?")) return;
   try {
     const result = await API.deleteBook(isbn);
-    document
-      .querySelector(`.delete-btn[data-isbn="${isbn}"]`)
-      .closest("tr")
-      .remove();
+    document.querySelector(`.delete-btn[data-isbn="${isbn}"]`).closest("tr").remove();
     window.location.reload();
   } catch (err) {
     alert(err.message || "Failed to delete book.");
@@ -345,7 +342,6 @@ const renderAdminDashboard = async () => {
   }
 };
 
-// ── TAB SWITCHING ────────────────────────────────────────────────
 function switchDashboardTab(name) {
   document
     .querySelectorAll(".dashboard-tab")
@@ -357,7 +353,6 @@ function switchDashboardTab(name) {
   document.getElementById("panel-" + name).classList.add("active");
 }
 
-// ── USERS TAB ────────────────────────────────────────────────────
 async function renderUsersTab() {
   const pendingList = document.getElementById("pending-list");
   const approvedList = document.getElementById("approved-list");
@@ -392,8 +387,8 @@ async function renderUsersTab() {
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
-            <button class="btn-approve" onclick="approveUserFromDashboard(${user.id})">Approve</button>
-            <button class="btn-deny" onclick="denyUserFromDashboard(${user.id})">Deny</button>
+            <button class="btn-approve" data-email="${user.email}">Approve</button>
+            <button class="btn-deny" data-email="${user.email}">Deny</button>
           </div>
         </div>`;
       })
@@ -419,12 +414,44 @@ async function renderUsersTab() {
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
-            <button class="btn-ban" onclick="banUserFromDashboard(${user.id})">Ban</button>
+            <button class="btn-ban" data-email="${user.email}">Ban</button>
           </div>
         </div>`;
       })
       .join("");
   }
+
+  approvedList.onclick = async (e) => {
+    const banBtn = e.target.closest(".btn-ban");
+    if (!banBtn) return;
+    const email = banBtn.dataset.email;
+    try {
+      await API.banUser(email);
+      await renderUsersTab();
+      await renderLogsTab();
+    } catch (err) {
+      alert(err.message || "Ban failed.");
+    }
+  };
+
+  pendingList.onclick = async (e) => {
+    const approveBtn = e.target.closest(".btn-approve");
+    const denyBtn    = e.target.closest(".btn-deny");
+    if (!approveBtn && !denyBtn) return;
+
+    const email = (approveBtn || denyBtn).dataset.email;
+    try {
+      if (approveBtn) {
+        await API.approveUser(email);
+      } else {
+        await API.denyUser(email);
+      }
+      await renderUsersTab();
+      await renderLogsTab();
+    } catch (err) {
+      alert(err.message || "Action failed.");
+    }
+  };
 }
 
 async function searchUsers() {
@@ -690,4 +717,65 @@ document.addEventListener("DOMContentLoaded", () => {
     renderUsersTab();
     renderLogsTab();
   }
+
+  if (document.getElementById("loanList-page")) {
+    LoanList();
+  }
 });
+
+function LoanList() {
+  const modal = document.getElementById("action-modal");
+  const modalTitle = document.getElementById("modal-title");
+  const modalBody = document.getElementById("modal-body");
+  const confirmBtn = document.getElementById("modal-confirm-btn");
+  const cancelBtn = document.getElementById("modal-cancel-btn");
+  const form = document.getElementById("loan-action-form");
+  const formLoanId = document.getElementById("form-loan-id");
+  const formAction = document.getElementById("form-action");
+
+  if (!modal) return;
+  document.querySelectorAll(".loan-btn, .return-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const action = btn.dataset.action;
+      const book = btn.dataset.book;
+      const user = btn.dataset.user;
+      formLoanId.value = btn.dataset.loanId;
+      formAction.value = action;
+      if (action === "loan") {
+        modalTitle.textContent = "Confirm Loan";
+        modalBody.textContent = `Hand "${book}" to ${user}? This will mark the book as borrowed.`;
+        confirmBtn.textContent = "Loan Book";
+        confirmBtn.className = "modal-confirm modal-confirm-loan";
+      } else {
+        modalTitle.textContent = "Confirm Return";
+        modalBody.textContent = `Mark "${book}" as returned from ${user}?`;
+        confirmBtn.textContent = "Confirm Return";
+        confirmBtn.className = "modal-confirm modal-confirm-return";
+      }
+      modal.classList.add("open");
+    });
+  });
+  confirmBtn.addEventListener("click", async () => {
+    const formData = new FormData(form);
+    try {
+      const response = await fetch(form.getAttribute("action"), {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      modal.classList.remove("open");
+      if (data.success) {
+        window.location.href = window.location.href;
+      } else {
+        const errorContainer = document.getElementById("error-message-container");
+        errorContainer.textContent = data.message;
+      }
+    } catch (err) {
+      console.error("Loan action failed:", err);
+    }
+  });
+  cancelBtn.addEventListener("click", () => modal.classList.remove("open"));
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.remove("open");
+  });
+}
