@@ -164,11 +164,9 @@
 					{% endif %}
 
 					<div class="page-numbers">
-						{% for num in page_to_show.paginator.page_range %} {% if num ==
-						page_to_show.number %}
+						{% for num in page_to_show.paginator.page_range %} {% if num == page_to_show.number %}
 						<button class="current-button">{{ num }}</button>
-						{% elif num > page_to_show.number|add:'-3' and num <
-						page_to_show.number|add:'3' %}
+						{% elif num > page_to_show.number|add:'-3' and num < page_to_show.number|add:'3' %}
 						<a href="?page={{ num }}" style="text-decoration: none">
 							<button class="not-current-button">{{ num }}</button>
 						</a>
