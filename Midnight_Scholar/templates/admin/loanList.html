@@ -1,201 +1,293 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <html>
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
-      <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-      <script type="module" src="https://kit.fontawesome.com/80d75008f5.js" crossorigin="anonymous"></script>
-      <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
-      <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
-      <title>Loan Management</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script type="module" src="https://kit.fontawesome.com/80d75008f5.js" crossorigin="anonymous"></script>
+    <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
+    <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
+    <title>Loan Management</title>
+  </head>
 
-    </head>
+  <body id="bookList-page">
+    <header>
+      <nav>
+        <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
+          <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+        </a>
 
-    <body id="bookList-page">
-      <header>
-        <nav>
-          <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
-            <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+        <div class="links">
+          <ul>
+            <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
+            <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
+            <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+            <li><a href="#" id="logout-link">Logout</a></li>
+          </ul>
+        </div>
+
+        <div class="search-profile">
+          <a href="{% url 'admin_search' %}">
+            <i class="fa-solid fa-magnifying-glass"></i>
           </a>
 
-          <div class="links">
-            <ul>
-              <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
-              <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
-              <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-              <li><a href="#" id="logout-link">Logout</a></li>
-            </ul>
-          </div>
-
-          <div class="search-profile">
-            <a href="{% url 'admin_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
-            <a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
-          </div>
-        </nav>
-      </header>
-
-      <main class="main-bookList">
-        <br />
-        <div class="filter-tabs">
-          <a href="?status=all{% if request.GET.page %}&page=1{% endif %}"
-             class="filter-tab {% if current_status == 'all' %}active{% endif %}">
-            All Active
-          </a>
-          <a href="?status=reserved{% if request.GET.page %}&page=1{% endif %}"
-             class="filter-tab {% if current_status == 'reserved' %}active{% endif %}">
-            Reserved
-          </a>
-          <a href="?status=borrowed{% if request.GET.page %}&page=1{% endif %}"
-             class="filter-tab {% if current_status == 'borrowed' %}active{% endif %}">
-            Borrowed
+          <a href="{% url 'admin_dashboard' %}">
+            <i class="fa-solid fa-circle-user"></i>
           </a>
         </div>
-        <table class="table-section">
-          <thead>
-            <tr>
-              <th>Book</th>
-              <th>User</th>
-              <th class="books-count">Reserved</th>
-              <th class="books-count">Borrow Date</th>
-              <th class="books-count">Due Date</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for loan in page_to_show %}
-            <tr>
-              <td>
-                <div class="book-title-column">
-                  <img src="{{ loan.book.cover_image.url }}" class="mini-book-image" alt="Book Cover" />
-                  <div>
-                    <label class="book-title-text">{{ loan.book.title }}</label>
-                    <br />
-                    <label class="book-isbn-label">ISBN-{{ loan.book.isbn }}</label>
-                  </div>
+      </nav>
+    </header>
+
+    <main class="main-bookList">
+      <br />
+
+      <div class="filter-tabs">
+        <a href="?status=all{% if request.GET.page %}&page=1{% endif %}"
+           class="filter-tab {% if current_status == 'all' %}active{% endif %}">
+          All Active
+        </a>
+
+        <a href="?status=reserved{% if request.GET.page %}&page=1{% endif %}"
+           class="filter-tab {% if current_status == 'reserved' %}active{% endif %}">
+          Reserved
+        </a>
+
+        <a href="?status=borrowed{% if request.GET.page %}&page=1{% endif %}"
+           class="filter-tab {% if current_status == 'borrowed' %}active{% endif %}">
+          Borrowed
+        </a>
+      </div>
+
+      <table class="table-section">
+        <thead>
+          <tr>
+            <th>Book</th>
+            <th>User</th>
+            <th class="books-count">Reserved</th>
+            <th class="books-count">Borrow Date</th>
+            <th class="books-count">Due Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for loan in page_to_show %}
+          <tr>
+            <td>
+              <div class="book-title-column">
+                <img
+                  src="{{ loan.book.cover_image.url }}"
+                  class="mini-book-image"
+                  alt="Book Cover"
+                />
+
+                <div>
+                  <label class="book-title-text">
+                    {{ loan.book.title }}
+                  </label>
+
+                  <br />
+
+                  <label class="book-isbn-label">
+                    ISBN-{{ loan.book.isbn }}
+                  </label>
                 </div>
-              </td>
-              <td>
-                <div class="user-column">
-                  <span class="user-name">{{ loan.user.get_full_name|default:loan.user.username }}</span>
-                  <span class="user-email">{{ loan.user.email }}</span>
-                </div>
-              </td>
-              <td class="books-count">{{ loan.reserved_at|date:"M d, Y" }}</td>
-              <td class="books-count">
-                {% if loan.borrow_date %}
-                  {{ loan.borrow_date|date:"M d, Y" }}
-                {% else %}
-                  <span style="opacity:0.4">—</span>
-                {% endif %}
-              </td>
-              <td class="books-count">
-                {% if loan.due_date %}
-                  <span {% if loan.status == 'borrowed' and loan.due_date < today %}class="due-overdue"{% endif %}>
-                    {{ loan.due_date|date:"M d, Y" }}
-                  </span>
-                {% else %}
-                  <span style="opacity:0.4">—</span>
-                {% endif %}
-              </td>
-              <td>
-                <span class="status-badge status-{{ loan.status }}">
-                  {{ loan.get_status_display }}
+              </div>
+            </td>
+
+            <td>
+              <div class="user-column">
+                <span class="user-name">
+                  {{ loan.user.get_full_name|default:loan.user.username }}
                 </span>
-              </td>
-              <td class="book-action-column">
-                <div class="book-action-cell">
-                  {% if loan.status == 'reserved' %}
-                    <button class="loan-btn"
-                            data-loan-id="{{ loan.id }}"
-                            data-action="loan"
-                            data-book="{{ loan.book.title }}"
-                            data-user="{{ loan.user.get_full_name|default:loan.user.username }}">
-                      <i class="fa-solid fa-book-open-reader"></i> Loan
-                    </button>
-                  {% elif loan.status == 'borrowed' %}
-                    <button class="return-btn"
-                            data-loan-id="{{ loan.id }}"
-                            data-action="return"
-                            data-book="{{ loan.book.title }}"
-                            data-user="{{ loan.user.get_full_name|default:loan.user.username }}">
-                      <i class="fa-solid fa-rotate-left"></i> Return
-                    </button>
+
+                <span class="user-email">
+                  {{ loan.user.email }}
+                </span>
+              </div>
+            </td>
+
+            <td class="books-count">
+              {{ loan.reserved_at|date:"M d, Y" }}
+            </td>
+
+            <td class="books-count">
+              {% if loan.borrow_date %}
+                {{ loan.borrow_date|date:"M d, Y" }}
+              {% else %}
+                <span style="opacity:0.4">—</span>
+              {% endif %}
+            </td>
+
+            <td class="books-count">
+              {% if loan.due_date %}
+                <span
+                  {% if loan.status == 'borrowed' and loan.due_date < today %}
+                    class="due-overdue"
                   {% endif %}
-                </div>
-              </td>
-            </tr>
-            {% empty %}
-            <tr>
-              <td colspan="7" style="text-align: center">No active loans found.</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <div id="error-message-container" class="error-msg"></div>
-        <br />
-        <div class="table-options-section">
-          <div></div>
-          <div class="table-pagination">
-            {% if page_to_show.has_previous %}
-              <a href="?status={{ current_status }}&page={{ page_to_show.previous_page_number }}" style="text-decoration: none;">
-                <button class="prev-btn">←</button>
-              </a>
-            {% else %}
-              <button class="prev-btn" disabled>←</button>
-            {% endif %}
-            <div class="page-numbers">
-              {% for num in page_to_show.paginator.page_range %}
-                {% if num == page_to_show.number %}
-                  <button class="current-button">{{ num }}</button>
-                {% elif num > page_to_show.number|add:'-3' and num < page_to_show.number|add:'3' %}
-                  <a href="?status={{ current_status }}&page={{ num }}" style="text-decoration: none;">
-                    <button class="not-current-button">{{ num }}</button>
-                  </a>
+                >
+                  {{ loan.due_date|date:"M d, Y" }}
+                </span>
+              {% else %}
+                <span style="opacity:0.4">—</span>
+              {% endif %}
+            </td>
+
+            <td>
+              <span class="status-badge status-{{ loan.status }}">
+                {{ loan.get_status_display }}
+              </span>
+            </td>
+
+            <td class="book-action-column">
+              <div class="book-action-cell">
+                {% if loan.status == 'reserved' %}
+                  <button
+                    class="loan-btn"
+                    data-loan-id="{{ loan.id }}"
+                    data-action="loan"
+                    data-book="{{ loan.book.title }}"
+                    data-user="{{ loan.user.get_full_name|default:loan.user.username }}"
+                  >
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    Loan
+                  </button>
+
+                {% elif loan.status == 'borrowed' %}
+                  <button
+                    class="return-btn"
+                    data-loan-id="{{ loan.id }}"
+                    data-action="return"
+                    data-book="{{ loan.book.title }}"
+                    data-user="{{ loan.user.get_full_name|default:loan.user.username }}"
+                  >
+                    <i class="fa-solid fa-rotate-left"></i>
+                    Return
+                  </button>
                 {% endif %}
-              {% endfor %}
-            </div>
-            {% if page_to_show.has_next %}
-              <a href="?status={{ current_status }}&page={{ page_to_show.next_page_number }}" style="text-decoration: none;">
-                <button class="next-btn">→</button>
-              </a>
-            {% else %}
-              <button class="next-btn" disabled>→</button>
-            {% endif %}
+              </div>
+            </td>
+          </tr>
+
+          {% empty %}
+          <tr>
+            <td colspan="7" style="text-align: center">
+              No active loans found.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div id="error-message-container" class="error-msg"></div>
+
+      <br />
+
+      <div class="table-options-section">
+        <div></div>
+
+        <div class="table-pagination">
+          {% if page_to_show.has_previous %}
+            <a
+              href="?status={{ current_status }}&page={{ page_to_show.previous_page_number }}"
+              style="text-decoration: none;"
+            >
+              <button class="prev-btn">←</button>
+            </a>
+
+          {% else %}
+            <button class="prev-btn" disabled>←</button>
+          {% endif %}
+
+          <div class="page-numbers">
+            {% for num in page_to_show.paginator.page_range %}
+              {% if num == page_to_show.number %}
+
+                <button class="current-button">
+                  {{ num }}
+                </button>
+
+              {% elif num > page_to_show.number|add:'-3' and num < page_to_show.number|add:'3' %}
+
+                <a
+                  href="?status={{ current_status }}&page={{ num }}"
+                  style="text-decoration: none;"
+                >
+                  <button class="not-current-button">
+                    {{ num }}
+                  </button>
+                </a>
+
+              {% endif %}
+            {% endfor %}
           </div>
-        </div>
-        <br />
-      </main>
-      <div class="modal-overlay" id="action-modal">
-        <div class="modal-box">
-          <h3 id="modal-title"></h3>
-          <p id="modal-body"></p>
-          <div class="modal-actions">
-            <button class="modal-cancel" id="modal-cancel-btn">Cancel</button>
-            <button class="modal-confirm" id="modal-confirm-btn"></button>
-          </div>
+
+          {% if page_to_show.has_next %}
+            <a
+              href="?status={{ current_status }}&page={{ page_to_show.next_page_number }}"
+              style="text-decoration: none;"
+            >
+              <button class="next-btn">→</button>
+            </a>
+
+          {% else %}
+            <button class="next-btn" disabled>→</button>
+          {% endif %}
         </div>
       </div>
-      <form id="loan-action-form" method="POST" action="{% url 'admin_loan_action' %}" style="display:none;">
-        {% csrf_token %}
-        <input type="hidden" name="loan_id" id="form-loan-id" />
-        <input type="hidden" name="action"  id="form-action" />
-      </form>
 
-      <hr class="global-hr" />
-      <footer class="global-footer">
-        <p class="name">The Midnight Scholar</p>
-        <div class="cnt">
-          <p><a href="#">PRIVACY POLICY</a></p>
-          <p><a href="#">TERMS OF ACCESS</a></p>
-          <p><a href="#">CONTACT CURATOR</a></p>
+      <br />
+    </main>
+
+    <div class="modal-overlay" id="action-modal">
+      <div class="modal-box">
+        <h3 id="modal-title"></h3>
+
+        <p id="modal-body"></p>
+
+        <div class="modal-actions">
+          <button class="modal-cancel" id="modal-cancel-btn">
+            Cancel
+          </button>
+
+          <button class="modal-confirm" id="modal-confirm-btn"></button>
         </div>
-        <p class="copyrights">&copy; 2026 The Midnight Scholar Private Archive. All rights reserved.</p>
-      </footer>
-      <div id="loanList-page" hidden></div>
-    </body>
-  </html>
+      </div>
+    </div>
+
+    <form
+      id="loan-action-form"
+      method="POST"
+      action="{% url 'admin_loan_action' %}"
+      style="display:none;"
+    >
+      {% csrf_token %}
+
+      <input type="hidden" name="loan_id" id="form-loan-id" />
+
+      <input type="hidden" name="action" id="form-action" />
+    </form>
+
+    <hr class="global-hr" />
+
+    <footer class="global-footer">
+      <p class="name">The Midnight Scholar</p>
+
+      <div class="cnt">
+        <p><a href="#">PRIVACY POLICY</a></p>
+        <p><a href="#">TERMS OF ACCESS</a></p>
+        <p><a href="#">CONTACT CURATOR</a></p>
+      </div>
+
+      <p class="copyrights">
+        &copy; 2026 The Midnight Scholar Private Archive.
+        All rights reserved.
+      </p>
+    </footer>
+
+    <div id="loanList-page" hidden></div>
+  </body>
 </html>
