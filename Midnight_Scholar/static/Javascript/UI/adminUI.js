@@ -387,8 +387,8 @@ async function renderUsersTab() {
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
-            <button class="btn-approve" data-email="${user.email}">Approve</button>
-            <button class="btn-deny" data-email="${user.email}">Deny</button>
+            <button class="btn-approve" data-email="${user.id}">Approve</button>
+            <button class="btn-deny" data-email="${user.id}">Deny</button>
           </div>
         </div>`;
       })
@@ -414,7 +414,7 @@ async function renderUsersTab() {
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
-            <button class="btn-ban" data-email="${user.email}">Ban</button>
+            <button class="btn-ban" data-email="${user.id}">Ban</button>
           </div>
         </div>`;
       })
