@@ -1,23 +1,20 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 import json
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST, require_GET
-from django.contrib.admin.views.decorators import staff_member_required
-from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Q
 from .models import Book
 import re
 from datetime import date
 from loans.models import Loan
+from logs.models import Log
 
-# Create your views here.
 
 def book_details(request):
     isbn = request.GET.get('isbn')
     book = get_object_or_404(Book, isbn=isbn)
-    
-    # check if user already has an active loan for this book
+
     is_active = Loan.objects.filter(
         user=request.user,
         book=book,
@@ -25,9 +22,10 @@ def book_details(request):
     ).exists()
 
     return render(request, 'user/bookDetails.html', {
-    'book': book,
-    'is_active': is_active,
-})
+        'book': book,
+        'is_active': is_active,
+    })
+
 
 def get_book(request, isbn):
     try:
@@ -47,6 +45,8 @@ def get_book(request, isbn):
         })
     except Book.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Book not found'}, status=404)
+
+
 @require_POST
 def add_book(request):
     try:
@@ -60,7 +60,6 @@ def add_book(request):
         category    = request.POST.get('category', 'Uncategorized').strip()
         cover_image = request.FILES.get('cover_image')
 
-        # makes sure book data is valid
         errors = {}
 
         if not title:
@@ -109,10 +108,17 @@ def add_book(request):
             year=int(year),
             publisher=publisher,
             total_copies=copies_int,
-            available_copies=copies_int, 
+            available_copies=copies_int,
             description=description,
             category=category,
             cover_image=cover_image,
+        )
+
+        who = getattr(request.user, 'name', 'Admin')
+        Log.objects.create(
+            what='book_added',
+            who=who,
+            info=f'{who} added "{title}"',
         )
 
         return JsonResponse({
@@ -124,23 +130,23 @@ def add_book(request):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
+
 @require_POST
 def delete_book(request, isbn):
     try:
         book = Book.objects.get(isbn=isbn)
+        title = book.title
         book.delete()
-        # log from here
-        return JsonResponse({
-            'success': True,
-            'message': 'The book has been deleted.'
-        }, status=200)
+        who = getattr(request.user, 'name', 'Admin')
+        Log.objects.create(
+            what='book_deleted',
+            who=who,
+            info=f'{who} deleted "{title}"',
+        )
+        return JsonResponse({'success': True, 'message': 'The book has been deleted.'}, status=200)
     except Book.DoesNotExist:
-        return JsonResponse({
-            'success': False,
-            'message': 'Book not found.'
-        }, status=404)
+        return JsonResponse({'success': False, 'message': 'Book not found.'}, status=404)
 
-    
 
 @require_POST
 def edit_book(request, isbn):
@@ -198,7 +204,6 @@ def edit_book(request, isbn):
         return JsonResponse({'success': False, 'errors': errors}, status=400)
 
     copies_int = int(copies)
-    
     borrowed = book.total_copies - book.available_copies
     new_available = max(0, copies_int - borrowed)
 
@@ -216,6 +221,13 @@ def edit_book(request, isbn):
 
     book.save()
 
+    who = getattr(request.user, 'name', 'Admin')
+    Log.objects.create(
+        what='book_edited',
+        who=who,
+        info=f'{who} edited "{title}"',
+    )
+
     return JsonResponse({
         'success': True,
         'message': 'Book updated successfully!',
@@ -228,49 +240,31 @@ def book_list(request):
     paginator = Paginator(book_list, 7)
     page_no = request.GET.get('page')
     page_to_show = paginator.get_page(page_no)
-    return render(request, 'admin/bookList.html', {'page_to_show':page_to_show})
+    return render(request, 'admin/bookList.html', {'page_to_show': page_to_show})
 
 
 @require_GET
 def search_books(request):
-    """
-    Server-side search endpoint that returns book results in JSON format.
-    Filters books by query (title/author), categories, and availability.
-    
-    Query parameters:
-    - query: Search text (optional)
-    - categories: Comma-separated category list (optional)
-    - available_only: Boolean flag for available books only (optional)
-    """
     try:
-        query = request.GET.get('query', '').strip().lower()
+        query           = request.GET.get('query', '').strip().lower()
         categories_param = request.GET.get('categories', '').strip()
-        available_only = request.GET.get('available_only', 'false').lower() == 'true'
-        
-        # Parse categories
+        available_only  = request.GET.get('available_only', 'false').lower() == 'true'
+
         categories = [cat.strip() for cat in categories_param.split(',') if cat.strip()]
-        
-        # Start with all books
+
         books = Book.objects.all()
-        
-        # Filter by search query (title or author)
+
         if query:
-            books = books.filter(
-                Q(title__icontains=query) | Q(author__icontains=query)
-            )
-        
-        # Filter by categories
+            books = books.filter(Q(title__icontains=query) | Q(author__icontains=query))
+
         if categories and 'all' not in [cat.lower() for cat in categories]:
             books = books.filter(category__in=categories)
-        
-        # Filter by availability
+
         if available_only:
             books = books.filter(available_copies__gt=0)
-        
-        # Convert to list with JSON-serializable data
-        books_data = []
-        for book in books:
-            books_data.append({
+
+        books_data = [
+            {
                 'isbn': book.isbn,
                 'title': book.title,
                 'author': book.author,
@@ -280,16 +274,11 @@ def search_books(request):
                 'cover': book.cover_image.url if book.cover_image else '/static/images/default-cover.png',
                 'copies': book.available_copies,
                 'availableCopies': book.available_copies,
-            })
-        
-        return JsonResponse({
-            'success': True,
-            'results': books_data,
-            'count': len(books_data)
-        })
-    
+            }
+            for book in books
+        ]
+
+        return JsonResponse({'success': True, 'results': books_data, 'count': len(books_data)})
+
     except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'message': str(e)
-        }, status=500)
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)

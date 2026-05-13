@@ -4,8 +4,10 @@ from django.views.decorators.http import require_POST
 from loans.models import Loan
 import json
 from django.core.paginator import Paginator
-import datetime 
+import datetime
 from books.models import Book
+from logs.models import Log
+
 
 def loan_list(request):
     status = request.GET.get('status', 'all')
@@ -36,21 +38,33 @@ def loan_action(request):
             loan.borrow_date = datetime.date.today()
             loan.due_date = datetime.date.today() + datetime.timedelta(days=10)
             loan.save()
+            who = getattr(request.user, 'name', 'Admin')
+            Log.objects.create(
+                what='book_loaned',
+                who=who,
+                info=f'{loan.user.name} borrowed "{loan.book.title}" — approved by {who}',
+            )
             return JsonResponse({'success': True, 'message': 'Book loaned successfully.'}, status=200)
         elif action == 'return' and loan.status == 'borrowed':
             loan.status = 'returned'
             loan.return_date = datetime.date.today()
             loan.save()
+            loan.book.available_copies += 1
+            loan.book.save()
+            who = getattr(request.user, 'name', 'Admin')
+            Log.objects.create(
+                what='book_returned',
+                who=who,
+                info=f'{who} returned "{loan.book.title}" from {loan.user.name}',
+            )
             return JsonResponse({'success': True, 'message': 'Book returned successfully.'}, status=200)
         else:
             return JsonResponse({'success': False, 'message': 'Invalid action for current loan status.'}, status=400)
     except Loan.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Loan not found.'}, status=404)
 
-def borrowed_books(request):
-    # if not request.user.is_authenticated:
-    #     return JsonResponse({'error': 'Authentication required'}, status=401)
 
+def borrowed_books(request):
     loans = (
         Loan.objects
         .filter(user=request.user, status__in=['reserved', 'borrowed'])
@@ -76,6 +90,7 @@ def borrowed_books(request):
     ]
     return JsonResponse(data, safe=False)
 
+
 @require_POST
 def borrow_book(request):
     try:
@@ -88,9 +103,17 @@ def borrow_book(request):
             status__in=['reserved', 'borrowed']
         ).exists()
         if is_exists:
-                return JsonResponse({'success': False, 'message': 'You already have an active loan for this book.'}, status=400)
+            return JsonResponse({'success': False, 'message': 'You already have an active loan for this book.'}, status=400)
+        if book.available_copies < 1:
+            return JsonResponse({'success': False, 'message': 'No available copies.'}, status=400)
         Loan.objects.create(user=request.user, book=book, status='reserved')
+        book.available_copies -= 1
+        book.save()
+        Log.objects.create(
+            what='book_reserved',
+            who=request.user.name,
+            info=f'{request.user.name} registered book "{book.title}"',
+        )
         return JsonResponse({'success': True, 'message': 'Book reserved successfully.'}, status=200)
     except Book.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Book not found.'}, status=404)
-

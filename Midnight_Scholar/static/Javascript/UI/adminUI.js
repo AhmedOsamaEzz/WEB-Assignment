@@ -328,7 +328,6 @@ const renderAdminDashboard = async () => {
   }
 };
 
-// ── TAB SWITCHING ────────────────────────────────────────────────
 function switchDashboardTab(name) {
   document.querySelectorAll(".dashboard-tab").forEach((t) => t.classList.remove("active"));
   document.querySelectorAll(".dashboard-panel").forEach((p) => p.classList.remove("active"));
@@ -336,7 +335,6 @@ function switchDashboardTab(name) {
   document.getElementById("panel-" + name).classList.add("active");
 }
 
-// ── USERS TAB ────────────────────────────────────────────────────
 async function renderUsersTab() {
   const pendingList = document.getElementById("pending-list");
   const approvedList = document.getElementById("approved-list");
@@ -402,21 +400,20 @@ async function renderUsersTab() {
       .join("");
   }
 
-  // wire ban button
-  approvedList.addEventListener("click", async (e) => {
+  approvedList.onclick = async (e) => {
     const banBtn = e.target.closest(".btn-ban");
     if (!banBtn) return;
     const email = banBtn.dataset.email;
     try {
       await API.banUser(email);
       await renderUsersTab();
+      await renderLogsTab();
     } catch (err) {
       alert(err.message || "Ban failed.");
     }
-  });
+  };
 
-  // wire approve / deny buttons
-  pendingList.addEventListener("click", async (e) => {
+  pendingList.onclick = async (e) => {
     const approveBtn = e.target.closest(".btn-approve");
     const denyBtn    = e.target.closest(".btn-deny");
     if (!approveBtn && !denyBtn) return;
@@ -429,10 +426,11 @@ async function renderUsersTab() {
         await API.denyUser(email);
       }
       await renderUsersTab();
+      await renderLogsTab();
     } catch (err) {
       alert(err.message || "Action failed.");
     }
-  });
+  };
 }
 
 // LOGS TAB

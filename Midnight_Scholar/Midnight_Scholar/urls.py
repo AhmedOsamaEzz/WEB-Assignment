@@ -23,6 +23,7 @@ from authe import views as authe_views
 from django.conf import settings
 from django.conf.urls.static import static
 from books import views as book_views
+from logs import views as logs_views
 
 
 urlpatterns = [
@@ -56,6 +57,9 @@ urlpatterns = [
     path('api/users/approve/', authe_views.approve_user, name='api_users_approve'),
     path('api/users/deny/', authe_views.deny_user, name='api_users_deny'),
     path('api/users/ban/', authe_views.ban_user, name='api_users_ban'),
+
+    path('api/logs/', logs_views.get_logs, name='api_logs'),
+    path('api/stats/', authe_views.get_admin_stats, name='api_stats'),
 
     path('api/books/', include('books.urls')),
     
