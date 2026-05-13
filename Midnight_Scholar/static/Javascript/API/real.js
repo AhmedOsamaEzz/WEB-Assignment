@@ -304,6 +304,28 @@ const RealAPI = {
       throw error;
     }
   },
+  async getBookByIsbn(isbn) {
+try {
+        // Construct the URL matching your Django path
+        const url = `/api/books/detail/${isbn}/`;
+        
+        // Make the GET request
+        const response = await fetch(url);
+
+        // Check if the response is successful (status 200-299)
+        if (!response.ok) {
+            throw new Error(`Failed to fetch book. Status: ${response.status}`);
+        }
+
+        // Parse and return the JSON data
+        const bookData = await response.json();
+        return bookData;
+
+    } catch (error) {
+        console.error("Error fetching the book:", error);
+        return null;
+    }
+  },
 };
 
 export default RealAPI;
