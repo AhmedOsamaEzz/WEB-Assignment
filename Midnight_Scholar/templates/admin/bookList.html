@@ -1,142 +1,158 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <html>
-    <head>
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
-      <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-      <script type="module" src="https://kit.fontawesome.com/80d75008f5.js" crossorigin="anonymous"></script>
-      <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
-      <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
-      <title>List of All Books</title>
-    </head>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    
+    <script type="module" src="https://kit.fontawesome.com/80d75008f5.js" crossorigin="anonymous"></script>
+    
+    <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
+    <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
+    
+    <title>List of All Books</title>
+</head>
 
-    <body id="bookList-page">
-      <header>
+<body id="bookList-page">
+    <header>
         <nav>
-          <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
-            <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
-          </a>
+            <div class="links">
+                <ul>
+                    <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
+                    <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
+                    <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
+                    <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn" style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">
+                                Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
 
-          <div class="links">
-            <ul>
-              <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
-              <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
-              <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-              <li><a href="#" id="logout-link">Logout</a></li>
-            </ul>
-          </div>
-
-          <div class="search-profile">
-            <a href="{% url 'admin_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
-            <a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
-          </div>
+            <div class="search-profile">
+                <a href="{% url 'admin_search' %}" aria-label="Search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </a>
+                <a href="{% url 'admin_dashboard' %}" aria-label="Profile">
+                    <i class="fa-solid fa-circle-user"></i>
+                </a>
+            </div>
         </nav>
-      </header>
+    </header>
 
-      <main class="main-bookList">
+    <main class="main-bookList">
         <br />
         <table class="table-section">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Category</th>
-              <th class="books-count">Total</th>
-              <th class="books-count">Available</th>
-              <th class="books-count">Borrowed</th>
-              <th>Action</th>
-            </tr>
-          </thead>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th class="books-count">Total</th>
+                    <th class="books-count">Available</th>
+                    <th class="books-count">Borrowed</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
 
-          <tbody>
-            {% for book in page_to_show %}
-            <tr>
-              <td>
-                <div class="book-title-column">
-                  <img src="{{ book.cover_image.url }}" class="mini-book-image" alt="Book Cover" />
-                  <div>
-                    <label class="book-title-text">{{ book.title }}</label>
-                    <br />
-                    <label class="book-isbn-label">ISBN-{{ book.isbn }}</label>
-                  </div>
-                </div>
-              </td>
-              <td>{{ book.author }}</td>
-              <td><label class="book-category-column">{{ book.category }}</label></td>
-        
-              <td class="books-count">{{ book.total_copies }}</td>
-              <td class="books-count">{{ book.available_copies }}</td>
-              <td class="books-count">{{ book.borrowed_copies }}</td>
-              <td class="book-action-column">
-                <div class="book-action-cell">
-                  <button class="edit-btn" data-isbn="{{ book.isbn }}">
-                  <i class="fa-solid fa-pen"></i>
-                  </button>
-                  <button class="delete-btn" data-isbn="{{ book.isbn }}">
-                  <i class="fa-solid fa-trash-can"></i>
-                  </button>
-                </div>
-        </td>
-            </tr>
-            {% empty %}
-              <tr>
-                <td colspan="7" style="text-align: center">No books in the archive yet.</td>
-              </tr>
-            {% endfor %}
-          </tbody>
+            <tbody>
+                {% for book in page_to_show %}
+                <tr>
+                    <td>
+                        <div class="book-title-column">
+                            {% if book.cover_image %}
+                                <img src="{{ book.cover_image.url }}" class="mini-book-image" alt="{{ book.title }} cover" />
+                            {% else %}
+                                <img src="{% static 'images/default-cover.png' %}" class="mini-book-image" alt="No cover available" />
+                            {% endif %}
+                            <div>
+                                <span class="book-title-text" style="font-weight: bold;">{{ book.title }}</span>
+                                <br />
+                                <span class="book-isbn-label" style="font-size: 0.85em; color: #555;">ISBN-{{ book.isbn }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>{{ book.author }}</td>
+                    <td><span class="book-category-column">{{ book.category }}</span></td>
+
+                    <td class="books-count">{{ book.total_copies }}</td>
+                    <td class="books-count">{{ book.available_copies }}</td>
+                    <td class="books-count">{{ book.borrowed_copies }}</td>
+                    <td class="book-action-column">
+                        <div class="book-action-cell">
+                            <button class="edit-btn" data-isbn="{{ book.isbn }}" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </button>
+                            <button class="delete-btn" data-isbn="{{ book.isbn }}" title="Delete">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" style="text-align: center">No books in the archive yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
+        
         <div id="error-message-container" class="error-msg"></div>
 
         <br />
         <div class="table-options-section">
-          <button type="button" class="btn-primary" onclick="window.location.href='{% url 'admin_book_add' %}'"> <!--  this is not wrong nor an error -->
-            Add Book
-          </button>
-          <div class="table-pagination">
-            {% if page_to_show.has_previous %}
-              <a href="?page={{ page_to_show.previous_page_number }}" style="text-emphasis: none;">
-              <button class="prev-btn">←</button>
-              </a>
-            {% else %}
-              <button class="prev-btn" disabled>←</button>
-            {% endif %}
-            <!-- page number buttons are generated by JavaScript -->
-            <div class="page-numbers">
-              {% for num in page_to_show.paginator.page_range %}
-                {% if num == page_to_show.number %}
-                  <button class="current-button">{{ num }}</button>
-                {% elif num > page_to_show.number|add:'-3' and num < page_to_show.number|add:'3' %}
-                <a href="?page={{ num }}" style="text-decoration: none;">
-                  <button class="not-current-button">{{ num }}</button>
+            <button type="button" class="btn-primary" onclick="window.location.href='{% url 'admin_book_add' %}'">
+                Add Book
+            </button>
+            
+            <div class="table-pagination">
+                {% if page_to_show.has_previous %}
+                <a href="?page={{ page_to_show.previous_page_number }}" style="text-decoration: none;">
+                    <button class="prev-btn">←</button>
                 </a>
+                {% else %}
+                <button class="prev-btn" disabled>←</button>
                 {% endif %}
-              {% endfor %}
+
+                <div class="page-numbers">
+                    {% for num in page_to_show.paginator.page_range %}
+                        {% if num == page_to_show.number %}
+                            <button class="current-button">{{ num }}</button>
+                        {% elif num > page_to_show.number|add:'-3' and num < page_to_show.number|add:'3' %}
+                            <a href="?page={{ num }}" style="text-decoration: none;">
+                                <button class="not-current-button">{{ num }}</button>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% if page_to_show.has_next %}
+                <a href="?page={{ page_to_show.next_page_number }}" style="text-decoration: none;">
+                    <button class="next-btn">→</button>
+                </a>
+                {% else %}
+                <button class="next-btn" disabled>→</button>
+                {% endif %}
             </div>
-            {% if page_to_show.has_next %}
-              <a href="?page={{ page_to_show.next_page_number }}" style="text-decoration: none;">
-              <button class="next-btn">→</button>
-              </a>
-            {% else %}
-              <button class="next-btn" disabled>→</button>
-            {% endif %}
-          </div>
         </div>
         <br />
-      </main>
+    </main>
 
-      <hr class="global-hr" />
-      <footer class="global-footer">
+    <hr class="global-hr" />
+    <footer class="global-footer">
         <p class="name">The Midnight Scholar</p>
         <div class="cnt">
-          <p><a href="#">PRIVACY POLICY</a></p>
-          <p><a href="#">TERMS OF ACCESS</a></p>
-          <p><a href="#">CONTACT CURATOR</a></p>
+            <p><a href="#">PRIVACY POLICY</a></p>
+            <p><a href="#">TERMS OF ACCESS</a></p>
+            <p><a href="#">CONTACT CURATOR</a></p>
         </div>
         <p class="copyrights">&copy; 2026 The Midnight Scholar Private Archive. All rights reserved.</p>
-      </footer>
-    </body>
-  </html>
+    </footer>
+</body>
 </html>

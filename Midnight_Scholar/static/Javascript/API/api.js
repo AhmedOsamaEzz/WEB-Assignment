@@ -7,11 +7,9 @@ const API = {
   getBookById: FakeAPI.getBookById,
   borrowBook: RealAPI.borrowBook,
   getUserBorrowedBooks: RealAPI.getUserBorrowedBooks,
-
   getUserHistory: FakeAPI.getUserHistory,
   extendLoan: FakeAPI.extendLoan,
   returnBook: FakeAPI.returnBook,
-
   getAdminStats: RealAPI.getAdminStats,
   // Admin Inventory
   addBook: RealAPI.addBook,
@@ -19,7 +17,6 @@ const API = {
   editBook: FakeAPI.editBook,
   updateBook: RealAPI.updateBook,
   deleteBook: RealAPI.deleteBook,
-
   loginUser: FakeAPI.loginUser,
   registerUser: FakeAPI.registerUser,
   // new dashboard functions
@@ -29,6 +26,8 @@ const API = {
   approveUser: RealAPI.approveUser,
   denyUser: RealAPI.denyUser,
   banUser: RealAPI.banUser,
+  unbanUser: RealAPI.unbanUser,
+  searchUsers: RealAPI.searchUsers,
 };
 
 export default API;

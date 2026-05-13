@@ -7,13 +7,11 @@ function getCookie(name) {
 const RealAPI = {
   async getBooks(query = "", categories = [], availableOnly = false) {
     try {
-      // Format categories
       let categoriesParam = "";
       if (categories && categories.length > 0) {
         categoriesParam = categories.join(",");
       }
 
-      // Build query URL string
       const params = new URLSearchParams();
       if (query) params.append("query", query);
       if (categoriesParam) params.append("categories", categoriesParam);
@@ -48,11 +46,24 @@ const RealAPI = {
       if (response.status === 401) {
         throw new Error("Please log in to view your borrowed books.");
       }
-
       throw new Error("Failed to fetch borrowed books");
     }
 
     return response.json();
+  },
+
+  async borrowBook(isbn) {
+    const response = await fetch("/api/loans/borrow/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      body: JSON.stringify({ isbn }),
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message);
+    return data;
   },
 
   async addBook(bookData) {
@@ -119,79 +130,179 @@ const RealAPI = {
     return data;
   },
 
-  async borrowBook(isbn) {
-    const response = await fetch("/api/loans/borrow/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "X-CSRFToken": getCookie("csrftoken") },
-      body: JSON.stringify({ isbn }),
-    });
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message);
-    return data;
-  },
-
   async getLogs() {
-    const response = await fetch('/api/logs/', { credentials: 'same-origin' });
+    const response = await fetch("/api/logs/", { credentials: "same-origin" });
     const data = await response.json();
-    if (!data.success) throw new Error(data.message || 'Failed to fetch logs');
+    if (!data.success) throw new Error(data.message || "Failed to fetch logs");
     return data.logs;
   },
 
   async getAdminStats() {
-    const response = await fetch('/api/stats/', { credentials: 'same-origin' });
+    const response = await fetch("/api/stats/", { credentials: "same-origin" });
     const data = await response.json();
-    if (!data.success) throw new Error(data.message || 'Failed to fetch stats');
+    if (!data.success) throw new Error(data.message || "Failed to fetch stats");
     return data;
   },
 
+  // User Management Functions
   async getPendingUsers() {
-    const response = await fetch('/api/users/pending/', { credentials: 'same-origin' });
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message || 'Failed to fetch pending users');
-    return data.users;
+    try {
+      const response = await fetch("/api/users/search/?status=pending", {
+        credentials: "same-origin",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch pending users");
+      }
+
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || "Failed to fetch pending users");
+      }
+
+      return data.data.map((user) => ({
+        ...user,
+        username: user.name,
+      }));
+    } catch (error) {
+      console.error("Error fetching pending users:", error);
+      return [];
+    }
   },
 
   async getApprovedUsers() {
-    const response = await fetch('/api/users/approved/', { credentials: 'same-origin' });
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message || 'Failed to fetch approved users');
-    return data.users;
+    try {
+      const response = await fetch("/api/users/search/?status=approved", {
+        credentials: "same-origin",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch users");
+      }
+
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || "Failed to fetch users");
+      }
+
+      return data.data.map((user) => ({
+        ...user,
+        username: user.name,
+      }));
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      return [];
+    }
   },
 
-  async approveUser(email) {
-    const response = await fetch('/api/users/approve/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-      credentials: 'same-origin',
-      body: JSON.stringify({ email }),
-    });
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message || 'Failed to approve user');
-    return data;
+  async searchUsers(query = "", status = "") {
+    try {
+      const params = new URLSearchParams();
+      if (query) params.append("query", query);
+      if (status) params.append("status", status);
+
+      const response = await fetch(`/api/users/search/?${params.toString()}`, {
+        credentials: "same-origin",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to search users");
+      }
+
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || "Failed to search users");
+      }
+
+      return data.data || [];
+    } catch (error) {
+      console.error("Error searching users:", error);
+      return [];
+    }
   },
 
-  async banUser(email) {
-    const response = await fetch('/api/users/ban/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-      credentials: 'same-origin',
-      body: JSON.stringify({ email }),
-    });
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message || 'Failed to ban user');
-    return data;
+  async approveUser(userId) {
+    try {
+      const response = await fetch("/api/users/approve/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ user_id: userId }),
+        credentials: "same-origin",
+      });
+
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || "Failed to approve user");
+      return data;
+    } catch (error) {
+      console.error("Error approving user:", error);
+      throw error;
+    }
   },
 
-  async denyUser(email) {
-    const response = await fetch('/api/users/deny/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
-      credentials: 'same-origin',
-      body: JSON.stringify({ email }),
-    });
-    const data = await response.json();
-    if (!data.success) throw new Error(data.message || 'Failed to deny user');
-    return data;
+  async denyUser(userId) {
+    try {
+      const response = await fetch("/api/users/deny/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ user_id: userId }),
+        credentials: "same-origin",
+      });
+
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || "Failed to deny user");
+      return data;
+    } catch (error) {
+      console.error("Error denying user:", error);
+      throw error;
+    }
+  },
+
+  async banUser(userId) {
+    try {
+      const response = await fetch("/api/users/ban/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ user_id: userId }),
+        credentials: "same-origin",
+      });
+
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || "Failed to ban user");
+      return data;
+    } catch (error) {
+      console.error("Error banning user:", error);
+      throw error;
+    }
+  },
+
+  async unbanUser(userId) {
+    try {
+      const response = await fetch("/api/users/unban/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        body: JSON.stringify({ user_id: userId }),
+        credentials: "same-origin",
+      });
+
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || "Failed to unban user");
+      return data;
+    } catch (error) {
+      console.error("Error unbanning user:", error);
+      throw error;
+    }
   },
 };
 

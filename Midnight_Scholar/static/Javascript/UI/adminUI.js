@@ -143,15 +143,21 @@ function fetchBook(book) {
   document.getElementById("isbn").textContent = `ISBN: ${book.isbn}`;
   document.getElementById("title").textContent = `Title: ${book.title}`;
   document.getElementById("author").textContent = `Author: ${book.author}`;
-  document.getElementById("category").textContent = `Category: ${book.category}`;
-  document.getElementById("description").textContent = `Description: ${book.description}`;
+  document.getElementById("category").textContent =
+    `Category: ${book.category}`;
+  document.getElementById("description").textContent =
+    `Description: ${book.description}`;
 }
 
 /**
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(query = "", categories = [], availableOnly = false) {
+async function renderCatalog(
+  query = "",
+  categories = [],
+  availableOnly = false,
+) {
   const cardsContainer = document.getElementById("cards-container");
   const resultsCount = document.getElementById("results-count");
   if (!cardsContainer) return;
@@ -208,7 +214,8 @@ const handleBookFormSubmit = async (event, mode) => {
   const publisher = document.querySelector("#publisher").value.trim();
   const copies = document.querySelector("#totalCopies").value.trim();
   const description = document.querySelector("#description").value.trim();
-  const category = document.querySelector("#category")?.value || "Uncategorized";
+  const category =
+    document.querySelector("#category")?.value || "Uncategorized";
 
   const bookData = {
     title,
@@ -286,14 +293,21 @@ const renderAdminDashboard = async () => {
   if (!document.getElementById("admin-dashboard-page")) return;
   const s = await API.getAdminStats();
 
-  document.getElementById("stat-total-books").textContent = s.totalBooks.toLocaleString();
-  document.getElementById("stat-added-month").textContent = s.totalBooks.toLocaleString(); // change later
+  document.getElementById("stat-total-books").textContent =
+    s.totalBooks.toLocaleString();
+  document.getElementById("stat-added-month").textContent =
+    s.totalBooks.toLocaleString(); // change later
   document.getElementById("stat-overdue-returns").textContent = s.overdueLoans;
-  document.getElementById("stat-active-loans").textContent = s.activeLoans.toLocaleString();
-  document.getElementById("stat-total-members").textContent = s.totalMembers.toLocaleString();
-  document.getElementById("stat-available-books").textContent = s.totalAvailable.toLocaleString();
-  document.getElementById("loan-total-label").textContent = s.totalBooks.toLocaleString();
-  document.getElementById("loan-total-number").textContent = s.totalBooks.toLocaleString();
+  document.getElementById("stat-active-loans").textContent =
+    s.activeLoans.toLocaleString();
+  document.getElementById("stat-total-members").textContent =
+    s.totalMembers.toLocaleString();
+  document.getElementById("stat-available-books").textContent =
+    s.totalAvailable.toLocaleString();
+  document.getElementById("loan-total-label").textContent =
+    s.totalBooks.toLocaleString();
+  document.getElementById("loan-total-number").textContent =
+    s.totalBooks.toLocaleString();
 
   const setPct = (labelId, barId, pct) => {
     document.getElementById(labelId).textContent = pct + "%";
@@ -329,8 +343,12 @@ const renderAdminDashboard = async () => {
 };
 
 function switchDashboardTab(name) {
-  document.querySelectorAll(".dashboard-tab").forEach((t) => t.classList.remove("active"));
-  document.querySelectorAll(".dashboard-panel").forEach((p) => p.classList.remove("active"));
+  document
+    .querySelectorAll(".dashboard-tab")
+    .forEach((t) => t.classList.remove("active"));
+  document
+    .querySelectorAll(".dashboard-panel")
+    .forEach((p) => p.classList.remove("active"));
   document.getElementById("tab-" + name).classList.add("active");
   document.getElementById("panel-" + name).classList.add("active");
 }
@@ -342,7 +360,10 @@ async function renderUsersTab() {
   const approvedCount = document.getElementById("approved-count");
   if (!pendingList || !approvedList) return;
 
-  const [pending, approved] = await Promise.all([API.getPendingUsers(), API.getUsers()]);
+  const [pending, approved] = await Promise.all([
+    API.getPendingUsers(),
+    API.getUsers(),
+  ]);
 
   pendingCount.textContent = pending.length + " waiting";
   approvedCount.textContent = approved.length + " active";
@@ -352,7 +373,7 @@ async function renderUsersTab() {
   } else {
     pendingList.innerHTML = pending
       .map((user) => {
-        const initials = user.username
+        const initials = user.name
           .split(" ")
           .map((w) => w[0])
           .join("")
@@ -362,7 +383,7 @@ async function renderUsersTab() {
         <div class="user-row">
           <div class="user-avatar">${initials}</div>
           <div class="user-info">
-            <div class="user-name">${user.username}</div>
+            <div class="user-name">${user.name}</div>
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
@@ -379,7 +400,7 @@ async function renderUsersTab() {
   } else {
     approvedList.innerHTML = approved
       .map((user) => {
-        const initials = user.username
+        const initials = user.name
           .split(" ")
           .map((w) => w[0])
           .join("")
@@ -389,7 +410,7 @@ async function renderUsersTab() {
         <div class="user-row">
           <div class="user-avatar">${initials}</div>
           <div class="user-info">
-            <div class="user-name">${user.username}</div>
+            <div class="user-name">${user.name}</div>
             <div class="user-email">${user.email}</div>
           </div>
           <div class="user-actions">
@@ -433,6 +454,111 @@ async function renderUsersTab() {
   };
 }
 
+async function searchUsers() {
+  const query = document.getElementById("id_query").value;
+  const status = document.getElementById("id_status").value;
+
+  try {
+    const response = await fetch(
+      `/api/users/search/?query=${encodeURIComponent(query)}&status=${encodeURIComponent(status)}`,
+    );
+    const data = await response.json();
+
+    if (data.success) {
+      const tbody = document.getElementById("users-table-body");
+      tbody.innerHTML = "";
+
+      if (data.data.length === 0) {
+        tbody.innerHTML =
+          '<tr><td colspan="5" class="text-center text-muted py-5">No users found</td></tr>';
+        return;
+      }
+
+      data.data.forEach((user) => {
+        const row = document.createElement("tr");
+        row.className = "user-row";
+        row.setAttribute("data-user-id", user.id);
+        row.setAttribute("data-status", user.status);
+
+        const statusBadge = `<span class="status-badge status-${user.status}">${user.status.charAt(0).toUpperCase() + user.status.slice(1)}</span>`;
+
+        let actionsHtml = "";
+        if (user.status === "pending") {
+          actionsHtml = `
+            <button class="btn btn-sm btn-success" onclick="approveUserFromDashboard(${user.id})">
+              <i class="fa-solid fa-check"></i> Approve
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="denyUserFromDashboard(${user.id})">
+              <i class="fa-solid fa-times"></i> Deny
+            </button>`;
+        } else if (user.status === "approved") {
+          actionsHtml = `
+            <button class="btn btn-sm btn-warning" onclick="banUserFromDashboard(${user.id})">
+              <i class="fa-solid fa-ban"></i> Ban
+            </button>`;
+        } else if (user.status === "banned") {
+          actionsHtml = `
+            <button class="btn btn-sm btn-info text-white" onclick="unbanUserFromDashboard(${user.id})">
+              <i class="fa-solid fa-undo"></i> Unban
+            </button>`;
+        }
+
+        row.innerHTML = `
+          <td class="user-name">${user.name}</td>
+          <td class="user-email">${user.email}</td>
+          <td>${statusBadge}</td>
+          <td>${user.date_joined}</td>
+          <td>${actionsHtml}</td>`;
+        tbody.appendChild(row);
+      });
+    } else {
+      alert("Error searching users: " + data.message);
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error searching users");
+  }
+}
+
+async function approveUserFromDashboard(userId) {
+  if (!confirm("Are you sure you want to approve this user?")) return;
+  try {
+    await API.approveUser(userId);
+    window.location.reload();
+  } catch (error) {
+    alert("Error approving user: " + error.message);
+  }
+}
+
+async function denyUserFromDashboard(userId) {
+  if (!confirm("Are you sure you want to deny this registration?")) return;
+  try {
+    await API.denyUser(userId);
+    window.location.reload();
+  } catch (error) {
+    alert("Error denying user: " + error.message);
+  }
+}
+
+async function banUserFromDashboard(userId) {
+  if (!confirm("Are you sure you want to ban this user?")) return;
+  try {
+    await API.banUser(userId);
+    location.reload();
+  } catch (error) {
+    alert("Error banning user: " + error.message);
+  }
+}
+async function unbanUserFromDashboard(userId) {
+  if (!confirm("Are you sure you want to unban this user?")) return;
+  try {
+    await API.unbanUser(userId);
+    location.reload();
+  } catch (error) {
+    alert("Error unbanning user: " + error.message);
+  }
+}
+
 // LOGS TAB
 async function renderLogsTab() {
   const logList = document.getElementById("log-list");
@@ -463,7 +589,8 @@ async function renderLogsTab() {
     })
     .join("");
 
-  document.getElementById("log-entry-count").textContent = logs.length + " entries";
+  document.getElementById("log-entry-count").textContent =
+    logs.length + " entries";
   document.getElementById("logs-empty-msg").style.display = "none";
 }
 
@@ -472,31 +599,44 @@ let activeLogType = "all";
 
 function setLogFilter(type, el) {
   activeLogType = type;
-  document.querySelectorAll(".log-filter-btn").forEach((b) => b.classList.remove("active"));
+  document
+    .querySelectorAll(".log-filter-btn")
+    .forEach((b) => b.classList.remove("active"));
   el.classList.add("active");
   applyLogFilters();
 }
 
 function applyLogFilters() {
-  const query = document.getElementById("log-search-input").value.trim().toLowerCase();
+  const query = document
+    .getElementById("log-search-input")
+    .value.trim()
+    .toLowerCase();
   const rows = document.querySelectorAll("#log-list .log-row");
   let visible = 0;
 
   rows.forEach((row) => {
-    const typeMatch = activeLogType === "all" || row.dataset.type === activeLogType;
+    const typeMatch =
+      activeLogType === "all" || row.dataset.type === activeLogType;
     const whoMatch = !query || row.dataset.who.includes(query);
     const show = typeMatch && whoMatch;
     row.style.display = show ? "" : "none";
     if (show) visible++;
   });
 
-  document.getElementById("log-entry-count").textContent = visible + (visible === 1 ? " entry" : " entries");
-  document.getElementById("logs-empty-msg").style.display = visible === 0 ? "block" : "none";
+  document.getElementById("log-entry-count").textContent =
+    visible + (visible === 1 ? " entry" : " entries");
+  document.getElementById("logs-empty-msg").style.display =
+    visible === 0 ? "block" : "none";
 }
 
 window.switchDashboardTab = switchDashboardTab;
 window.setLogFilter = setLogFilter;
 window.applyLogFilters = applyLogFilters;
+window.approveUserFromDashboard = approveUserFromDashboard;
+window.denyUserFromDashboard = denyUserFromDashboard;
+window.banUserFromDashboard = banUserFromDashboard;
+window.unbanUserFromDashboard = unbanUserFromDashboard;
+window.searchUsers = searchUsers;
 
 // listeners
 document.addEventListener("DOMContentLoaded", () => {
@@ -532,7 +672,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // addbook stuff
   const addBtn = document.getElementById("addbtn");
-  if (addBtn) addBtn.addEventListener("click", (e) => handleBookFormSubmit(e, "add"));
+  if (addBtn)
+    addBtn.addEventListener("click", (e) => handleBookFormSubmit(e, "add"));
 
   // editbook stuff
   const editBtn = document.getElementById("editbtn");
