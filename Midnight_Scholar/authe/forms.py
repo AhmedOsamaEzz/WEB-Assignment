@@ -4,6 +4,7 @@ from authe.models import User
 class SignupForm(forms.ModelForm):
 
     password = forms.CharField(widget=forms.PasswordInput())
+    isAdmin = forms.BooleanField(required=False, label="Create as Admin")
 
     class Meta:
         model = User
@@ -16,6 +17,11 @@ class SignupForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         # comment or uncomment this line until someone implements login
         # user.role = 'admin'
+
+        if self.cleaned_data.get('isAdmin'):
+            user.role = 'admin'
+        else:
+            user.role = 'user'
         if commit:
             user.save()
         return user
