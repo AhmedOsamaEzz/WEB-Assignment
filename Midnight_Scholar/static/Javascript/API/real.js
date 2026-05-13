@@ -304,6 +304,19 @@ const RealAPI = {
       throw error;
     }
   },
+
+  async getUserHistory() {
+    const response = await fetch("/api/loans/history/", {
+        credentials: "same-origin",
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch borrowing history");
+    }
+
+    const data = await response.json();
+    return data.history || [];
+  },
 };
 
 export default RealAPI;

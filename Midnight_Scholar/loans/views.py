@@ -90,6 +90,28 @@ def borrowed_books(request):
     ]
     return JsonResponse(data, safe=False)
 
+def loan_history(request):
+    history = (
+        Loan.objects
+        .filter(user=request.user)
+        .exclude(status__in=['reserved', 'borrowed']) 
+        .select_related('book')
+        .order_by('-return_date') 
+    )
+
+    data = [
+        {
+            'isbn': loan.book.isbn,
+            'title': loan.book.title,
+            'author': loan.book.author,
+            'borrowedAt': loan.borrow_date.strftime('%Y-%m-%d') if loan.borrow_date else 'N/A',
+            'returnedAt': loan.return_date.strftime('%Y-%m-%d') if loan.return_date else 'N/A',
+            'status': loan.status,
+        }
+        for loan in history
+    ]
+    return JsonResponse({'history': data}, safe=False)
+
 
 @require_POST
 def borrow_book(request):
