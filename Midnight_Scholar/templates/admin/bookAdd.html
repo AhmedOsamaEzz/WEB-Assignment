@@ -2,49 +2,47 @@
 <!doctype html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>The Midnight Scholar - Add Book</title>
-    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <script
-      src="https://kit.fontawesome.com/80d75008f5.js"
-      crossorigin="anonymous"></script>
-    <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
-    <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
-  </head>
-  <title>add book</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Midnight Scholar - Add Book</title>
+  <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <script src="https://kit.fontawesome.com/80d75008f5.js" crossorigin="anonymous"></script>
+  <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
+  <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
+</head>
+<title>add book</title>
 </head>
 
 <body>
   <header>
     <nav>
-          <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
-            <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
-          </a>
+      <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
+        <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+      </a>
 
-          <div class="links">
-            <ul>
-              <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
-              <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
-              <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-              <li><a href="#" id="logout-link">Logout</a></li>
-            </ul>
-          </div>
+      <div class="links">
+        <ul>
+          <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
+          <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
+          <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+          <li><a href="#" id="logout-link">Logout</a></li>
+        </ul>
+      </div>
 
-          <div class="search-profile">
-            <a href="{% url 'admin_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
-            <a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
-          </div>
-        </nav>
+      <div class="search-profile">
+        <a href="{% url 'admin_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="{% url 'admin_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
+      </div>
+    </nav>
   </header>
 
-  
+
   <form class="book-edit-container">
     <div class="book-image-section">
       <label for="image">Book cover</label>
-      <img id="image" src="../assets/images/unnamed.png" alt />
+      <img id="image" src="{% static 'images/unnamed.png' %}" alt />
       <input type="file" id="fileInput" accept="image/*" style="display: none;">
       <div class="upload-icon"><i class="fas fa-camera"></i> </div>
     </div>
@@ -58,8 +56,7 @@
       <div class="same-row">
         <div class="label-input">
           <label for="author">Book Author</label>
-          <input id="author" type="text"
-            placeholder="Enter the book Author" />
+          <input id="author" type="text" placeholder="Enter the book Author" />
         </div>
         <div class="label-input">
           <label for="isbn">Book ISBN</label>
@@ -85,28 +82,24 @@
       <div class="same-row">
         <div class="label-input">
           <label for="publicationYear">Publication Year</label>
-          <input id="publicationYear" type="text"
-            placeholder="Enter the book Publication year" />
+          <input id="publicationYear" type="text" placeholder="Enter the book Publication year" />
         </div>
         <div class="label-input">
           <label for="publisher">Publisher</label>
-          <input id="publisher" type="text"
-            placeholder="Enter the book Publisher" />
+          <input id="publisher" type="text" placeholder="Enter the book Publisher" />
         </div>
       </div>
 
       <div class="label-input">
         <label for="totalCopies">Book Total Copies</label>
-        <input id="totalCopies" type="number"
-          placeholder="Enter the book Total Copies" />
+        <input id="totalCopies" type="number" placeholder="Enter the book Total Copies" />
       </div>
 
       <div class="label-input">
         <label for="description">Book description</label>
-        <textarea id="description"
-          placeholder="Enter the book description"></textarea>
+        <textarea id="description" placeholder="Enter the book description"></textarea>
       </div>
-      <div id = "error-message-container" class = "error-msg"></div>
+      <div id="error-message-container" class="error-msg"></div>
       <div class="form-button">
         <button class="btn-primary" id="addbtn" type="submit">submit</button>
       </div>
@@ -114,16 +107,17 @@
   </form>
 
   <hr class="global-hr">
-    <footer class="global-footer">
-      <p class="name">The Midnight Scholar</p>
-      <div class="cnt">
-        <p><a href="#">PRIVACY POLICY</a></p>
-        <p><a href="#">TERMS OF ACCESS</a></p>
-        <p><a href="#">CONTACT CURATOR</a></p>
-      </div>
-      <p class="copyrights">
-        &copy; 2026 The Midnight Scholar Private Archive. All rights reserved.
-      </p>
-    </footer>
-  </body>
+  <footer class="global-footer">
+    <p class="name">The Midnight Scholar</p>
+    <div class="cnt">
+      <p><a href="#">PRIVACY POLICY</a></p>
+      <p><a href="#">TERMS OF ACCESS</a></p>
+      <p><a href="#">CONTACT CURATOR</a></p>
+    </div>
+    <p class="copyrights">
+      &copy; 2026 The Midnight Scholar Private Archive. All rights reserved.
+    </p>
+  </footer>
+</body>
+
 </html>
