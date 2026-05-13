@@ -20,29 +20,30 @@
   <body id="admin-dashboard-page">
     <!-- NAV BAR -->
     <nav>
-      <a href="{% url 'home' %}" style="text-decoration: none; color: inherit">
-        <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
-      </a>
-
       <div class="links">
         <ul>
           <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
           <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
+          <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
           <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
           <li>
-            <form method="post" action="{% url 'logout' %}">
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
               {% csrf_token %}
-              <button type="submit">Logout</button>
+              <button type="submit" class="logout-btn" style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">
+                Logout
+              </button>
             </form>
           </li>
         </ul>
       </div>
 
       <div class="search-profile">
-        <a href="{% url 'admin_search' %}"><i
-            class="fa-solid fa-magnifying-glass"></i></a>
-        <a href="{% url 'admin_dashboard' %}"><i
-            class="fa-solid fa-circle-user"></i></a>
+        <a href="{% url 'admin_search' %}">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </a>
+        <a href="{% url 'admin_dashboard' %}">
+          <i class="fa-solid fa-circle-user"></i>
+        </a>
       </div>
     </nav>
 
