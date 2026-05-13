@@ -325,7 +325,7 @@ try {
         console.error("Error fetching the book:", error);
         return null;
     }
-
+  },
   async getUserHistory() {
     const response = await fetch("/api/loans/history/", {
       credentials: "same-origin",
