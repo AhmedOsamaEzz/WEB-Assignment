@@ -130,6 +130,20 @@ const RealAPI = {
     return data;
   },
 
+  async getLogs() {
+    const response = await fetch('/api/logs/', { credentials: 'same-origin' });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || 'Failed to fetch logs');
+    return data.logs;
+  },
+
+  async getAdminStats() {
+    const response = await fetch('/api/stats/', { credentials: 'same-origin' });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.message || 'Failed to fetch stats');
+    return data;
+  },
+
   async getPendingUsers() {
     const response = await fetch('/api/users/pending/', { credentials: 'same-origin' });
     const data = await response.json();

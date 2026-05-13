@@ -125,39 +125,6 @@
               >
             </div>
             <div class="activity-list">
-              <div class="activity-item">
-                <img src="../assets/images/unnamed.png" alt="Atomic Habits" class="activity-book-img" />
-                <div class="activity-info">
-                  <p class="activity-book-title">Atomic Habits</p>
-                  <p class="activity-book-sub">Loaned to <span class="activity-name">Dr. Alistair Sterling</span></p>
-                </div>
-                <div class="activity-meta">
-                  <p class="activity-time">2 hours ago</p>
-                  <span class="activity-badge activity-badge--loan">Standard Loan</span>
-                </div>
-              </div>
-              <div class="activity-item activity-item--alt">
-                <img src="../assets/images/unnamed.png" alt="The Mountain Is You" class="activity-book-img" />
-                <div class="activity-info">
-                  <p class="activity-book-title">The Mountain Is You</p>
-                  <p class="activity-book-sub">Returned by <span class="activity-name">Julianne Vance</span></p>
-                </div>
-                <div class="activity-meta">
-                  <p class="activity-time">5 hours ago</p>
-                  <span class="activity-badge activity-badge--returned">Completed</span>
-                </div>
-              </div>
-              <div class="activity-item">
-                <img src="../assets/images/unnamed.png" alt="The 48 Laws of Power" class="activity-book-img" />
-                <div class="activity-info">
-                  <p class="activity-book-title">The 48 Laws of Power</p>
-                  <p class="activity-book-sub">Added by <span class="activity-name">Admin</span></p>
-                </div>
-                <div class="activity-meta">
-                  <p class="activity-time">Yesterday</p>
-                  <span class="activity-badge activity-badge--update">Inventory Update</span>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -295,6 +262,13 @@
               onclick="setLogFilter('book_loaned', this)"
             >
               Book loaned
+            </button>
+            <button
+              class="log-filter-btn log-filter-btn--book-reserved"
+              data-type="book_reserved"
+              onclick="setLogFilter('book_reserved', this)"
+            >
+              Book registered
             </button>
             <button
               class="log-filter-btn log-filter-btn--book-returned"

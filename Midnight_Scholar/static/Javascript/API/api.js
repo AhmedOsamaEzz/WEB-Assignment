@@ -12,7 +12,7 @@ const API = {
   extendLoan: FakeAPI.extendLoan,
   returnBook: FakeAPI.returnBook,
 
-  getAdminStats: FakeAPI.getAdminStats,
+  getAdminStats: RealAPI.getAdminStats,
   // Admin Inventory
   addBook: RealAPI.addBook,
   getBook: FakeAPI.getBook,
@@ -23,7 +23,7 @@ const API = {
   loginUser: FakeAPI.loginUser,
   registerUser: FakeAPI.registerUser,
   // new dashboard functions
-  getLogs: FakeAPI.getLogs,
+  getLogs: RealAPI.getLogs,
   getPendingUsers: RealAPI.getPendingUsers,
   getUsers: RealAPI.getApprovedUsers,
   approveUser: RealAPI.approveUser,
