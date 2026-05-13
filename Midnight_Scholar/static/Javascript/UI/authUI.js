@@ -138,7 +138,7 @@ async function handleSignupSubmit(nameInput, emailInput, passwordInput, signupBt
 }
 
 function initUI() {
-  console.log("I'm alive");
+  // console.log("I'm alive");
   const loginForm = document.querySelector(".login-form");
   if (loginForm) {
     const loginBtn = document.querySelector(".login-card .btn-primary");
@@ -189,4 +189,4 @@ const dbgr = () => {
   console.log("I AM ALIVE");
 }
 document.addEventListener("DOMContentLoaded", initUI);
-document.addEventListener("DOMContentLoaded", dbgr);
+// document.addEventListener("DOMContentLoaded", dbgr);

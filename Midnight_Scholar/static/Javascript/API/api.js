@@ -7,7 +7,7 @@ const API = {
   getBookById: FakeAPI.getBookById,
   borrowBook: RealAPI.borrowBook,
   getUserBorrowedBooks: RealAPI.getUserBorrowedBooks,
-  getUserHistory: FakeAPI.getUserHistory,
+  getUserHistory: RealAPI.getUserHistory,
   extendLoan: FakeAPI.extendLoan,
   returnBook: FakeAPI.returnBook,
   getAdminStats: RealAPI.getAdminStats,
