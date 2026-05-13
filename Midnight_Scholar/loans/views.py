@@ -7,6 +7,7 @@ from django.core.paginator import Paginator
 import datetime
 from books.models import Book
 from logs.models import Log
+from datetime import timedelta
 
 
 def loan_list(request):
@@ -85,10 +86,33 @@ def borrowed_books(request):
             ),
             'dueDate': loan.due_date.isoformat() if loan.due_date else None,
             'extended': loan.is_extended,
+            "loan_id": loan.id,
         }
         for loan in loans
     ]
     return JsonResponse(data, safe=False)
+
+def loan_history(request):
+    history = (
+        Loan.objects
+        .filter(user=request.user)
+        .exclude(status__in=['reserved', 'borrowed']) 
+        .select_related('book')
+        .order_by('-return_date') 
+    )
+
+    data = [
+        {
+            'isbn': loan.book.isbn,
+            'title': loan.book.title,
+            'author': loan.book.author,
+            'borrowedAt': loan.borrow_date.strftime('%Y-%m-%d') if loan.borrow_date else 'N/A',
+            'returnedAt': loan.return_date.strftime('%Y-%m-%d') if loan.return_date else 'N/A',
+            'status': loan.status,
+        }
+        for loan in history
+    ]
+    return JsonResponse({'history': data}, safe=False)
 
 
 @require_POST
@@ -117,3 +141,28 @@ def borrow_book(request):
         return JsonResponse({'success': True, 'message': 'Book reserved successfully.'}, status=200)
     except Book.DoesNotExist:
         return JsonResponse({'success': False, 'message': 'Book not found.'}, status=404)
+
+
+@require_POST
+def extend_loan(request, loan_id):
+    try:
+        loan = Loan.objects.get(id=loan_id, user=request.user)
+    except Loan.DoesNotExist:
+        return JsonResponse(
+            {'success': False, 'error': 'Loan not found.'},
+            status=404
+    )
+    if loan.is_extended:
+        return JsonResponse(
+            {'success': False, 'error': 'This loan has already been extended once!!!!.'},
+            status=400
+        )
+    loan.due_date += timedelta(days=3)
+    loan.is_extended = True
+    loan.save(update_fields=['due_date', 'is_extended'])
+
+    return JsonResponse({
+        'success': True,
+        'message': 'Loan extended successfully.',
+        'new_due_date': loan.due_date.isoformat(),
+    }, status=200)

@@ -120,6 +120,7 @@ async function handleBorrowAction() {
 async function checkBookStatus(isbn) {
   try {
     const borrowedBooks = await API.getUserBorrowedBooks();
+
     const isActive = borrowedBooks.some((book) => book.isbn === isbn);
     if (isActive) disableBorrowButton();
   } catch (error) {
@@ -262,18 +263,40 @@ async function initSearchPage() {
   triggerSearch();
 }
 
+function getAuthenticatedUser() {
+  const userDataElement = document.getElementById("user-data");
+
+  if (!userDataElement) {
+    console.error("User data script tag missing.");
+    return null;
+  }
+
+  const data = JSON.parse(userDataElement.textContent);
+
+  // LOGS TO VERIFY
+  // console.log("Checking attributes...");
+  // console.log("Display Name (Should be name):", data.displayName);
+  // console.log("Email (Should be email):", data.userEmail);
+
+  return data;
+}
+
 async function renderUserDashboard() {
-  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+  const User = getAuthenticatedUser();
+
   if (!User) return;
-  const token = User.token;
-  const borrowed = await API.getUserBorrowedBooks(token);
-  const history = await API.getUserHistory(token);
+
+  //   const token = User.token;
+  const borrowed = await API.getUserBorrowedBooks();
+
+  console.log(borrowed[0]); // check the field names
+  const history = await API.getUserHistory(); // fake
 
   const nameEl = document.getElementById("username");
-  if (nameEl) nameEl.textContent = User.name || "Scholar";
+  if (nameEl) nameEl.textContent = User.displayName || "Scholar";
 
   const emailEl = document.getElementById("email");
-  if (emailEl) emailEl.textContent = User.email || "Scholar@gmail.com";
+  if (emailEl) emailEl.textContent = User.userEmail || "Scholar@gmail.com";
 
   const now = new Date();
   const overdueBooks = borrowed.filter((b) => new Date(b.dueDate) < now);
@@ -289,7 +312,6 @@ async function renderUserDashboard() {
 
   if (borrowed.length === 0) {
     grid.innerHTML = '<p class="ud-book-author" style="padding:1rem;">No active loans.</p>';
-    return;
   }
   const recent = borrowed.slice(-3).reverse();
   grid.innerHTML = recent
@@ -322,29 +344,62 @@ async function renderUserDashboard() {
           <p class="ud-book-author">${book.author}</p>
           <span class="ud-badge ud-badge--loaned">Loaned</span>
           <div class="ud-book-actions">
-            <button class="ud-btn-ghost btn-extend" data-isbn="${book.isbn}">${extend}</button>
-            <button class="ud-btn-outline btn-return" data-isbn="${book.isbn}">Return</button>
+            <button class="ud-btn-ghost btn-extend" data-loan-id="${book.loan_id}" ${book.extended ? "disabled" : ""}>${extend}</button>
           </div>
         </div>
       </div>
     `;
     })
     .join("");
+
+  // console.log("history len", history.length);
+  const historyTbody = document.getElementById("history-tbody");
+  if (historyTbody) {
+    if (history.length === 0) {
+      historyTbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:2rem;">No borrowing history found.</td></tr>`;
+    } else {
+      // Show the 5 most recent history items
+      const recentHistory = history.slice(0, 5);
+
+      historyTbody.innerHTML = recentHistory
+        .map((item) => {
+          // Determine badge color based on status from Django
+          let badgeCls = "ud-badge--returned"; // default green
+          if (item.status === "overdue") badgeCls = "ud-badge--overdue";
+
+          return `
+          <tr>
+            <td><strong>${item.title}</strong></td>
+            <td>${item.author}</td>
+            <td>${item.borrowedAt}</td>
+            <td>${item.returnedAt || "—"}</td>
+            <td><span class="ud-badge ${badgeCls}">${item.status}</span></td>
+          </tr>
+        `;
+        })
+        .join("");
+    }
+  }
 }
 
 document.addEventListener("click", async (e) => {
-  const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
-  if (!User) return;
-  const isbn = e.target.getAttribute("data-isbn");
-  const token = User.token;
+  // const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
+  // if (!User) return;
+  // const isbn = e.target.getAttribute("data-isbn");
+  // const token = User.token;
 
   if (e.target.classList.contains("btn-extend")) {
     const btn = e.target;
-    const response = await API.extendLoan(isbn, token);
-    if (response.message === "Already Extended Book") return;
-    else {
+    const loanId = btn.dataset.loanId;
+    console.log("loan id:", loanId);
+
+    try {
+      await API.extendLoan(loanId);
       btn.disabled = true;
+      Window.alert("the loan has been extended for 3 days");
       renderUserDashboard();
+    } catch (error) {
+      alert(error.message);
     }
   }
 

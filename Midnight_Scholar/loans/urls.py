@@ -6,4 +6,6 @@ urlpatterns = [
     path('borrow/', views.borrow_book, name='borrow_book'),
     path('books/borrowed/', views.loan_list, name='admin_loan_list'),
     path('books/borrowed/action/', views.loan_action, name='admin_loan_action'),
+    path('history/', views.loan_history, name='loan_history'),
+    path('<int:loan_id>/extend/', views.extend_loan, name='extend-loan'),
 ]

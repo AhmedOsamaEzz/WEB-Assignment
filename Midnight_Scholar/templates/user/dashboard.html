@@ -25,6 +25,12 @@
         color: #ffb4ab;
       }
     </style>
+  <script id="user-data" type="application/json">
+    {
+      "displayName": "{{ user.name|default:user.username }}",
+      "userEmail": "{{ user.email }}"
+    }
+  </script>
   </head>
 
   <body id="user-dashboard-page">
@@ -53,7 +59,7 @@
       <header class="ud-header">
         <div class="ud-profile-block">
           <div class="ud-avatar">
-            <span class="material-symbols-outlined">account_circle</span>
+            <!-- <span class="material-symbols-outlined">account_circle</span> -->
           </div>
           <div class="ud-profile-info">
             <p class="ud-label">Member Since 2026</p>

@@ -325,6 +325,31 @@ try {
         console.error("Error fetching the book:", error);
         return null;
     }
+
+  async getUserHistory() {
+    const response = await fetch("/api/loans/history/", {
+      credentials: "same-origin",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch borrowing history");
+    }
+
+    const data = await response.json();
+    return data.history || [];
+  },
+
+  async extendLoan(loanId) {
+    const response = await fetch(`/api/loans/${loanId}/extend/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+    });
+    const data = await response.json();
+    if (!data.success) throw new Error(data.error);
+    return data;
   },
 };
 
