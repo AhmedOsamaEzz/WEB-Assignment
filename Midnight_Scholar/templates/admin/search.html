@@ -1,106 +1,121 @@
 {% load static %}
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <script src="https://kit.fontawesome.com/80d75008f5.js"
-      crossorigin="anonymous"></script>
-    <title>Search</title>
-    <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
-    <script type="module" src="{% static 'Javascript/UI/userUI.js' %}"></script>
-  </head>
-  <body id="search-page">
-  <nav>
-    <div class="links">
-      <ul>
-        <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
-        <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
-        <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
-        <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-        <li>
-          <form method="post" action="{% url 'logout' %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit" class="logout-btn" style="background:none; border:none; color:inherit; cursor:pointer; font:inherit; padding:0;">
-              Logout
-            </button>
-          </form>
-        </li>
-      </ul>
-    </div>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
+		<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+		<script
+			src="https://kit.fontawesome.com/80d75008f5.js"
+			crossorigin="anonymous"
+		></script>
+		<title>Search</title>
+		<script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
+		<script type="module" src="{% static 'Javascript/UI/userUI.js' %}"></script>
+	</head>
+	<body id="search-page">
+		<header>
+			<nav>
+				<a
+					href="{% url 'home' %}"
+					style="text-decoration: none; color: inherit"
+				>
+					<h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+				</a>
 
-    <div class="search-profile">
-      <a href="{% url 'admin_search' %}">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </a>
-      <a href="{% url 'admin_dashboard' %}">
-        <i class="fa-solid fa-circle-user"></i>
-      </a>
-    </div>
-  </nav>
+				<div class="links">
+					<ul>
+						<li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
+						<li><a href="{% url 'admin_book_list' %}">All Books</a></li>
+						<li>
+							<a href="{% url 'admin_loan_list' %}" class="active-nav-link"
+								>Loans</a
+							>
+						</li>
+						<li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
+						<li><a href="#" id="logout-link">Logout</a></li>
+					</ul>
+				</div>
 
-    <main>
-      <aside class="filters">
-        <div class="filters-section">
-          <p class="filters-title">Filter Archive</p>
-          <p class="filters-sub">Refine by category</p>
-        </div>
-        <div class="filters-section">
-          <h4>Category</h4>
-          <ul>
-            <li class="active">All</li>
-            <li>Self-Help</li>
-            <li>Programming</li>
-            <li>Math</li>
-            <li>History</li>
-            <li>Fiction</li>
-            <li>Science</li>
-            <li>Psychology</li>
-            <li>Other</li>
-          </ul>
-        </div>
-        <div class="filters-section">
-          <h4>Availability</h4>
-          <ul>
-            <li>
-              <input type="checkbox" class="filter-check" value="available"
-                checked />
-              Available Now
-            </li>
-          </ul>
-        </div>
-      </aside>
+				<div class="search-profile">
+					<a href="{% url 'admin_search' %}"
+						><i class="fa-solid fa-magnifying-glass"></i
+					></a>
+					<a href="{% url 'admin_dashboard' %}"
+						><i class="fa-solid fa-circle-user"></i
+					></a>
+				</div>
+			</nav>
+		</header>
+		<main>
+			<aside class="filters">
+				<div class="filters-section">
+					<p class="filters-title">Filter Archive</p>
+					<p class="filters-sub">Refine by category</p>
+				</div>
+				<div class="filters-section">
+					<h4>Category</h4>
+					<ul>
+						<li class="active">All</li>
+						<li>Self-Help</li>
+						<li>Programming</li>
+						<li>Math</li>
+						<li>History</li>
+						<li>Fiction</li>
+						<li>Science</li>
+						<li>Psychology</li>
+						<li>Other</li>
+					</ul>
+				</div>
+				<div class="filters-section">
+					<h4>Availability</h4>
+					<ul>
+						<li>
+							<input
+								type="checkbox"
+								class="filter-check"
+								value="available"
+								checked
+							/>
+							Available Now
+						</li>
+					</ul>
+				</div>
+			</aside>
 
-      <div class="main-content">
-        <div class="hero">
-          <div class="middle-text">
-            <p class="head">Explore the <span>Infinite</span></p>
-            <p>Discover, organize, and explore our comprehensive archive of rare
-              editions.</p>
-          </div>
-          <form class="search-bar">
-            <i class="fa-solid fa-book-open"></i>
-            <input type="text" placeholder="Search the Vaults" />
-            <button type="submit">
-              SEARCH
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </form>
-        </div>
+			<div class="main-content">
+				<div class="hero">
+					<div class="middle-text">
+						<p class="head">Explore the <span>Infinite</span></p>
+						<p>
+							Discover, organize, and explore our comprehensive archive of rare
+							editions.
+						</p>
+					</div>
+					<form class="search-bar">
+						<i class="fa-solid fa-book-open"></i>
+						<input type="text" placeholder="Search the Vaults" />
+						<button type="submit">
+							SEARCH
+							<i class="fa-solid fa-magnifying-glass"></i>
+						</button>
+					</form>
+				</div>
 
-        <div class="results-cnt" id="results-cnt">
-          <div class="results-header">
-            <div>
-              <p class="results-query">Results for: <span
-                  id="query-label"></span></p>
-              <p class="results-count"><span id="results-count">0</span> books
-                found</p>
-            </div>
-          </div>
-          <div class="cards" id="cards-container">
-            <!-- <div class="card">
+				<div class="results-cnt" id="results-cnt">
+					<div class="results-header">
+						<div>
+							<p class="results-query">
+								Results for: <span id="query-label"></span>
+							</p>
+							<p class="results-count">
+								<span id="results-count">0</span> books found
+							</p>
+						</div>
+					</div>
+					<div class="cards" id="cards-container">
+						<!-- <div class="card">
             <figure>
               <img src="../assets/images/atomic.jpg" alt="Can't load image!"
                 draggable="false">
@@ -116,20 +131,21 @@
               </figcaption>
             </figure>
           </div> -->
-          </div>
-        </div>
-      </div>
-    </main>
-    <hr class="global-hr" />
-    <footer class="global-footer">
-      <p class="name">The Midnight Scholar</p>
-      <div class="cnt">
-        <p><a href="#">PRIVACY POLICY</a></p>
-        <p><a href="#">TERMS OF ACCESS</a></p>
-        <p><a href="#">CONTACT CURATOR</a></p>
-      </div>
-      <p class="copyrights">&copy; 2026 The Midnight Scholar Private Archive.
-        All rights reserved.</p>
-    </footer>
-  </body>
+					</div>
+				</div>
+			</div>
+		</main>
+		<hr class="global-hr" />
+		<footer class="global-footer">
+			<p class="name">The Midnight Scholar</p>
+			<div class="cnt">
+				<p><a href="#">PRIVACY POLICY</a></p>
+				<p><a href="#">TERMS OF ACCESS</a></p>
+				<p><a href="#">CONTACT CURATOR</a></p>
+			</div>
+			<p class="copyrights">
+				&copy; 2026 The Midnight Scholar Private Archive. All rights reserved.
+			</p>
+		</footer>
+	</body>
 </html>
