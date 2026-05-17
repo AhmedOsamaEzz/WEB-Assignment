@@ -10,31 +10,65 @@
     <title>Search</title>
     <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
     <script type="module" src="{% static 'Javascript/UI/userUI.js' %}"></script>
+    <style>
+      .pagination-row {
+        display: flex;
+        justify-content: center;
+        gap: 0.35rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        padding-bottom: 2rem;
+      }
+      .page-btn {
+        background: var(--surface);
+        color: var(--text-muted);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: var(--radius-md);
+        padding: 0.45rem 0.85rem;
+        font-size: 0.8rem;
+        font-family: var(--sans);
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .page-btn:hover:not(:disabled) {
+        background: var(--surface-bright);
+        color: var(--text);
+      }
+      .page-btn:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .page-btn.current {
+        background: var(--primary-dark);
+        color: var(--primary);
+        border-color: var(--primary-dark);
+        font-weight: 700;
+        cursor: default;
+      }
+    </style>
   </head>
   <body id="search-page">
-      <nav>
-        <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
-            <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
-        </a>
-
-        <div class="links">
-          <ul>
-            <li><a href="{% url 'user_borrowed' %}">My Books</a></li>
-            <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
-            <li>
+    <nav>
+      <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
+          <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+      </a>
+      <div class="links">
+        <ul>
+          <li><a href="{% url 'user_borrowed' %}">My Books</a></li>
+          <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
+          <li>
             <form method="post" action="{% url 'logout' %}">
               {% csrf_token %}
               <button type="submit">Logout</button>
             </form>
           </li>
-          </ul>
-        </div>
-
-        <div class="search-profile">
-          <a href="{% url 'user_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
-          <a href="{% url 'user_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
-        </div>
-      </nav>
+        </ul>
+      </div>
+      <div class="search-profile">
+        <a href="{% url 'user_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
+        <a href="{% url 'user_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
+      </div>
+    </nav>
 
     <main>
       <aside class="filters">
@@ -87,24 +121,7 @@
               <p class="results-count"><span id="results-count">0</span> books found</p>
             </div>
           </div>
-          <div class="cards" id="cards-container">
-            <!-- <div class="card">
-            <figure>
-              <img src="../assets/images/atomic.jpg" alt="Can't load image!"
-                draggable="false">
-              <figcaption>
-                <p class="name">Atomic Habits</p>
-                <p class="author">James Clear</p>
-                <p class="desc">If you're having trouble changing your habits,
-                  the problem isn't you. The problem is your system. Bad
-                  habits
-                  repeat themselves again and again not because you don't want
-                  to change, but because you have the wrong system for
-                  change.</p>
-              </figcaption>
-            </figure>
-          </div> -->
-          </div>
+          <div class="cards" id="cards-container"></div>
         </div>
       </div>
     </main>

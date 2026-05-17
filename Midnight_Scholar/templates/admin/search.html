@@ -13,7 +13,44 @@
 		<title>Search</title>
 		<script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
 		<script type="module" src="{% static 'Javascript/UI/userUI.js' %}"></script>
-	</head>
+	
+    <style>
+      .pagination-row {
+        display: flex;
+        justify-content: center;
+        gap: 0.35rem;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+        padding-bottom: 2rem;
+      }
+      .page-btn {
+        background: var(--surface);
+        color: var(--text-muted);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: var(--radius-md);
+        padding: 0.45rem 0.85rem;
+        font-size: 0.8rem;
+        font-family: var(--sans);
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .page-btn:hover:not(:disabled) {
+        background: var(--surface-bright);
+        color: var(--text);
+      }
+      .page-btn:disabled {
+        opacity: 0.35;
+        cursor: default;
+      }
+      .page-btn.current {
+        background: var(--primary-dark);
+        color: var(--primary);
+        border-color: var(--primary-dark);
+        font-weight: 700;
+        cursor: default;
+      }
+    </style>
+  </head>
 	<body id="search-page">
 		<header>
 			<nav>
