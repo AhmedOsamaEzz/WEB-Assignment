@@ -436,7 +436,7 @@ async function renderUsersTab() {
 
   pendingList.onclick = async (e) => {
     const approveBtn = e.target.closest(".btn-approve");
-    const denyBtn    = e.target.closest(".btn-deny");
+    const denyBtn = e.target.closest(".btn-deny");
     if (!approveBtn && !denyBtn) return;
 
     const email = (approveBtn || denyBtn).dataset.email;
@@ -485,20 +485,20 @@ async function searchUsers() {
         let actionsHtml = "";
         if (user.status === "pending") {
           actionsHtml = `
-            <button class="btn btn-sm btn-success" onclick="approveUserFromDashboard(${user.id})">
+            <button class="action-btn btn-approve" onclick="approveUserFromDashboard(${user.id})">
               <i class="fa-solid fa-check"></i> Approve
             </button>
-            <button class="btn btn-sm btn-danger" onclick="denyUserFromDashboard(${user.id})">
+            <button class="action-btn btn-deny" onclick="denyUserFromDashboard(${user.id})">
               <i class="fa-solid fa-times"></i> Deny
             </button>`;
         } else if (user.status === "approved") {
           actionsHtml = `
-            <button class="btn btn-sm btn-warning" onclick="banUserFromDashboard(${user.id})">
+            <button class="action-btn btn-ban" onclick="banUserFromDashboard(${user.id})">
               <i class="fa-solid fa-ban"></i> Ban
             </button>`;
         } else if (user.status === "banned") {
           actionsHtml = `
-            <button class="btn btn-sm btn-info text-white" onclick="unbanUserFromDashboard(${user.id})">
+            <button class="action-btn btn-unban" onclick="unbanUserFromDashboard(${user.id})">
               <i class="fa-solid fa-undo"></i> Unban
             </button>`;
         }
