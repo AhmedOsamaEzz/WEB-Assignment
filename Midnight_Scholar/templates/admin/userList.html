@@ -325,7 +325,12 @@
 							>
 						</li>
 						<li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-						<li><a href="#" id="logout-link">Logout</a></li>
+						<li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
 					</ul>
 				</div>
 
@@ -354,7 +359,7 @@
 		<main class="users-main">
 			<!-- SEARCH & FILTERS -->
 			<div class="filter-card">
-				<form id="filter-form" style="display: contents">
+				<form id="filter-form" style="display: contents" onsubmit="event.preventDefault(); searchUsers();">
 					{% csrf_token %} {{ filter_form|crispy }}
 				</form>
 				<button class="search-btn" onclick="searchUsers()">
@@ -437,13 +442,13 @@
 				<a class="page-btn" href="?page={{ page_to_show.previous_page_number }}"
 					>‹ Prev</a
 				>
-				{% endif %} {% for num in page_to_show.paginator.page_range %}
-				<a
-					class="page-btn {% if page_to_show.number == num %}current{% endif %}"
-					href="?page={{ num }}"
-					>{{ num }}</a
-				>
-				{% endfor %} {% if page_to_show.has_next %}
+				{% endif %}
+				{% for num in page_to_show.paginator.page_range %}
+					{% if num >= page_to_show.number|add:"-2" and num <= page_to_show.number|add:"2" %}
+					<a class="page-btn {% if page_to_show.number == num %}current{% endif %}" href="?page={{ num }}">{{ num }}</a>
+					{% endif %}
+				{% endfor %}
+				{% if page_to_show.has_next %}
 				<a class="page-btn" href="?page={{ page_to_show.next_page_number }}"
 					>Next ›</a
 				>
