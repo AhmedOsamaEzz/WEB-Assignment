@@ -131,4 +131,5 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static', 
 ]
 AUTH_USER_MODEL = 'authe.User'
+LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'home'

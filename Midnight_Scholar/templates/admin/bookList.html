@@ -42,7 +42,12 @@
 							>
 						</li>
 						<li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-						<li><a href="#" id="logout-link">Logout</a></li>
+						<li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
 					</ul>
 				</div>
 
@@ -144,30 +149,25 @@
 
 			<br />
 			<div class="table-options-section">
-				<button
-					type="button"
-					class="btn-primary"
-					onclick="window.location.href='{% url 'admin_book_add' %}'"
-				>
-					Add Book
-				</button>
+				<a href="{% url 'admin_book_add' %}" class="btn-primary" style="text-decoration: none;">Add Book</a>
 
 				<div class="table-pagination">
 					{% if page_to_show.has_previous %}
-					<a
-						href="?page={{ page_to_show.previous_page_number }}"
-						style="text-decoration: none"
-					>
+					<a href="?page=1" style="text-decoration: none">
+						<button class="prev-btn">«</button>
+					</a>
+					<a href="?page={{ page_to_show.previous_page_number }}" style="text-decoration: none">
 						<button class="prev-btn">←</button>
 					</a>
 					{% else %}
+					<button class="prev-btn" disabled>«</button>
 					<button class="prev-btn" disabled>←</button>
 					{% endif %}
 
 					<div class="page-numbers">
 						{% for num in page_to_show.paginator.page_range %} {% if num == page_to_show.number %}
 						<button class="current-button">{{ num }}</button>
-						{% elif num > page_to_show.number|add:'-3' and num < page_to_show.number|add:'3' %}
+						{% elif num > page_to_show.number|add:'-2' and num < page_to_show.number|add:'2' %}
 						<a href="?page={{ num }}" style="text-decoration: none">
 							<button class="not-current-button">{{ num }}</button>
 						</a>
@@ -175,14 +175,15 @@
 					</div>
 
 					{% if page_to_show.has_next %}
-					<a
-						href="?page={{ page_to_show.next_page_number }}"
-						style="text-decoration: none"
-					>
+					<a href="?page={{ page_to_show.next_page_number }}" style="text-decoration: none">
 						<button class="next-btn">→</button>
+					</a>
+					<a href="?page={{ page_to_show.paginator.num_pages }}" style="text-decoration: none">
+						<button class="next-btn">»</button>
 					</a>
 					{% else %}
 					<button class="next-btn" disabled>→</button>
+					<button class="next-btn" disabled>»</button>
 					{% endif %}
 				</div>
 			</div>

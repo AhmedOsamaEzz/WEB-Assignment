@@ -9,7 +9,7 @@ const RealAPI = {
     try {
       let categoriesParam = "";
       if (categories && categories.length > 0) {
-        categoriesParam = categories.join(",");
+        categoriesParam = categories.map(cat => cat.toLowerCase()).join(",");
       }
 
       const params = new URLSearchParams();
@@ -305,25 +305,25 @@ const RealAPI = {
     }
   },
   async getBookByIsbn(isbn) {
-try {
-        // Construct the URL matching your Django path
-        const url = `/api/books/detail/${isbn}/`;
-        
-        // Make the GET request
-        const response = await fetch(url);
+    try {
+      // Construct the URL matching your Django path
+      const url = `/api/books/detail/${isbn}/`;
 
-        // Check if the response is successful (status 200-299)
-        if (!response.ok) {
-            throw new Error(`Failed to fetch book. Status: ${response.status}`);
-        }
+      // Make the GET request
+      const response = await fetch(url);
 
-        // Parse and return the JSON data
-        const bookData = await response.json();
-        return bookData;
+      // Check if the response is successful (status 200-299)
+      if (!response.ok) {
+        throw new Error(`Failed to fetch book. Status: ${response.status}`);
+      }
+
+      // Parse and return the JSON data
+      const bookData = await response.json();
+      return bookData;
 
     } catch (error) {
-        console.error("Error fetching the book:", error);
-        return null;
+      console.error("Error fetching the book:", error);
+      return null;
     }
   },
   async getUserHistory() {

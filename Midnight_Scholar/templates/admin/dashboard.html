@@ -44,7 +44,12 @@
 							>
 						</li>
 						<li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
-						<li><a href="#" id="logout-link">Logout</a></li>
+						<li>
+            <form method="post" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit">Logout</button>
+            </form>
+          </li>
 					</ul>
 				</div>
 

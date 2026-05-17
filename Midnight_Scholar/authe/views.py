@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout
 from django.views.decorators.http import require_POST, require_GET
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 
@@ -17,6 +18,7 @@ from logs.models import Log
 
 class CustomLoginView(LoginView):
     template_name = 'auth/login.html'
+    redirect_authenticated_user = True # if already loged in
 
     def form_valid(self, form):
         user = form.get_user()
@@ -48,6 +50,12 @@ class CustomLoginView(LoginView):
 
 
 def signupView(request):
+    # if he has tokens just let him in
+    if request.user.is_authenticated:
+        if getattr(request.user, 'role', 'user') == 'admin':
+            return redirect('admin_dashboard')
+        return redirect('user_dashboard')
+
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
@@ -65,7 +73,7 @@ def signupView(request):
 
     return render(request, 'auth/signup.html', {'form': form})
 
-
+@login_required(login_url='login')
 @admin_required
 def user_list(request):
     users = User.objects.all().exclude(role='admin').order_by('-date_joined')
@@ -80,6 +88,7 @@ def user_list(request):
 
 
 @require_GET
+@login_required(login_url='login')
 @admin_required
 def search_users(request):
     try:
@@ -118,12 +127,14 @@ def search_users(request):
         }, status=500)
 
 
+@login_required(login_url='login')
 @admin_required
 def get_pending_users(request):
     users = User.objects.filter(status='pending').values('id', 'name', 'email', 'username')
     return JsonResponse({'success': True, 'users': list(users)})
 
 
+@login_required(login_url='login')
 @admin_required
 def get_approved_users(request):
     users = User.objects.filter(status='approved', role='user').values('id', 'name', 'email', 'username')
@@ -131,6 +142,7 @@ def get_approved_users(request):
 
 
 @require_POST
+@login_required(login_url='login')
 @admin_required
 def approve_user(request):
     try:
@@ -163,6 +175,7 @@ def approve_user(request):
 
 
 @require_POST
+@login_required(login_url='login')
 @admin_required
 def deny_user(request):
     try:
@@ -195,6 +208,7 @@ def deny_user(request):
 
 
 @require_POST
+@login_required(login_url='login')
 @admin_required
 def ban_user(request):
     try:
@@ -234,6 +248,7 @@ def ban_user(request):
 
 
 @require_POST
+@login_required(login_url='login')
 @admin_required
 def unban_user(request):
     try:
@@ -267,6 +282,7 @@ def unban_user(request):
         }, status=500)
 
 
+@login_required(login_url='login')
 @admin_required
 def get_admin_stats(request):
     from books.models import Book

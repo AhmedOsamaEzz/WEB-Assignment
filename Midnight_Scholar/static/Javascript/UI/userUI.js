@@ -50,13 +50,20 @@ function fetchBook(book) {
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(query = "", categories = [], availableOnly = false) {
+async function renderCatalog(query = "", categories = [], availableOnly = false, excludeCategories = []) {
   const cardsContainer = document.getElementById("cards-container");
   const resultsCount = document.getElementById("results-count");
   if (!cardsContainer) return;
 
   try {
-    const books = await API.getBooks(query, categories, availableOnly);
+    let books = await API.getBooks(query, categories, availableOnly);
+
+    // If "Other" is selected, exclude all known named categories
+    if (excludeCategories.length > 0) {
+      const excluded = excludeCategories.map(c => c.toLowerCase());
+      books = books.filter(book => !excluded.includes((book.category || "").toLowerCase()));
+    }
+
     if (resultsCount) resultsCount.textContent = books.length;
 
     if (books.length === 0) {
@@ -210,12 +217,20 @@ async function initSearchPage() {
     }, 300);
   };
 
+  // hard copied ;)
+  const KNOWN_CATEGORIES = ["Self-Help", "Programming", "Math", "History", "Fiction", "Science", "Psychology"];
+
   const triggerSearch = () => {
     if (queryLabel) {
       queryLabel.textContent = currentQuery;
     }
-    const catogriesArray = currentCategory === "All" ? [] : [currentCategory];
-    renderCatalog(currentQuery, catogriesArray, currentAvailability);
+    if (currentCategory === "Other") {
+      // 
+      renderCatalog(currentQuery, [], currentAvailability, KNOWN_CATEGORIES);
+    } else {
+      const catogriesArray = currentCategory === "All" ? [] : [currentCategory];
+      renderCatalog(currentQuery, catogriesArray, currentAvailability);
+    }
   };
 
   if (searchInput) {
