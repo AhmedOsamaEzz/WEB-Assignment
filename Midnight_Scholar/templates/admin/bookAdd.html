@@ -12,8 +12,6 @@
   <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
   <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
 </head>
-<title>add book</title>
-</head>
 
 <body>
   <header>
@@ -24,7 +22,7 @@
 
       <div class="links">
         <ul>
-		  <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
+          <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
           <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
           <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
           <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>
@@ -46,22 +44,26 @@
       <img id="image" src="{% static 'images/unnamed.png' %}" alt />
       <input type="file" id="fileInput" accept="image/*" style="display: none;">
       <div class="upload-icon"><i class="fas fa-camera"></i> </div>
+      <div class="error-msg" id="error-cover_image"></div>
     </div>
 
     <div class="book-info-section">
       <div class="label-input">
         <label for="title">Book Title</label>
         <input id="title" placeholder="Enter the book title" />
+        <div class="error-msg" id="error-title"></div>
       </div>
 
       <div class="same-row">
         <div class="label-input">
           <label for="author">Book Author</label>
           <input id="author" type="text" placeholder="Enter the book Author" />
+          <div class="error-msg" id="error-author"></div>
         </div>
         <div class="label-input">
           <label for="isbn">Book ISBN</label>
           <input id="isbn" type="text" placeholder="Enter the book ISBN" />
+          <div class="error-msg" id="error-isbn"></div>
         </div>
       </div>
 
@@ -78,28 +80,34 @@
           <option value="psychology">Psychology</option>
           <option value="other">Other</option>
         </select>
+        <div class="error-msg" id="error-category"></div>
       </div>
 
       <div class="same-row">
         <div class="label-input">
           <label for="publicationYear">Publication Year</label>
           <input id="publicationYear" type="text" placeholder="Enter the book Publication year" />
+          <div class="error-msg" id="error-year"></div>
         </div>
         <div class="label-input">
           <label for="publisher">Publisher</label>
           <input id="publisher" type="text" placeholder="Enter the book Publisher" />
+          <div class="error-msg" id="error-publisher"></div>
         </div>
       </div>
 
       <div class="label-input">
         <label for="totalCopies">Book Total Copies</label>
         <input id="totalCopies" type="number" placeholder="Enter the book Total Copies" />
+        <div class="error-msg" id="error-copies"></div>
       </div>
 
       <div class="label-input">
         <label for="description">Book description</label>
         <textarea id="description" placeholder="Enter the book description"></textarea>
+        <div class="error-msg" id="error-description"></div>
       </div>
+
       <div id="error-message-container" class="error-msg"></div>
       <div class="form-button">
         <button class="btn-primary" id="addbtn" type="submit">submit</button>

@@ -57,7 +57,7 @@
 		<form class="book-edit-container">
 			<div class="book-image-section">
 				<label for="image">Book cover</label>
-				<img id="image" src="../assets/images/unnamed.png" alt />
+				<img id="image" src="{% static 'images/unnamed.png' %}" alt />
 				<input
 					type="file"
 					id="fileInput"
@@ -71,6 +71,7 @@
 				<div class="label-input">
 					<label for="title">Book Title</label>
 					<input id="title" placeholder="enter the book title" />
+					<div class="error-msg" id="error-title"></div>
 				</div>
 
 				<div class="same-row">
@@ -81,10 +82,12 @@
 							type="text"
 							placeholder="enter the book Author"
 						/>
+						<div class="error-msg" id="error-author"></div>
 					</div>
 					<div class="label-input">
 						<label for="isbn">Book ISBN</label>
 						<input id="isbn" type="text" placeholder="enter the book ISBN" />
+						<div class="error-msg" id="error-isbn"></div>
 					</div>
 				</div>
 
@@ -101,6 +104,7 @@
 						<option value="psychology">Psychology</option>
 						<option value="other">Other</option>
 					</select>
+					<div class="error-msg" id="error-category"></div>
 				</div>
 
 				<div class="same-row">
@@ -111,6 +115,7 @@
 							type="text"
 							placeholder="enter the book Publication year"
 						/>
+						<div class="error-msg" id="error-year"></div>
 					</div>
 					<div class="label-input">
 						<label for="publisher">Publisher</label>
@@ -119,6 +124,7 @@
 							type="text"
 							placeholder="enter the book Publisher"
 						/>
+						<div class="error-msg" id="error-publisher"></div>
 					</div>
 				</div>
 
@@ -129,6 +135,7 @@
 						type="number"
 						placeholder="enter the book Total Copies"
 					/>
+					<div class="error-msg" id="error-copies"></div>
 				</div>
 
 				<div class="label-input">
@@ -137,7 +144,9 @@
 						id="description"
 						placeholder="enter the book description"
 					></textarea>
+					<div class="error-msg" id="error-description"></div>
 				</div>
+
 				<div id="error-message-container" class="error-msg"></div>
 				<div class="form-button">
 					<button class="btn-primary" id="editbtn" type="submit">submit</button>
