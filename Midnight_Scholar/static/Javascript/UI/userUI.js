@@ -411,7 +411,7 @@ document.addEventListener("click", async (e) => {
     try {
       await API.extendLoan(loanId);
       btn.disabled = true;
-      Window.alert("the loan has been extended for 3 days");
+      window.alert("the loan has been extended for 3 days");
       renderUserDashboard();
     } catch (error) {
       alert(error.message);

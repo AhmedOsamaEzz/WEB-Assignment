@@ -1,0 +1,51 @@
+<header>
+  <nav>
+    <a href="{% url 'home' %}" class="logo-link">
+      <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
+    </a>
+
+    <div class="links">
+      <ul>
+        <li>
+          <a href="{% url 'admin_user_list' %}"
+            {% if request.resolver_match.url_name == 'admin_user_list' %}class="active-nav-link"{% endif %}>
+            Manage Users
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin_book_list' %}"
+            {% if request.resolver_match.url_name in 'admin_book_list admin_book_add admin_book_edit admin_book_details' %}class="active-nav-link"{% endif %}>
+            All Books
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin_loan_list' %}"
+            {% if request.resolver_match.url_name in 'admin_loan_list admin_borrowed_list' %}class="active-nav-link"{% endif %}>
+            Loans
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'admin_dashboard' %}"
+            {% if request.resolver_match.url_name == 'admin_dashboard' %}class="active-nav-link"{% endif %}>
+            Dashboard
+          </a>
+        </li>
+        <li>
+          <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="nav-logout-btn" style="transform: none;">Logout</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+
+    <div class="search-profile">
+      <a href="{% url 'admin_search' %}" aria-label="Search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </a>
+      <a href="{% url 'admin_dashboard' %}" aria-label="Profile">
+        <i class="fa-solid fa-circle-user"></i>
+      </a>
+    </div>
+  </nav>
+</header>

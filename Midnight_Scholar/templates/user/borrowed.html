@@ -12,29 +12,7 @@
   </head>
 
   <body id="borrowed-page">
-      <nav>
-        <a href="{% url 'home' %}" style="text-decoration: none; color: inherit;">
-            <h3 class="logo" id="logo-link">The Midnight Scholar</h3>
-        </a>
-
-        <div class="links">
-          <ul>
-            <li><a href="{% url 'user_borrowed' %}">My Books</a></li>
-            <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
-            <li>
-            <form method="post" action="{% url 'logout' %}">
-              {% csrf_token %}
-              <button type="submit">Logout</button>
-            </form>
-          </li>
-          </ul>
-        </div>
-
-        <div class="search-profile">
-          <a href="{% url 'user_search' %}"><i class="fa-solid fa-magnifying-glass"></i></a>
-          <a href="{% url 'user_dashboard' %}"><i class="fa-solid fa-circle-user"></i></a>
-        </div>
-      </nav>
+      {% include "partials/user_navbar.html" %}
 
     <h1 id="page-title">Borrowed Books</h1>
 

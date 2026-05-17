@@ -339,11 +339,11 @@ body#sign-up-page {
     border-color 0.2s;
 }
 
-.checkbox-container:hover input ~ .checkmark {
+.checkbox-container:hover input~.checkmark {
   border-color: var(--primary-dark);
 }
 
-.checkbox-container input:checked ~ .checkmark {
+.checkbox-container input:checked~.checkmark {
   background-color: var(--primary-dark);
   border-color: var(--primary-dark);
 }
@@ -354,7 +354,7 @@ body#sign-up-page {
   display: none;
 }
 
-.checkbox-container input:checked ~ .checkmark:after {
+.checkbox-container input:checked~.checkmark:after {
   display: block;
 }
 
@@ -368,7 +368,7 @@ body#sign-up-page {
   transform: rotate(45deg);
 }
 
-.checkbox-container input:focus-visible ~ .checkmark {
+.checkbox-container input:focus-visible~.checkmark {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
@@ -656,14 +656,12 @@ body#sign-up-page {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(240, 187, 164, 0.08) 40%,
-    rgba(114, 75, 57, 0.25) 50%,
-    rgba(240, 187, 164, 0.08) 60%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(240, 187, 164, 0.08) 40%,
+      rgba(114, 75, 57, 0.25) 50%,
+      rgba(240, 187, 164, 0.08) 60%,
+      transparent 100%);
   opacity: 0;
   pointer-events: none;
   border-radius: var(--radius-sm);
@@ -692,7 +690,7 @@ body#sign-up-page {
   }
 }
 
-#search-page main .search-bar > i {
+#search-page main .search-bar>i {
   font-size: 1.5625rem;
   padding: 1.5rem;
   background-color: var(--surface-bright);
@@ -2469,7 +2467,7 @@ body#sign-up-page {
 .ud-avatar .material-symbols-outlined {
   font-size: 3rem;
   color: var(--primary);
-  font-variation-settings: "FILL" 1;
+  font-variation-settings: "FILL"1;
 }
 
 .ud-label {
@@ -3021,31 +3019,43 @@ body#sign-up-page {
 /* END INDEX PAGE */
 
 /* Start Global Nav */
-
 nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
   height: var(--nav-height);
   display: flex;
   padding: 0 2rem;
-  background-color: hsl(from var(--bg) h s l / 0.6);
+  background: hsl(from var(--surface) h s l / 0.78);
+  backdrop-filter: blur(18px) saturate(1.2);
+  -webkit-backdrop-filter: blur(18px) saturate(1.2);
   justify-content: space-between;
   align-items: center;
-  box-shadow: var(--shadow);
+  border-bottom: 1px solid hsl(from var(--surface-bright) h s l / 0.4);
   font-family: var(--serif);
+}
+
+.logo-link {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
 }
 
 nav .logo {
   user-select: none;
-  text-decoration: none;
   color: var(--primary);
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 400;
-  transition: 0.4s;
+  letter-spacing: 0.03em;
+  transition: color 0.3s ease;
   cursor: pointer;
+  margin: 0;
+  transition: 0.4s;
 }
 
 nav .logo:hover {
   color: hsl(from var(--secondary) h s l / 0.7);
-  transform: scale(1.08);
+  transform: scale(1.03);
 }
 
 .links {
@@ -3058,92 +3068,100 @@ nav ul {
   padding: 0;
   margin: 0;
   display: flex;
-  justify-content: space-around;
   align-items: center;
+  gap: 0.15rem;
 }
 
+nav ul li a,
 nav ul li button {
+  text-decoration: none;
+  color: hsl(from var(--text) h s l / 0.6);
+  padding: 0.45rem 1rem;
+  font-size: 0.9rem;
+  font-family: var(--sans);
+  font-weight: 500;
+  display: block;
+  position: relative;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
   background: none;
   border: none;
-  padding: 0;
   cursor: pointer;
   font: inherit;
-  color: hsl(from var(--text) h s l / 0.7);
-  /* match your link color */
-  text-decoration: none;
-  /* or underline, whatever your links use */
+  letter-spacing: 0.01em;
 }
 
+nav ul li a:hover,
 nav ul li button:hover {
   color: var(--text-light);
+  background: hsl(from var(--surface-bright) h s l / 0.35);
 }
 
-nav ul li a {
-  text-decoration: none;
-  color: hsl(from var(--text) h s l / 0.7);
-  padding: 10px;
-  margin: 15px;
-  display: block;
-  font-size: 1rem;
-  position: relative;
+nav ul li a.active-nav-link {
+  color: var(--primary);
+  background: hsl(from var(--primary) h s l / 0.08);
 }
 
-nav ul li a:hover {
-  color: var(--text-light);
-}
-
-nav ul li button {
-  position: relative;
-}
-
-nav ul li button::after {
+nav ul li a.active-nav-link::after {
   content: "";
   position: absolute;
   height: 2px;
-  width: 100%;
-  bottom: -10px;
-  left: 0;
-  background-color: var(--text-muted);
-  transform: scaleX(0);
-  transition: transform 0.3s ease-in-out;
+  width: 50%;
+  bottom: 3px;
+  left: 25%;
+  background: var(--primary);
+  border-radius: 2px;
 }
 
-nav ul li a::after {
+nav ul li a:not(.active-nav-link)::after,
+nav ul li button.nav-logout-btn::after {
   content: "";
   position: absolute;
   height: 2px;
-  width: 100%;
-  bottom: 0;
-  left: 0;
-  background-color: var(--text-muted);
+  width: 50%;
+  bottom: 3px;
+  left: 25%;
+  background: var(--text-muted);
+  border-radius: 2px;
   transform: scaleX(0);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.25s ease;
 }
 
-nav ul li a:hover::after, nav ul li button:hover::after {
+nav ul li a:not(.active-nav-link):hover::after,
+nav ul li button.nav-logout-btn:hover::after {
   transform: scaleX(1);
 }
 
 .search-profile {
   display: flex;
-  align-self: center;
-  gap: 1rem;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .search-profile a {
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.search-profile a:hover {
+  background: hsl(from var(--surface-bright) h s l / 0.5);
 }
 
 .search-profile a i {
-  display: flex;
   color: var(--primary);
-  font-size: 1.5rem;
-  justify-content: flex-start;
+  font-size: 1.15rem;
   transition: color 0.2s;
+  display: flex;
 }
 
 .search-profile a:hover i {
-  color: hsl(from var(--secondary) h s l / 0.7);
+  color: var(--secondary);
 }
 
 /* End Global Nav */
@@ -3304,7 +3322,8 @@ nav ul li a:hover::after, nav ul li button:hover::after {
 }
 
 .due-overdue {
-  color: #e57373; /* Soft dark-mode friendly red */
+  color: #e57373;
+  /* Soft dark-mode friendly red */
   font-weight: 600;
 }
 
@@ -3327,7 +3346,8 @@ nav ul li a:hover::after, nav ul li button:hover::after {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(12, 21, 25, 0.75); /* Matches --bg with opacity */
+  background: rgba(12, 21, 25, 0.75);
+  /* Matches --bg with opacity */
   z-index: 999;
   align-items: center;
   justify-content: center;
