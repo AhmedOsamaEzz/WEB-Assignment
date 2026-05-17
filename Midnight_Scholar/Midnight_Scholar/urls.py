@@ -24,6 +24,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from books import views as book_views
 from django.contrib.auth.views import LogoutView
+from django.contrib.auth.decorators import login_required
 
 
 def home_view(request):
@@ -37,13 +38,13 @@ from logs import views as logs_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('', home_view, name='home'),
     # path('login/', TemplateView.as_view(template_name='auth/login.html'), name='login'),
     # path('signup/', TemplateView.as_view(template_name='auth/signup.html'), name='signup'),
-    path('user/dashboard/', TemplateView.as_view(template_name='user/dashboard.html'), name='user_dashboard'),
-    path('user/books/', book_views.book_details, name='user_book_details'),
-    path('user/borrowed/', TemplateView.as_view(template_name='user/borrowed.html'), name='user_borrowed'),
-    path('user/search/', TemplateView.as_view(template_name='user/search.html'), name='user_search'),
+    path('user/dashboard/', login_required(TemplateView.as_view(template_name='user/dashboard.html'), login_url='login'), name='user_dashboard'),
+    path('user/books/',     login_required(book_views.book_details, login_url='login'), name='user_book_details'),
+    path('user/borrowed/',  login_required(TemplateView.as_view(template_name='user/borrowed.html'), login_url='login'), name='user_borrowed'),
+    path('user/search/',    login_required(TemplateView.as_view(template_name='user/search.html'), login_url='login'), name='user_search'),
     
     # path('libadmin/dashboard/', TemplateView.as_view(template_name='admin/dashboard.html'), name='admin_dashboard'),
     path('libadmin/dashboard/', admin_required(TemplateView.as_view(template_name='admin/dashboard.html')), name='admin_dashboard'),
