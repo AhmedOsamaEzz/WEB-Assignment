@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
-from authe.services.security import admin_required
+from authe.services.security import admin_required, user_required
 from authe import views as authe_views
 from django.conf import settings
 from django.conf.urls.static import static
@@ -41,10 +41,10 @@ urlpatterns = [
     path('', home_view, name='home'),
     # path('login/', TemplateView.as_view(template_name='auth/login.html'), name='login'),
     # path('signup/', TemplateView.as_view(template_name='auth/signup.html'), name='signup'),
-    path('user/dashboard/', login_required(TemplateView.as_view(template_name='user/dashboard.html'), login_url='login'), name='user_dashboard'),
-    path('user/books/',     login_required(book_views.book_details, login_url='login'), name='user_book_details'),
-    path('user/borrowed/',  login_required(TemplateView.as_view(template_name='user/borrowed.html'), login_url='login'), name='user_borrowed'),
-    path('user/search/',    login_required(TemplateView.as_view(template_name='user/search.html'), login_url='login'), name='user_search'),
+    path('user/dashboard/', user_required(TemplateView.as_view(template_name='user/dashboard.html')), name='user_dashboard'),
+    path('user/books/',     user_required(book_views.book_details), name='user_book_details'),
+    path('user/borrowed/',  user_required(TemplateView.as_view(template_name='user/borrowed.html')), name='user_borrowed'),
+    path('user/search/',    user_required(TemplateView.as_view(template_name='user/search.html')), name='user_search'),
     
     # path('libadmin/dashboard/', TemplateView.as_view(template_name='admin/dashboard.html'), name='admin_dashboard'),
     path('libadmin/dashboard/', admin_required(TemplateView.as_view(template_name='admin/dashboard.html')), name='admin_dashboard'),
