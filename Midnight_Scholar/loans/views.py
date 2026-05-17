@@ -87,6 +87,7 @@ def borrowed_books(request):
             'dueDate': loan.due_date.isoformat() if loan.due_date else None,
             'extended': loan.is_extended,
             "loan_id": loan.id,
+            "status": loan.status,
         }
         for loan in loans
     ]
