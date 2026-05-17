@@ -40,72 +40,119 @@ const readImageAsync = (file) => {
 };
 
 /**
+ * Clears all per-field error messages in the book form.
+ */
+const clearBookErrors = () => {
+  const fields = ["title", "author", "isbn", "year", "publisher", "copies", "description", "category", "cover_image"];
+  fields.forEach((f) => {
+    const el = document.getElementById("error-" + f);
+    if (el) el.innerText = "";
+  });
+  const container = document.getElementById("error-message-container");
+  if (container) container.innerText = "";
+};
+
+/**
+ * Shows a per-field error message for a book form field.
+ * Falls back to the general error container if no per-field element exists.
+ * @param {string} field - The field name (e.g. "title", "isbn").
+ * @param {string} message - The error message to display.
+ */
+const showBookFieldError = (field, message) => {
+  const el = document.getElementById("error-" + field);
+  if (el) {
+    el.innerText = message;
+  } else {
+    bookSubmitFormError(message);
+  }
+};
+
+/**
  * Validates the raw text data extracted from the HTML form.
- * Ensures mandatory fields are filled out, some constraints are met,
- * and numbers are formatted logically.
- * * @param {Object} book - The book object containing raw string values from the DOM.
+ * Shows per-field error messages and returns false if anything fails.
+ * @param {Object} book - The book object containing raw string values from the DOM.
+ * @param {boolean} requireImage - Whether a cover image is required (true for add, false for edit).
  * @returns {boolean} True if the form data passes all checks, false if anything fails.
  */
-const isValidBook = (book) => {
+const isValidBook = (book, requireImage = false) => {
+  clearBookErrors();
+  let valid = true;
+
   if (!book.title) {
-    return false;
+    showBookFieldError("title", "Title is required");
+    valid = false;
   }
   if (!book.author) {
-    return false;
+    showBookFieldError("author", "Author is required");
+    valid = false;
   }
 
   // ISBN Checks
   if (!book.isbn) {
-    return false;
+    showBookFieldError("isbn", "ISBN is required");
+    valid = false;
+  } else if (!/^[\d-]+[Xx]?$/.test(String(book.isbn))) {
+    showBookFieldError("isbn", "Invalid ISBN format (digits and dashes only)");
+    valid = false;
+  } else if (book.isbn.length > 13) {
+    showBookFieldError("isbn", "ISBN must be 13 characters or fewer");
+    valid = false;
   }
-  if (!/^[\d-]+[Xx]?$/.test(String(book.isbn))) {
-    return false;
-  }
-  console.log("good isbn");
-  if (book.isbn.length > 13) {
-    return false;
-  }
+
   // Year Checks
   if (!book.year) {
-    return false;
-  }
-  if (!/^\d+$/.test(book.year)) {
-    return false;
-  }
-  if (book.year.length > 4) {
-    return false;
+    showBookFieldError("year", "Publication year is required");
+    valid = false;
+  } else if (!/^\d+$/.test(book.year)) {
+    showBookFieldError("year", "Year must be a number");
+    valid = false;
+  } else if (book.year.length !== 4) {
+    showBookFieldError("year", "Year must be a 4-digit number");
+    valid = false;
+  } else {
+    const year = parseInt(book.year);
+    const currentYear = new Date().getFullYear();
+    if (year < 1000 || year > currentYear) {
+      showBookFieldError("year", `Year must be between 1000 and ${currentYear}`);
+      valid = false;
+    }
   }
 
-  const year = parseInt(book.year);
-  const currentYear = new Date().getFullYear();
-  if (year < 1000 || year > currentYear) {
-    return false;
-  }
-
-  // Publisher, Copies, Description, Category Checks
   if (!book.publisher) {
-    return false;
+    showBookFieldError("publisher", "Publisher is required");
+    valid = false;
   }
 
   if (!book.copies) {
-    return false;
-  }
-  if (!/^\d+$/.test(book.copies)) {
-    return false;
-  }
-  const copies = parseInt(book.copies);
-  if (copies < 1) {
-    return false;
+    showBookFieldError("copies", "Number of copies is required");
+    valid = false;
+  } else if (!/^\d+$/.test(book.copies)) {
+    showBookFieldError("copies", "Copies must be a positive number");
+    valid = false;
+  } else if (parseInt(book.copies) < 1) {
+    showBookFieldError("copies", "Must have at least 1 copy");
+    valid = false;
   }
 
   if (!book.description) {
-    return false;
-  }
-  if (!book.category) {
-    return false;
+    showBookFieldError("description", "Description is required");
+    valid = false;
   }
 
-  return true;
+  if (!book.category) {
+    showBookFieldError("category", "Please select a category");
+    valid = false;
+  }
+
+  if (requireImage) {
+    const imageInput = document.getElementById("fileInput");
+    if (!imageInput || !imageInput.files || imageInput.files.length === 0) {
+      showBookFieldError("cover_image", "A cover image is required");
+      valid = false;
+    }
+  }
+
+  return valid;
 };
 
 /**
@@ -199,12 +246,6 @@ const bookSubmitFormError = (error) => {
 const handleBookFormSubmit = async (event, mode) => {
   event.preventDefault();
   const imageInput = document.getElementById("fileInput");
-
-  if (mode == "add" && (!imageInput.files || imageInput.files.length === 0)) {
-    bookSubmitFormError("No Image were provided");
-    return;
-  }
-
   const oldIsbn = new URLSearchParams(window.location.search).get("isbn");
 
   const title = document.querySelector("#title").value.trim();
@@ -228,24 +269,48 @@ const handleBookFormSubmit = async (event, mode) => {
     category,
   };
 
-  if (!isValidBook(bookData)) return;
+  if (!isValidBook(bookData, mode === "add")) return;
   bookData.year = parseInt(bookData.year);
   bookData.copies = parseInt(bookData.copies);
   bookData.availableCopies = bookData.copies;
 
   if (imageInput.files && imageInput.files.length > 0) {
-    const img = imageInput.files[0]; // don't convert to base 64
+    const img = imageInput.files[0];
     bookData.cover = img;
   } else {
     bookData.cover = document.querySelector("#image").src;
   }
+
+  /**
+   * Displays server-side field errors returned from the API.
+   * @param {Object} errors - Map of field name to error message.
+   */
+  const showServerErrors = (errors) => {
+    clearBookErrors();
+    let hasFieldError = false;
+    Object.entries(errors).forEach(([field, message]) => {
+      const el = document.getElementById("error-" + field);
+      if (el) {
+        el.innerText = message;
+        hasFieldError = true;
+      }
+    });
+    if (!hasFieldError) {
+      bookSubmitFormError(Object.values(errors).join(" "));
+    }
+  };
+
   if (mode === "add") {
     try {
       await API.addBook(bookData);
       window.location.href = "/libadmin/books/list/";
     } catch (error) {
       console.log(error);
-      bookSubmitFormError("Failed to add book");
+      if (error.errors) {
+        showServerErrors(error.errors);
+      } else {
+        bookSubmitFormError(error.message || "Failed to add book");
+      }
     }
   } else if (mode === "edit") {
     try {
@@ -253,7 +318,11 @@ const handleBookFormSubmit = async (event, mode) => {
       window.location.href = "/libadmin/books/list/";
     } catch (error) {
       console.log(error);
-      bookSubmitFormError("Failed to Edit book");
+      if (error.errors) {
+        showServerErrors(error.errors);
+      } else {
+        bookSubmitFormError(error.message || "Failed to edit book");
+      }
     }
   }
 };

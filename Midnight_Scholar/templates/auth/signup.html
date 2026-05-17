@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="{% static 'css/normalize.css' %}" />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <!-- <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script> -->
     <title>nice library</title>
   </head>
 
@@ -24,19 +23,16 @@
             {% csrf_token %}
 
             <label for="signup-name" class="form-label">Full Name</label>
-            <input type="text" placeholder="your name" class="input-field" id="signup-name" name="name"/>
-            <div class="error-msg" id="signup-username-error">
-            </div>
+            <input type="text" placeholder="your name" class="input-field" id="signup-name" name="name" value="{{ form.name.value|default:'' }}"/>
+            <div class="error-msg" id="signup-username-error">{% for error in form.name.errors %}{{ error }}{% endfor %}</div>
 
             <label for="signup-email" class="form-label">username (email)</label>
-            <input type="text" placeholder="username@gmail.com" class="input-field" id="signup-email" name="email"/>
-            <div class="error-msg" id="signup-email-error">
-            </div>
+            <input type="text" placeholder="username@gmail.com" class="input-field" id="signup-email" name="email" value="{{ form.email.value|default:'' }}"/>
+            <div class="error-msg" id="signup-email-error">{% for error in form.email.errors %}{{ error }}{% endfor %}{% for error in form.non_field_errors %}{{ error }}{% endfor %}</div>
 
             <label for="signup-password" class="form-label">password</label>
             <input type="password" placeholder="******" class="input-field" id="signup-password" name="password"/>
-            <div class="error-msg" id="signup-password-error">
-            </div>
+            <div class="error-msg" id="signup-password-error">{% for error in form.password.errors %}{{ error }}{% endfor %}</div>
 
             <div class="checkbox-group">
               <label class="checkbox-container"
