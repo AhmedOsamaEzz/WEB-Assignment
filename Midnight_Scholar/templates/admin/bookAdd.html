@@ -12,8 +12,6 @@
   <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script>
   <script type="module" src="{% static 'Javascript/UI/adminUI.js' %}"></script>
 </head>
-<title>add book</title>
-</head>
 
 <body>
   <header>
@@ -24,7 +22,7 @@
 
       <div class="links">
         <ul>
-		  <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
+          <li><a href="{% url 'admin_user_list' %}">Manage Users</a></li>
           <li><a href="{% url 'admin_book_list' %}">All Books</a></li>
           <li><a href="{% url 'admin_loan_list' %}" class="active-nav-link">Loans</a></li>
           <li><a href="{% url 'admin_dashboard' %}">Dashboard</a></li>

@@ -3,9 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="stylesheet" href="{% static 'css/normalize.css' %}" /> -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-    <!-- <script type="module" src="{% static 'Javascript/UI/authUI.js' %}"></script> -->
     <title>nice library</title>
   </head>
   <body id="login-page">
@@ -19,31 +17,17 @@
           <p class="brand-subtitle">Private Archival Access</p>
         </header>
         <div class="login-card">
-          <form class="login-form" method = "POST" action="{% url 'login'%}">
+          <form class="login-form" method="POST" action="{% url 'login'%}">
             {% csrf_token %}
 
-            
-            {% if form.errors %}
-              <div class="error-msg" style="color: red; margin-bottom: 10px;">
-                {% if form.non_field_errors %}
-                  {% for error in form.non_field_errors %}
-                    {{ error }}
-                  {% endfor %}
-                {% else %}
-                  Invalid username or password. Please try again.
-                {% endif %}
-              </div>
-            {% endif %}
-            
             <label for="email" class="form-label">username (email)</label>
-            <input type="text" placeholder="username@gmail.com" class="input-field" id="login-email" name="username" />
-            <div class="error-msg" id="login-email-error"></div>
+            <input type="text" placeholder="username@gmail.com" class="input-field" id="login-email" name="username" value="{{ form.username.value|default:'' }}" />
+            <div class="error-msg" id="login-email-error">{% for error in form.username.errors %}{{ error }}{% endfor %}</div>
 
             <label for="password" class="form-label">password</label>
             <input type="password" placeholder="******" class="input-field" id="login-password" name="password"/>
-            <div class="error-msg" id="login-password-error"></div>
-            <!-- TODO  -->
-            <!-- add forgot password here later -->
+            <div class="error-msg" id="login-password-error">{% for error in form.password.errors %}{{ error }}{% endfor %}{% for error in form.non_field_errors %}{{ error }}{% endfor %}</div>
+
             <div class="checkbox-group">
               <label class="checkbox-container"
                 >Stay Logged in
