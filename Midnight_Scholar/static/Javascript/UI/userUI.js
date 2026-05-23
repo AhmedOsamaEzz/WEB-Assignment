@@ -373,9 +373,10 @@ async function renderUserDashboard() {
   if (emailEl) emailEl.textContent = User.userEmail || "Scholar@gmail.com";
 
   const now = new Date();
-  const overdueBooks = borrowed.filter((b) => new Date(b.dueDate) < now);
+  const loanedOnly = borrowed.filter((b) => b.status === "borrowed");
+  const overdueBooks = loanedOnly.filter((b) => new Date(b.dueDate) < now);
   const activeCountEl = document.getElementById("active-loans-count");
-  if (activeCountEl) activeCountEl.textContent = borrowed.length;
+  if (activeCountEl) activeCountEl.textContent = loanedOnly.length;
   const totalReadEl = document.getElementById("total-read-count");
   if (totalReadEl) totalReadEl.textContent = history.length;
   const overdueEl = document.getElementById("overdue-count");
@@ -386,10 +387,28 @@ async function renderUserDashboard() {
 
   if (borrowed.length === 0) {
     grid.innerHTML = '<p class="ud-book-author" style="padding:1rem;">No active loans.</p>';
+    return;
   }
+
   const recent = borrowed.slice(-3).reverse();
   grid.innerHTML = recent
     .map((book) => {
+      const isReserved = book.status === "reserved";
+
+      if (isReserved) {
+        return `
+        <div class="ud-book-card">
+          <div class="ud-book-cover-wrap">
+            <img src="${book.cover}" alt="${book.title}" class="ud-book-cover" />
+          </div>
+          <div class="ud-book-info">
+            <h3 class="ud-book-title">${book.title}</h3>
+            <p class="ud-book-author">${book.author}</p>
+            <span class="ud-badge ud-badge--loaned">Reserved</span>
+          </div>
+        </div>`;
+      }
+
       const due = new Date(book.dueDate);
       const daysLeft = Math.ceil((due - now) / (1000 * 60 * 60 * 24));
       const isOverdue = daysLeft < 0;
@@ -406,7 +425,7 @@ async function renderUserDashboard() {
         dueLabel = `Due in ${daysLeft} days`;
         dueCls = "ud-due";
       }
-      let extend = book.extended ? "Extended" : "Extend";
+      const extend = book.extended ? "Extended" : "Extend";
       return `
       <div class="ud-book-card">
         <div class="ud-book-cover-wrap">
@@ -421,8 +440,7 @@ async function renderUserDashboard() {
             <button class="ud-btn-ghost btn-extend" data-loan-id="${book.loan_id}" ${book.extended ? "disabled" : ""}>${extend}</button>
           </div>
         </div>
-      </div>
-    `;
+      </div>`;
     })
     .join("");
 
@@ -470,7 +488,7 @@ document.addEventListener("click", async (e) => {
     try {
       await API.extendLoan(loanId);
       btn.disabled = true;
-      Window.alert("the loan has been extended for 3 days");
+      window.alert("the loan has been extended for 3 days");
       renderUserDashboard();
     } catch (error) {
       alert(error.message);
@@ -478,59 +496,19 @@ document.addEventListener("click", async (e) => {
   }
 
   if (e.target.classList.contains("btn-return")) {
-    if (confirm("Are you sure you want to return this book?")) {
-      await API.returnBook(isbn, token);
-      renderUserDashboard();
-      renderUserHistory();
+    const returnBtn = e.target;
+    const returnLoanId = returnBtn.dataset.loanId;
+    if (returnLoanId && confirm("Are you sure you want to return this book?")) {
+      try {
+        await API.returnBook(returnLoanId);
+        renderUserDashboard();
+      } catch (error) {
+        alert(error.message || "Failed to return book.");
+      }
     }
   }
 });
 
-async function renderUserHistory() {
-  const tbody = document.getElementById("history-tbody");
-  if (!tbody) return;
-
-  tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Loading...</td></tr>`;
-
-  try {
-    const User = JSON.parse(localStorage.getItem("user_info") || sessionStorage.getItem("user_info"));
-    if (!User) return;
-
-    const history = await API.getUserHistory(User.token);
-    if (!history || history.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;">No borrowing history yet.</td></tr>`;
-      return;
-    }
-
-    tbody.innerHTML = history
-      .map((entry, i) => {
-        const borrowed = new Date(entry.borrowedAt).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        });
-        const returned = entry.returnDate || "—";
-        const isOverdue = entry.status === "overdue";
-        const badgeCls = entry.status === "returned" ? "ud-badge--returned" : "ud-badge--overdue";
-        const badgeLabel = entry.status === "returned" ? "Returned" : "Overdue";
-        const altRow = i % 2 !== 0 ? "ud-tr-alt" : "";
-
-        return `
-        <tr class="${altRow}">
-          <td class="ud-td-title">${entry.title}</td>
-          <td>${entry.author}</td>
-          <td>${borrowed}</td>
-          <td>${returned}</td>
-          <td><span class="ud-badge ${badgeCls}">${badgeLabel}</span></td>
-        </tr>
-      `;
-      })
-      .join("");
-  } catch (error) {
-    console.log(error);
-    tbody.innerHTML = `<tr><td colspan="5" style="color:red; text-align:center;">Failed to load history.</td></tr>`;
-  }
-}
 
 document.addEventListener("DOMContentLoaded", () => {
   const logo = document.getElementById("logo-link");
@@ -557,18 +535,10 @@ document.addEventListener("DOMContentLoaded", () => {
   if (document.getElementById("book-list")) {
     renderUserLoans();
   }
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const borrowBtn = document.getElementById("borrow-btn");
-  // const storedInfo = localStorage.getItem("user_info") || sessionStorage.getItem("user_info");
-  // const info = JSON.parse(storedInfo);
-  // const token = info.token;
-  const urlParams = new URLSearchParams(window.location.search);
-  const isbn = urlParams.get("isbn");
 
   if (document.getElementById("user-dashboard-page")) {
     renderUserDashboard();
-    renderUserHistory();
   }
 });
+
+// dashboard init is handled in the DOMContentLoaded above
