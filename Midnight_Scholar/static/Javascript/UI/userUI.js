@@ -50,20 +50,88 @@ function fetchBook(book) {
  * The function `renderCatalog` asynchronously fetches books from an API and renders them as cards in a
  * container, handling errors by displaying a message if the catalog fails to load.
  */
-async function renderCatalog(query = "", categories = [], availableOnly = false) {
+const BOOKS_PER_PAGE = 8;
+let allBooks = [];
+let currentPage = 1;
+
+function renderPage(page) {
+  const cardsContainer = document.getElementById("cards-container");
+  if (!cardsContainer) return;
+
+  currentPage = page;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const start = (page - 1) * BOOKS_PER_PAGE;
+  const pageBooks = allBooks.slice(start, start + BOOKS_PER_PAGE);
+  cardsContainer.innerHTML = pageBooks.map(createCard).join("");
+  renderPagination();
+}
+
+function renderPagination() {
+  const existing = document.getElementById("pagination-row");
+  if (existing) existing.remove();
+
+  const totalPages = Math.ceil(allBooks.length / BOOKS_PER_PAGE);
+  if (totalPages <= 1) return;
+
+  const resultsCnt = document.getElementById("results-cnt");
+  if (!resultsCnt) return;
+
+  const nav = document.createElement("div");
+  nav.id = "pagination-row";
+  nav.className = "pagination-row";
+
+  const makeBtn = (label, page, isCurrent = false, disabled = false) => {
+    const btn = document.createElement("button");
+    btn.className = "page-btn" + (isCurrent ? " current" : "");
+    btn.textContent = label;
+    btn.disabled = disabled;
+    if (!disabled && !isCurrent) {
+      btn.addEventListener("click", () => renderPage(page));
+    }
+    return btn;
+  };
+
+  nav.appendChild(makeBtn("First", 1, false, currentPage === 1));
+  nav.appendChild(makeBtn("Prev", currentPage - 1, false, currentPage === 1));
+
+  const winStart = Math.max(1, currentPage - 2);
+  const winEnd = Math.min(totalPages, currentPage + 2);
+  for (let i = winStart; i <= winEnd; i++) {
+    nav.appendChild(makeBtn(String(i), i, i === currentPage));
+  }
+
+  nav.appendChild(makeBtn("Next", currentPage + 1, false, currentPage === totalPages));
+  nav.appendChild(makeBtn("Last", totalPages, false, currentPage === totalPages));
+
+  resultsCnt.appendChild(nav);
+}
+
+async function renderCatalog(query = "", categories = [], availableOnly = false, excludeCategories = []) {
   const cardsContainer = document.getElementById("cards-container");
   const resultsCount = document.getElementById("results-count");
   if (!cardsContainer) return;
 
   try {
-    const books = await API.getBooks(query, categories, availableOnly);
+    let books = await API.getBooks(query, categories, availableOnly);
+
+    if (excludeCategories.length > 0) {
+      const excluded = excludeCategories.map(c => c.toLowerCase());
+      books = books.filter(book => !excluded.includes((book.category || "").toLowerCase()));
+    }
+
+    allBooks = books;
+    currentPage = 1;
+
     if (resultsCount) resultsCount.textContent = books.length;
 
     if (books.length === 0) {
       cardsContainer.innerHTML = `<p style="text-align: center; width: 100%;">No books found matching your search.</p>`;
+      const existing = document.getElementById("pagination-row");
+      if (existing) existing.remove();
       return;
     }
-    cardsContainer.innerHTML = books.map(createCard).join("");
+
+    renderPage(1);
   } catch (error) {
     console.log(error);
     cardsContainer.innerHTML = `<p style="color: red;"> Failed to load catalog </p>`;
@@ -210,12 +278,18 @@ async function initSearchPage() {
     }, 300);
   };
 
+  const KNOWN_CATEGORIES = ["Self-Help", "Programming", "Math", "History", "Fiction", "Science", "Psychology"];
+
   const triggerSearch = () => {
     if (queryLabel) {
       queryLabel.textContent = currentQuery;
     }
-    const catogriesArray = currentCategory === "All" ? [] : [currentCategory];
-    renderCatalog(currentQuery, catogriesArray, currentAvailability);
+    if (currentCategory === "Other") {
+      renderCatalog(currentQuery, [], currentAvailability, KNOWN_CATEGORIES);
+    } else {
+      const catogriesArray = currentCategory === "All" ? [] : [currentCategory];
+      renderCatalog(currentQuery, catogriesArray, currentAvailability);
+    }
   };
 
   if (searchInput) {
